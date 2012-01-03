@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: lt-rails | teohm.dev]]></title>
+  <link href="http://teohm.github.com/blog/categories/lt-rails/atom.xml" rel="self"/>
+  <link href="http://teohm.github.com/"/>
+  <updated>2012-01-03T23:16:49+08:00</updated>
+  <id>http://teohm.github.com/</id>
+  <author>
+    <name><![CDATA[teohm (Huiming Teo)]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[ActiveRecord Mass Assignment]]></title>
+    <link href="http://teohm.github.com/blog/2011/05/09/activerecord-mass-assignment/"/>
+    <updated>2011-05-09T00:00:00+08:00</updated>
+    <id>http://teohm.github.com/blog/2011/05/09/activerecord-mass-assignment</id>
+    <content type="html"><![CDATA[<p>Even you haven't heard of
+<a href="http://guides.rubyonrails.org/security.html#mass-assignment">mass assignment</a>,
+it already exists in your first Rails generated scaffold code.</p>
+
+<p><div>
+  <pre>
+    <code class='ruby'>def create
+  @comment = Comment.new(params[:comment])
+  ..
+end&lt;/p&gt;
+
+&lt;p&gt;def update
+  ..
+  @comment.update_attributes(params[:comment])
+  ..
+end</code>
+  </pre>
+</div>
+</p>
+
+<h2>Why knowing mass assignment is important?</h2>
+
+<p>By default, mass assignment opens up an undesirable <strong>security hole</strong>,
+by allowing web clients to update any attributes they passing in,
+including attributes like <code>created_at</code>.</p>
+
+<p>For details, you can read:</p>
+
+<ul>
+<li><a href="http://guides.rubyonrails.org/security.html#mass-assignment">Ruby On Rails Security Guide - Mass Assignment</a></li>
+<li><a href="http://railspikes.com/2008/9/22/is-your-rails-application-safe-from-mass-assignment">Rail Spikes: Is your Rails application safe?</a></li>
+</ul>
+
+
+<h2>Mass assignment methods</h2>
+
+<p>There are a few <strong>ActiveRecord methods</strong> that accept mass assignment:</p>
+
+<ul>
+<li><a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#method-c-new"><code>new</code></a></li>
+<li><a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#method-c-create"><code>create</code></a></li>
+<li><a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#method-i-attributes-3D"><code>attributes=</code></a></li>
+<li><a href="http://apidock.com/rails/ActiveRecord/Base/update_attributes"><code>update_attributes</code></a></li>
+</ul>
+
+
+<p>Using any of these methods, means you are now responsible for the safety
+of the web application.</p>
+
+<h2>Minimal protection</h2>
+
+<p>To use mass assignment safely, we want to specify exactly which attributes
+allowed to be updated.</p>
+
+<h3>1. Define <code>attr_accessible</code> on every model</h3>
+
+<p><code>attr_accessible</code> defines a white-list of attributes
+that can be updated during mass assignment.</p>
+
+<p><div>
+  <pre>
+    <code class='ruby'>class Comment &amp;lt; ActiveRecord::Base
+  attr_accessible :title, :content
+end</code>
+  </pre>
+</div>
+</p>
+
+<h3>2. Enforce <code>attr_accessible</code> usage</h3>
+
+<p>You may set the white-list default to empty. This forces you
+to define the whitelist explicitly on a model, before
+mass assignment can be used.</p>
+
+<p><div>
+  <pre>
+    <code class='ruby'>&lt;/p&gt;
+
+&lt;h1&gt;config/initializer/enforce_attr_accessible.rb&lt;/h1&gt;
+
+&lt;p&gt;ActiveRecord::Base.send(:attr_accessible, nil)</code>
+  </pre>
+</div>
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ActiveRecord Model Equality]]></title>
+    <link href="http://teohm.github.com/blog/2011/05/05/activerecord-model-equality/"/>
+    <updated>2011-05-05T00:00:00+08:00</updated>
+    <id>http://teohm.github.com/blog/2011/05/05/activerecord-model-equality</id>
+    <content type="html"><![CDATA[<p>In daily web app development, we often need to check if two model objects are equal.
+When I first started using Rails, this is what I wrote:</p>
+
+<p><div>
+  <pre>
+    <code class='ruby'>if user.id == current_user.id
+  # do something
+end</code>
+  </pre>
+</div>
+</p>
+
+<h2>Use obj1 == obj2 instead</h2>
+
+<p>Of course, that reflects my ignorance on learning the new tool.</p>
+
+<p>So, here's a proper way to compare if
+<a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#method-i-3D-3D">two model objects are equal</a>:
+<div>
+  <pre>
+    <code class='ruby'>test &quot;2 records with same #id equal to each others.&quot; do
+  c1 = Comment.create
+  c2 = Comment.find(c1.id)&lt;/p&gt;
+
+&lt;p&gt;  assert c1 == c2
+  assert c2 == c1
+end</code>
+  </pre>
+</div>
+</p>
+
+<h2>What about new record?</h2>
+
+<p>Basically, a new model object only equals to itself:
+<div>
+  <pre>
+    <code class='ruby'>test &quot;New record does not equal to another new record.&quot; do
+  new_record = Comment.new
+  another_new = Comment.new&lt;/p&gt;
+
+&lt;p&gt;  assert new_record == new_record
+  assert another_new == another_new
+  assert new_record != another_new
+end</code>
+  </pre>
+</div>
+</p>
+
+<p>Learning to use <code>==</code> operator for checking model equality
+is useful. Because now, we can start using other methods
+that depend on <code>==</code> operator. For instance, <code>Array#include?</code>.</p>
+
+<p><div>
+  <pre>
+    <code class='ruby'>test &quot;When applied in Array&quot; do
+  c1 = Comment.create
+  c2 = Comment.find(c1.id)&lt;/p&gt;
+
+&lt;p&gt;  assert [c1].include? c2
+  assert [c2].include? c1
+  assert [c1, c2] == [c1, c2]
+end</code>
+  </pre>
+</div>
+</p>
+
+<h2>Rails learning tests</h2>
+
+<p>You may notice the code examples are written as tests.
+This is my first <a href="https://github.com/teohm/lt_rails">Rails learning test</a>.
+So the plan is to write more tests as a way to learn Rails. I will
+post them here occationally if interesting enough to share.</p>
+
+<p>Source code: <a href="https://github.com/teohm/lt_rails/blob/master/test/unit/model_equality_test.rb">model_equality_test.rb</a></p>
+]]></content>
+  </entry>
+  
+</feed>

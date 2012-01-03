@@ -1,102 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>teohm.dev</title>
-  <meta name="author" content="teohm (Huiming Teo)">
-
-  
-  <meta name="description" content="Let&#8217;s use an event management app as the example. The app has a simple feature: a user can add some events, then invite other users to attend &hellip;">
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://teohm.github.com">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <link href="/atom.xml" rel="alternate" title="teohm.dev" type="application/atom+xml">
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-
-  
-
-</head>
-
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">teohm.dev</a></h1>
-  
-    <h2>I enjoy life, and make stuffs for people I care about :)</h2>
-  
-</hgroup>
-
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:teohm.github.com" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  
-    <article>
-      
-  <header>
+  <title><![CDATA[teohm.dev]]></title>
+  <link href="http://teohm.github.com/atom.xml" rel="self"/>
+  <link href="http://teohm.github.com/"/>
+  <updated>2012-01-03T23:16:49+08:00</updated>
+  <id>http://teohm.github.com/</id>
+  <author>
+    <name><![CDATA[teohm (Huiming Teo)]]></name>
     
-      <h1 class="entry-title"><a href="/blog/2011/05/31/using-rabl-in-rails-json-web-api/">Using RABL in Rails JSON Web API</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
 
   
-
-
-<time datetime="2011-05-31T00:00:00+08:00" pubdate data-updated="true">May 31<span>st</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Let&#8217;s use an event management app as the example.</p>
+  <entry>
+    <title type="html"><![CDATA[Using RABL in Rails JSON Web API]]></title>
+    <link href="http://teohm.github.com/blog/2011/05/31/using-rabl-in-rails-json-web-api/"/>
+    <updated>2011-05-31T00:00:00+08:00</updated>
+    <id>http://teohm.github.com/blog/2011/05/31/using-rabl-in-rails-json-web-api</id>
+    <content type="html"><![CDATA[<p>Let&#8217;s use an event management app as the example.</p>
 
 <p>The app has a simple feature: a user can add some events, then invite other users to attend the event. Its data are represented in 3 models: User, Event, and Event Guest.
-<img src="/images/2011-05-31-using-rabl-in-rails-json-web-api/models.png" alt="An ER digram that shows the domain models." /></p>
+<img src="http://teohm.github.com/images/2011-05-31-using-rabl-in-rails-json-web-api/models.png" alt="An ER digram that shows the domain models." /></p>
 
 <p>Let say, we are going to add a read-only JSON web API for clients to browse data records from the app.</p>
 
@@ -260,42 +185,15 @@ end
 <p>I think I will use RABL for the next Rails web API project.</p>
 
 <p>The complete Rails example code is available at <a href="https://github.com/teohm/tryrabl">github.com/teohm/tryrabl</a>.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/05/30/learning-git-internals-by-example/">Learning Git Internals by Example</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-05-30T00:00:00+08:00" pubdate data-updated="true">May 30<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><em>Status: Draft.</em><br/>
+  <entry>
+    <title type="html"><![CDATA[Learning Git Internals by Example]]></title>
+    <link href="http://teohm.github.com/blog/2011/05/30/learning-git-internals-by-example/"/>
+    <updated>2011-05-30T00:00:00+08:00</updated>
+    <id>http://teohm.github.com/blog/2011/05/30/learning-git-internals-by-example</id>
+    <content type="html"><![CDATA[<p><em>Status: Draft.</em><br/>
 <em>Plan to revise this post, probably simplify it in future..</em></p>
 
 <h2>Movitation</h2>
@@ -312,7 +210,7 @@ end
 
 <p>I find this model is elegant. It fits well in a small diagram, as well as in my head.</p>
 
-<p><img src="/images/2011-05-30-learning-git-internals-by-example/big-picture.png" alt="A picture illustrates files in .git directory mentioned in this article." /></p>
+<p><img src="http://teohm.github.com/images/2011-05-30-learning-git-internals-by-example/big-picture.png" alt="A picture illustrates files in .git directory mentioned in this article." /></p>
 
 <h3>Objects</h3>
 
@@ -365,7 +263,7 @@ end
 </div>
 
 
-<p><img src="/images/2011-05-30-learning-git-internals-by-example/init.png" alt="illustration" /></p>
+<p><img src="http://teohm.github.com/images/2011-05-30-learning-git-internals-by-example/init.png" alt="illustration" /></p>
 
 <p>What happened:</p>
 
@@ -390,7 +288,7 @@ $ git add README</code>
 </div>
 
 
-<p><img src="/images/2011-05-30-learning-git-internals-by-example/new-file.png" alt="illustration" /></p>
+<p><img src="http://teohm.github.com/images/2011-05-30-learning-git-internals-by-example/new-file.png" alt="illustration" /></p>
 
 <p>What happened:</p>
 
@@ -423,7 +321,7 @@ A roti canai project.
 </div>
 
 
-<p><img src="/images/2011-05-30-learning-git-internals-by-example/first-commit.png" alt="illustration" /></p>
+<p><img src="http://teohm.github.com/images/2011-05-30-learning-git-internals-by-example/first-commit.png" alt="illustration" /></p>
 
 <p>What happened:</p>
 
@@ -465,7 +363,7 @@ $ git add README</code>
 </div>
 
 
-<p><img src="/images/2011-05-30-learning-git-internals-by-example/modified-file.png" alt="illustration" /></p>
+<p><img src="http://teohm.github.com/images/2011-05-30-learning-git-internals-by-example/modified-file.png" alt="illustration" /></p>
 
 <p>What happened:</p>
 
@@ -498,7 +396,7 @@ $ git add doc</code>
 </div>
 
 
-<p><img src="/images/2011-05-30-learning-git-internals-by-example/subdir.png" alt="illustration" /></p>
+<p><img src="http://teohm.github.com/images/2011-05-30-learning-git-internals-by-example/subdir.png" alt="illustration" /></p>
 
 <p>What happened:</p>
 
@@ -530,7 +428,7 @@ $ git cat-file blob ea283
 </div>
 
 
-<p><img src="/images/2011-05-30-learning-git-internals-by-example/second-commit.png" alt="illustration" /></p>
+<p><img src="http://teohm.github.com/images/2011-05-30-learning-git-internals-by-example/second-commit.png" alt="illustration" /></p>
 
 <p>What happened:</p>
 
@@ -575,7 +473,7 @@ second commit
 </div>
 
 
-<p><img src="/images/2011-05-30-learning-git-internals-by-example/annotated-tag.png" alt="illustration" /></p>
+<p><img src="http://teohm.github.com/images/2011-05-30-learning-git-internals-by-example/annotated-tag.png" alt="illustration" /></p>
 
 <p>What happened:</p>
 
@@ -608,7 +506,7 @@ this is annotated tag
 </div>
 
 
-<p><img src="/images/2011-05-30-learning-git-internals-by-example/new-tag.png" alt="illustration" /></p>
+<p><img src="http://teohm.github.com/images/2011-05-30-learning-git-internals-by-example/new-tag.png" alt="illustration" /></p>
 
 <p>What happened:</p>
 
@@ -633,42 +531,15 @@ d9976cfe0430557885d162927dd70186d0f521e8
 <h2>What&#8217;s Next?</h2>
 
 <p>Looking for a minimal git workflow suitable for a distributed team, long-running project..</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/05/25/using-jquery-validation-in-rails-remote-form/">Using JQuery Validation in Rails Remote Form</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-05-25T00:00:00+08:00" pubdate data-updated="true">May 25<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In a recent project, I was trying to use <a href="http://bassistance.de/jquery-plugins/jquery-plugin-validation/">JQuery Validation</a> in an <a href="https://github.com/rails/jquery-ujs/blob/bb620a29199214b5c7a3a015372fda28b69c69a1/src/rails.js">earlier version</a> of Rails 3 remote form (<a href="https://github.com/rails/jquery-ujs">jquery-ujs</a>). They didn&#8217;t work out well in IE.</p>
+  <entry>
+    <title type="html"><![CDATA[Using JQuery Validation in Rails Remote Form]]></title>
+    <link href="http://teohm.github.com/blog/2011/05/25/using-jquery-validation-in-rails-remote-form/"/>
+    <updated>2011-05-25T00:00:00+08:00</updated>
+    <id>http://teohm.github.com/blog/2011/05/25/using-jquery-validation-in-rails-remote-form</id>
+    <content type="html"><![CDATA[<p>In a recent project, I was trying to use <a href="http://bassistance.de/jquery-plugins/jquery-plugin-validation/">JQuery Validation</a> in an <a href="https://github.com/rails/jquery-ujs/blob/bb620a29199214b5c7a3a015372fda28b69c69a1/src/rails.js">earlier version</a> of Rails 3 remote form (<a href="https://github.com/rails/jquery-ujs">jquery-ujs</a>). They didn&#8217;t work out well in IE.</p>
 
 <p>After experimenting with the <a href="https://github.com/rails/jquery-ujs/blob/dad6982dc592686677e6845e681233c40d2ead27/src/rails.js">latest jquery-ujs</a> and making an embarrassing mistake, it turns out that the issue is resolved in the latest version.</p>
 
@@ -695,7 +566,7 @@ d9976cfe0430557885d162927dd70186d0f521e8
 </ul>
 
 
-<p>Try run the example page on IE7/8: <a href="/quirks/jquery-validate-ujs-conflict/jquery-ujs-latest.html">/quirks/jquery-validate-ujs-conflict/jquery-ujs-latest.html</a></p>
+<p>Try run the example page on IE7/8: <a href="http://teohm.github.com/quirks/jquery-validate-ujs-conflict/jquery-ujs-latest.html">/quirks/jquery-validate-ujs-conflict/jquery-ujs-latest.html</a></p>
 
 <h3>When using <code>submitHandler</code> in JQuery Validation</h3>
 
@@ -718,82 +589,28 @@ call <code>$.rails.handleRemote( $(form) )</code> function manually, so that it 
 
 
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/05/16/buying-things-online-in-china/">Buy Things Online in China</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-05-16T00:00:00+08:00" pubdate data-updated="true">May 16<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>Micropayment with China Mobile</h2>
+  <entry>
+    <title type="html"><![CDATA[Buy Things Online in China]]></title>
+    <link href="http://teohm.github.com/blog/2011/05/16/buying-things-online-in-china/"/>
+    <updated>2011-05-16T00:00:00+08:00</updated>
+    <id>http://teohm.github.com/blog/2011/05/16/buying-things-online-in-china</id>
+    <content type="html"><![CDATA[<h2>Micropayment with China Mobile</h2>
 
 <p>asdf</p>
 
 <h2>Just pay cash</h2>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/05/09/activerecord-mass-assignment/">ActiveRecord Mass Assignment</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-05-09T00:00:00+08:00" pubdate data-updated="true">May 9<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Even you haven&#8217;t heard of
+  <entry>
+    <title type="html"><![CDATA[ActiveRecord Mass Assignment]]></title>
+    <link href="http://teohm.github.com/blog/2011/05/09/activerecord-mass-assignment/"/>
+    <updated>2011-05-09T00:00:00+08:00</updated>
+    <id>http://teohm.github.com/blog/2011/05/09/activerecord-mass-assignment</id>
+    <content type="html"><![CDATA[<p>Even you haven&#8217;t heard of
 <a href="http://guides.rubyonrails.org/security.html#mass-assignment">mass assignment</a>,
 it already exists in your first Rails generated scaffold code.</p>
 
@@ -877,42 +694,15 @@ ActiveRecord::Base.send(:attr_accessible, nil)</code>
 
 
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/05/05/activerecord-model-equality/">ActiveRecord Model Equality</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-05-05T00:00:00+08:00" pubdate data-updated="true">May 5<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In daily web app development, we often need to check if two model objects are equal.
+  <entry>
+    <title type="html"><![CDATA[ActiveRecord Model Equality]]></title>
+    <link href="http://teohm.github.com/blog/2011/05/05/activerecord-model-equality/"/>
+    <updated>2011-05-05T00:00:00+08:00</updated>
+    <id>http://teohm.github.com/blog/2011/05/05/activerecord-model-equality</id>
+    <content type="html"><![CDATA[<p>In daily web app development, we often need to check if two model objects are equal.
 When I first started using Rails, this is what I wrote:</p>
 
 <div>
@@ -988,147 +778,7 @@ So the plan is to write more tests as a way to learn Rails. I will
 post them here occationally if interesting enough to share.</p>
 
 <p>Source code: <a href="https://github.com/teohm/lt_rails/blob/master/test/unit/model_equality_test.rb">model_equality_test.rb</a></p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2011/05/31/using-rabl-in-rails-json-web-api/">Using RABL in Rails JSON Web API</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2011/05/30/learning-git-internals-by-example/">Learning Git Internals by Example</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2011/05/25/using-jquery-validation-in-rails-remote-form/">Using JQuery Validation in Rails Remote Form</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2011/05/16/buying-things-online-in-china/">Buy Things Online in China</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2011/05/09/activerecord-mass-assignment/">ActiveRecord Mass Assignment</a>
-      </li>
-    
-  </ul>
-</section>
-
-
-<section>
-  <h1>Latest Tweets</h1>
-  <ul id="tweets">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
-  <script type="text/javascript">
-    $.domReady(function(){
-      getTwitterFeed("teohm", 3, false);
-    });
-  </script>
-  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
-  
-    <a href="http://twitter.com/teohm" class="twitter-follow-button" data-show-count="false">Follow @teohm</a>
-  
-</section>
-
-
-<section>
-  <h1>On Delicious</h1>
-  <div id="delicious"></div>
-  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/toydi?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
-  <p><a href="http://delicious.com/toydi">My Delicious Bookmarks &raquo;</a></p>
-</section>
-
-
-<section class="googleplus">
-  <h1>
-    <a href="https://plus.google.com/100712640845389576742?rel=author">
-      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
-      Google+
-    </a>
-  </h1>
-</section>
-
-
-
-  
-</aside>
-
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2012 - teohm (Huiming Teo) -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
-
-<script type="text/javascript">
-      var disqus_shortname = 'teohm';
-      
-        
-        var disqus_script = 'count.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
-
-
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-
-
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
-</body>
-</html>
+</feed>

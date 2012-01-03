@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: user-experience | teohm.dev]]></title>
+  <link href="http://teohm.github.com/blog/categories/user-experience/atom.xml" rel="self"/>
+  <link href="http://teohm.github.com/"/>
+  <updated>2012-01-03T23:16:49+08:00</updated>
+  <id>http://teohm.github.com/</id>
+  <author>
+    <name><![CDATA[teohm (Huiming Teo)]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Buy Things Online in China]]></title>
+    <link href="http://teohm.github.com/blog/2011/05/16/buying-things-online-in-china/"/>
+    <updated>2011-05-16T00:00:00+08:00</updated>
+    <id>http://teohm.github.com/blog/2011/05/16/buying-things-online-in-china</id>
+    <content type="html"><![CDATA[<h2>Micropayment with China Mobile</h2>
+
+<p>asdf</p>
+
+<h2>Just pay cash</h2>
+]]></content>
+  </entry>
+  
+</feed>

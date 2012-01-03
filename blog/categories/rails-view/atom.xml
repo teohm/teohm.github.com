@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: rails-view | teohm.dev]]></title>
+  <link href="http://teohm.github.com/blog/categories/rails-view/atom.xml" rel="self"/>
+  <link href="http://teohm.github.com/"/>
+  <updated>2012-01-03T23:16:49+08:00</updated>
+  <id>http://teohm.github.com/</id>
+  <author>
+    <name><![CDATA[teohm (Huiming Teo)]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using RABL in Rails JSON Web API]]></title>
+    <link href="http://teohm.github.com/blog/2011/05/31/using-rabl-in-rails-json-web-api/"/>
+    <updated>2011-05-31T00:00:00+08:00</updated>
+    <id>http://teohm.github.com/blog/2011/05/31/using-rabl-in-rails-json-web-api</id>
+    <content type="html"><![CDATA[<p>Let's use an event management app as the example.</p>
+
+<p>The app has a simple feature: a user can add some events, then invite other users to attend the event. Its data are represented in 3 models: User, Event, and Event Guest.
+<img src="/images/2011-05-31-using-rabl-in-rails-json-web-api/models.png" alt="An ER digram that shows the domain models." /></p>
+
+<p>Let say, we are going to add a read-only JSON web API for clients to browse data records from the app.</p>
+
+<h2>Problems</h2>
+
+<h3>Model is not view</h3>
+
+<p>When working on a non-trivial web API, you will soon <a href="http://engineering.gomiso.com/2011/05/16/if-youre-using-to_json-youre-doing-it-wrong/">realize</a> that, model often cannot be serialized directly in web API.</p>
+
+<p>Within the same app, one API may need to render a summary view of the model, while another needs a detail view of the same model. You want to serialize a view or view object, not a model.</p>
+
+<p><a href="https://github.com/nesquena/rabl"><strong>RABL (Ruby API Builder Language) gem</strong></a> is designed for this purpose.</p>
+
+<h3>Define once, reuse everywhere</h3>
+
+<p>Let say, we need to render these user attributes: <code>id</code>, <code>username</code>, <code>email</code>, <code>display_name</code>, except <code>password</code>.</p>
+
+<p>In RABL, we can define the attribute whitelist in a RABL template.
+<div>
+  <pre>
+    <code class='ruby'>&lt;/p&gt;
+
+&lt;h1&gt;tryrabl/app/views/users/base.rabl&lt;/h1&gt;
+
+&lt;p&gt;attributes :id, :username, :email, :display_name</code>
+  </pre>
+</div>
+</p>
+
+<p>To show individual user, we can now reuse the template through RABL <code>extends</code>.
+<div>
+  <pre>
+    <code class='ruby'>&lt;/p&gt;
+
+&lt;h1&gt;tryrabl/app/views/users/show.rabl&lt;/h1&gt;
+
+&lt;p&gt;extends &quot;users/base&quot;
+object @user&lt;/p&gt;
+
+&lt;h2&gt;JSON output:&lt;/h2&gt;
+
+&lt;h1&gt;{&lt;/h1&gt;
+
+&lt;h1&gt;&quot;user&quot;: {&lt;/h1&gt;
+
+&lt;h1&gt;&quot;id&quot;: 8,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;username&quot;: &quot;blaise&quot;,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;email&quot;: &quot;matteo@wilkinsonhuel.name&quot;,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;display_name&quot;: &quot;Ms. Noe Lowe&quot;&lt;/h1&gt;
+
+&lt;h1&gt;}&lt;/h1&gt;
+
+&lt;h1&gt;}&lt;/h1&gt;
+
+&lt;p&gt;</code>
+  </pre>
+</div>
+</p>
+
+<p>Here's another example to show a list of users.
+<div>
+  <pre>
+    <code class='ruby'>&lt;/p&gt;
+
+&lt;h1&gt;tryrabl/app/views/users/index.rabl&lt;/h1&gt;
+
+&lt;p&gt;extends &quot;users/base&quot;
+collection @users&lt;/p&gt;
+
+&lt;h2&gt;JSON output:&lt;/h2&gt;
+
+&lt;h1&gt;[{&lt;/h1&gt;
+
+&lt;h1&gt;&quot;user&quot;: {&lt;/h1&gt;
+
+&lt;h1&gt;&quot;id&quot;: 1,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;username&quot;: &quot;alanna&quot;,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;email&quot;: &quot;rubie@hayes.name&quot;,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;display_name&quot;: &quot;Mrs. Gaylord Hoeger&quot;&lt;/h1&gt;
+
+&lt;h1&gt;}&lt;/h1&gt;
+
+&lt;h1&gt;}, {&lt;/h1&gt;
+
+&lt;h1&gt;&quot;user&quot;: {&lt;/h1&gt;
+
+&lt;h1&gt;&quot;id&quot;: 2,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;username&quot;: &quot;jarrell.robel&quot;,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;email&quot;: &quot;jarod@eichmann.com&quot;,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;display_name&quot;: &quot;Oran Lebsack&quot;&lt;/h1&gt;
+
+&lt;h1&gt;}&lt;/h1&gt;
+
+&lt;h1&gt;}]&lt;/h1&gt;
+
+&lt;p&gt;</code>
+  </pre>
+</div>
+</p>
+
+<p>The template can be reused in nested child as well, through RABL <code>child</code>.
+<div>
+  <pre>
+    <code class='ruby'>attributes :id, :title, :description, :start, :end, :location
+child :creator =&gt; :creator do
+  extends 'users/base'
+end&lt;/p&gt;
+
+&lt;h2&gt;JSON output:&lt;/h2&gt;
+
+&lt;h1&gt;{&lt;/h1&gt;
+
+&lt;h1&gt;&quot;event&quot;: {&lt;/h1&gt;
+
+&lt;h1&gt;&quot;id&quot;: 7,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;title&quot;: &quot;Et earum sed fuga.&quot;,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;description&quot;: &quot;Quis sed ..e ad.&quot;,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;start&quot;: &quot;2011-05-31T08:31:45Z&quot;,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;end&quot;: &quot;2011-06-01T08:31:45Z&quot;,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;location&quot;: &quot;Saul Tunnel&quot;,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;creator&quot;: {&lt;/h1&gt;
+
+&lt;h1&gt;&quot;id&quot;: 1,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;username&quot;: &quot;alanna&quot;,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;email&quot;: &quot;rubie@hayes.name&quot;,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;display_name&quot;: &quot;Mrs. Gaylord Hoeger&quot;&lt;/h1&gt;
+
+&lt;h1&gt;}&lt;/h1&gt;
+
+&lt;h1&gt;}&lt;/h1&gt;
+
+&lt;h1&gt;}&lt;/h1&gt;
+
+&lt;p&gt;</code>
+  </pre>
+</div>
+</p>
+
+<h3>Join table rendered as subclass</h3>
+
+<p>I notice a recurring pattern in two recent projects. For instance, in this example, from client's point of view, Event Guest is basically a User with an additional attribute: RSVP status.</p>
+
+<p>When query database, usually we need to query the join table: <code>event_guests</code>.
+<div>
+  <pre>
+    <code class='ruby'>class GuestsController &amp;lt; ApplicationController
+  def index&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@guests = EventGuest.where(:event_id =&amp;gt; params[:event_id])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;  end
+end</code>
+  </pre>
+</div>
+</p>
+
+<p>But when rendering, the result set needs to be rendered as a list of Users. RABL allows you to do that easily, using its <code>glue</code> feature (a weird name though :).
+<div>
+  <pre>
+    <code class='ruby'>&lt;/p&gt;
+
+&lt;h1&gt;tryrabl/app/views/guests/index.rabl&lt;/h1&gt;
+
+&lt;p&gt;collection @event_guests&lt;/p&gt;
+
+&lt;h1&gt;include the additional attribute&lt;/h1&gt;
+
+&lt;p&gt;attributes :rsvp&lt;/p&gt;
+
+&lt;h1&gt;add child attributes to parent model&lt;/h1&gt;
+
+&lt;p&gt;glue :user do
+  extends &quot;users/base&quot;
+end&lt;/p&gt;
+
+&lt;h2&gt;JSON output:&lt;/h2&gt;
+
+&lt;h1&gt;[{&lt;/h1&gt;
+
+&lt;h1&gt;&quot;event_guest&quot;: {&lt;/h1&gt;
+
+&lt;h1&gt;&quot;rsvp&quot;: &quot;PENDING&quot;,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;id&quot;: 3,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;username&quot;: &quot;myrna_harvey&quot;,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;email&quot;: &quot;shad.armstrong@littelpouros.name&quot;,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;display_name&quot;: &quot;Savion Balistreri&quot;&lt;/h1&gt;
+
+&lt;h1&gt;}&lt;/h1&gt;
+
+&lt;h1&gt;}, {&lt;/h1&gt;
+
+&lt;h1&gt;&quot;event_guest&quot;: {&lt;/h1&gt;
+
+&lt;h1&gt;&quot;rsvp&quot;: &quot;PENDING&quot;,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;id&quot;: 4,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;username&quot;: &quot;adelle.nader&quot;,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;email&quot;: &quot;brendon.howe@cormiergrady.info&quot;,&lt;/h1&gt;
+
+&lt;h1&gt;&quot;display_name&quot;: &quot;Edgardo Dickens&quot;&lt;/h1&gt;
+
+&lt;h1&gt;}&lt;/h1&gt;
+
+&lt;h1&gt;}]&lt;/h1&gt;
+
+&lt;p&gt;</code>
+  </pre>
+</div>
+</p>
+
+<p>I think I will use RABL for the next Rails web API project.</p>
+
+<p>The complete Rails example code is available at <a href="https://github.com/teohm/tryrabl">github.com/teohm/tryrabl</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

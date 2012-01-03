@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
+    <url>
+        <loc>http://teohm.github.com/blog/2011/05/05/activerecord-model-equality/</loc>
+        <lastmod>2012-01-03T23:15:22+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://teohm.github.com/blog/2011/05/09/activerecord-mass-assignment/</loc>
+        <lastmod>2012-01-03T23:15:35+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://teohm.github.com/blog/2011/05/16/buying-things-online-in-china/</loc>
+        <lastmod>2012-01-03T23:15:45+08:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://teohm.github.com/blog/2011/05/25/using-jquery-validation-in-rails-remote-form/
+        </loc>
+        <lastmod>2012-01-03T23:16:03+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://teohm.github.com/blog/2011/05/30/learning-git-internals-by-example/</loc>
+        <lastmod>2012-01-03T23:16:14+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://teohm.github.com/blog/2011/05/31/using-rabl-in-rails-json-web-api/</loc>
+        <lastmod>2012-01-03T23:16:39+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://teohm.github.com/blog/archives/</loc>
+        <lastmod>2012-01-03T23:16:39+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://teohm.github.com/</loc>
+        <lastmod>2012-01-03T23:16:39+08:00</lastmod>
+    </url>
+</urlset>

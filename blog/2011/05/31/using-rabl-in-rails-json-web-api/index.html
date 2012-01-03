@@ -1,0 +1,458 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Using RABL in Rails JSON Web API - teohm.dev</title>
+  <meta name="author" content="teohm (Huiming Teo)">
+
+  
+  <meta name="description" content="Let&#8217;s use an event management app as the example. The app has a simple feature: a user can add some events, then invite other users to attend &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://teohm.github.com/blog/2011/05/31/using-rabl-in-rails-json-web-api">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="teohm.dev" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">teohm.dev</a></h1>
+  
+    <h2>I enjoy life, and make stuffs for people I care about :)</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:teohm.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Using RABL in Rails JSON Web API</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-31T00:00:00+08:00" pubdate data-updated="true">May 31<span>st</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Let&#8217;s use an event management app as the example.</p>
+
+<p>The app has a simple feature: a user can add some events, then invite other users to attend the event. Its data are represented in 3 models: User, Event, and Event Guest.
+<img src="/images/2011-05-31-using-rabl-in-rails-json-web-api/models.png" alt="An ER digram that shows the domain models." /></p>
+
+<p>Let say, we are going to add a read-only JSON web API for clients to browse data records from the app.</p>
+
+<h2>Problems</h2>
+
+<h3>Model is not view</h3>
+
+<p>When working on a non-trivial web API, you will soon <a href="http://engineering.gomiso.com/2011/05/16/if-youre-using-to_json-youre-doing-it-wrong/">realize</a> that, model often cannot be serialized directly in web API.</p>
+
+<p>Within the same app, one API may need to render a summary view of the model, while another needs a detail view of the same model. You want to serialize a view or view object, not a model.</p>
+
+<p><a href="https://github.com/nesquena/rabl"><strong>RABL (Ruby API Builder Language) gem</strong></a> is designed for this purpose.</p>
+
+<h3>Define once, reuse everywhere</h3>
+
+<p>Let say, we need to render these user attributes: <code>id</code>, <code>username</code>, <code>email</code>, <code>display_name</code>, except <code>password</code>.</p>
+
+<p>In RABL, we can define the attribute whitelist in a RABL template.</p>
+
+<div>
+  <pre>
+    <code class='ruby'># tryrabl/app/views/users/base.rabl
+attributes :id, :username, :email, :display_name</code>
+  </pre>
+</div>
+
+
+<p>To show individual user, we can now reuse the template through RABL <code>extends</code>.</p>
+
+<div>
+  <pre>
+    <code class='ruby'># tryrabl/app/views/users/show.rabl
+extends &quot;users/base&quot;
+object @user
+
+## JSON output:
+# {
+#     &quot;user&quot;: {
+#         &quot;id&quot;: 8,
+#         &quot;username&quot;: &quot;blaise&quot;,
+#         &quot;email&quot;: &quot;matteo@wilkinsonhuel.name&quot;,
+#         &quot;display_name&quot;: &quot;Ms. Noe Lowe&quot;
+#     }
+# }</code>
+  </pre>
+</div>
+
+
+<p>Here&#8217;s another example to show a list of users.</p>
+
+<div>
+  <pre>
+    <code class='ruby'># tryrabl/app/views/users/index.rabl
+extends &quot;users/base&quot;
+collection @users
+
+## JSON output:
+# [{
+#     &quot;user&quot;: {
+#         &quot;id&quot;: 1,
+#         &quot;username&quot;: &quot;alanna&quot;,
+#         &quot;email&quot;: &quot;rubie@hayes.name&quot;,
+#         &quot;display_name&quot;: &quot;Mrs. Gaylord Hoeger&quot;
+#     }
+# }, {
+#     &quot;user&quot;: {
+#         &quot;id&quot;: 2,
+#         &quot;username&quot;: &quot;jarrell.robel&quot;,
+#         &quot;email&quot;: &quot;jarod@eichmann.com&quot;,
+#         &quot;display_name&quot;: &quot;Oran Lebsack&quot;
+#     }
+# }]</code>
+  </pre>
+</div>
+
+
+<p>The template can be reused in nested child as well, through RABL <code>child</code>.</p>
+
+<div>
+  <pre>
+    <code class='ruby'>attributes :id, :title, :description, :start, :end, :location
+child :creator =&gt; :creator do
+  extends 'users/base'
+end
+
+## JSON output:
+# {
+#     &quot;event&quot;: {
+#         &quot;id&quot;: 7,
+#         &quot;title&quot;: &quot;Et earum sed fuga.&quot;,
+#         &quot;description&quot;: &quot;Quis sed ..e ad.&quot;,
+#         &quot;start&quot;: &quot;2011-05-31T08:31:45Z&quot;,
+#         &quot;end&quot;: &quot;2011-06-01T08:31:45Z&quot;,
+#         &quot;location&quot;: &quot;Saul Tunnel&quot;,
+#         &quot;creator&quot;: {
+#             &quot;id&quot;: 1,
+#             &quot;username&quot;: &quot;alanna&quot;,
+#             &quot;email&quot;: &quot;rubie@hayes.name&quot;,
+#             &quot;display_name&quot;: &quot;Mrs. Gaylord Hoeger&quot;
+#         }
+#     }
+# }</code>
+  </pre>
+</div>
+
+
+<h3>Join table rendered as subclass</h3>
+
+<p>I notice a recurring pattern in two recent projects. For instance, in this example, from client&#8217;s point of view, Event Guest is basically a User with an additional attribute: RSVP status.</p>
+
+<p>When query database, usually we need to query the join table: <code>event_guests</code>.</p>
+
+<div>
+  <pre>
+    <code class='ruby'>class GuestsController &lt; ApplicationController
+  def index
+    @guests = EventGuest.where(:event_id =&gt; params[:event_id])
+  end
+end</code>
+  </pre>
+</div>
+
+
+<p>But when rendering, the result set needs to be rendered as a list of Users. RABL allows you to do that easily, using its <code>glue</code> feature (a weird name though :).</p>
+
+<div>
+  <pre>
+    <code class='ruby'># tryrabl/app/views/guests/index.rabl
+collection @event_guests
+
+# include the additional attribute
+attributes :rsvp
+
+# add child attributes to parent model
+glue :user do
+  extends &quot;users/base&quot;
+end
+
+## JSON output:
+# [{
+#     &quot;event_guest&quot;: {
+#         &quot;rsvp&quot;: &quot;PENDING&quot;,
+#         &quot;id&quot;: 3,
+#         &quot;username&quot;: &quot;myrna_harvey&quot;,
+#         &quot;email&quot;: &quot;shad.armstrong@littelpouros.name&quot;,
+#         &quot;display_name&quot;: &quot;Savion Balistreri&quot;
+#     }
+# }, {
+#     &quot;event_guest&quot;: {
+#         &quot;rsvp&quot;: &quot;PENDING&quot;,
+#         &quot;id&quot;: 4,
+#         &quot;username&quot;: &quot;adelle.nader&quot;,
+#         &quot;email&quot;: &quot;brendon.howe@cormiergrady.info&quot;,
+#         &quot;display_name&quot;: &quot;Edgardo Dickens&quot;
+#     }
+# }]</code>
+  </pre>
+</div>
+
+
+<p>I think I will use RABL for the next Rails web API project.</p>
+
+<p>The complete Rails example code is available at <a href="https://github.com/teohm/tryrabl">github.com/teohm/tryrabl</a>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">teohm (Huiming Teo)</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-31T00:00:00+08:00" pubdate data-updated="true">May 31<span>st</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/rails-view/'>rails-view</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://teohm.github.com/blog/2011/05/31/using-rabl-in-rails-json-web-api/" data-via="teohm" data-counturl="http://teohm.github.com/blog/2011/05/31/using-rabl-in-rails-json-web-api/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/05/30/learning-git-internals-by-example/" title="Previous Post: Learning Git Internals by Example">&laquo; Learning Git Internals by Example</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/05/31/using-rabl-in-rails-json-web-api/">Using RABL in Rails JSON Web API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/05/30/learning-git-internals-by-example/">Learning Git Internals by Example</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/05/25/using-jquery-validation-in-rails-remote-form/">Using JQuery Validation in Rails Remote Form</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/05/16/buying-things-online-in-china/">Buy Things Online in China</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/05/09/activerecord-mass-assignment/">ActiveRecord Mass Assignment</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("teohm", 3, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/teohm" class="twitter-follow-button" data-show-count="false">Follow @teohm</a>
+  
+</section>
+
+
+<section>
+  <h1>On Delicious</h1>
+  <div id="delicious"></div>
+  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/toydi?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
+  <p><a href="http://delicious.com/toydi">My Delicious Bookmarks &raquo;</a></p>
+</section>
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/100712640845389576742?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - teohm (Huiming Teo) -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'teohm';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://teohm.github.com/blog/2011/05/31/using-rabl-in-rails-json-web-api/';
+        var disqus_url = 'http://teohm.github.com/blog/2011/05/31/using-rabl-in-rails-json-web-api/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

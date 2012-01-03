@@ -1,0 +1,368 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>ActiveRecord Model Equality - teohm.dev</title>
+  <meta name="author" content="teohm (Huiming Teo)">
+
+  
+  <meta name="description" content="In daily web app development, we often need to check if two model objects are equal.
+When I first started using Rails, this is what I wrote: if user. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://teohm.github.com/blog/2011/05/05/activerecord-model-equality">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="teohm.dev" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">teohm.dev</a></h1>
+  
+    <h2>I enjoy life, and make stuffs for people I care about :)</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:teohm.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">ActiveRecord Model Equality</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-05T00:00:00+08:00" pubdate data-updated="true">May 5<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>In daily web app development, we often need to check if two model objects are equal.
+When I first started using Rails, this is what I wrote:</p>
+
+<div>
+  <pre>
+    <code class='ruby'>if user.id == current_user.id
+  # do something
+end</code>
+  </pre>
+</div>
+
+
+<h2>Use obj1 == obj2 instead</h2>
+
+<p>Of course, that reflects my ignorance on learning the new tool.</p>
+
+<p>So, here&#8217;s a proper way to compare if
+<a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#method-i-3D-3D">two model objects are equal</a>:</p>
+
+<div>
+  <pre>
+    <code class='ruby'>test &quot;2 records with same #id equal to each others.&quot; do
+  c1 = Comment.create
+  c2 = Comment.find(c1.id)
+
+  assert c1 == c2
+  assert c2 == c1
+end</code>
+  </pre>
+</div>
+
+
+<h2>What about new record?</h2>
+
+<p>Basically, a new model object only equals to itself:</p>
+
+<div>
+  <pre>
+    <code class='ruby'>test &quot;New record does not equal to another new record.&quot; do
+  new_record = Comment.new
+  another_new = Comment.new
+
+  assert new_record == new_record
+  assert another_new == another_new
+  assert new_record != another_new
+end</code>
+  </pre>
+</div>
+
+
+<p>Learning to use <code>==</code> operator for checking model equality
+is useful. Because now, we can start using other methods
+that depend on <code>==</code> operator. For instance, <code>Array#include?</code>.</p>
+
+<div>
+  <pre>
+    <code class='ruby'>test &quot;When applied in Array&quot; do
+  c1 = Comment.create
+  c2 = Comment.find(c1.id)
+
+  assert [c1].include? c2
+  assert [c2].include? c1
+  assert [c1, c2] == [c1, c2]
+end</code>
+  </pre>
+</div>
+
+
+<h2>Rails learning tests</h2>
+
+<p>You may notice the code examples are written as tests.
+This is my first <a href="https://github.com/teohm/lt_rails">Rails learning test</a>.
+So the plan is to write more tests as a way to learn Rails. I will
+post them here occationally if interesting enough to share.</p>
+
+<p>Source code: <a href="https://github.com/teohm/lt_rails/blob/master/test/unit/model_equality_test.rb">model_equality_test.rb</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">teohm (Huiming Teo)</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-05T00:00:00+08:00" pubdate data-updated="true">May 5<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/lt-rails/'>lt-rails</a>, <a class='category' href='/blog/categories/rails-model/'>rails-model</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://teohm.github.com/blog/2011/05/05/activerecord-model-equality/" data-via="teohm" data-counturl="http://teohm.github.com/blog/2011/05/05/activerecord-model-equality/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/05/09/activerecord-mass-assignment/" title="next Post: ActiveRecord Mass Assignment">ActiveRecord Mass Assignment &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/05/31/using-rabl-in-rails-json-web-api/">Using RABL in Rails JSON Web API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/05/30/learning-git-internals-by-example/">Learning Git Internals by Example</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/05/25/using-jquery-validation-in-rails-remote-form/">Using JQuery Validation in Rails Remote Form</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/05/16/buying-things-online-in-china/">Buy Things Online in China</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/05/09/activerecord-mass-assignment/">ActiveRecord Mass Assignment</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("teohm", 3, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/teohm" class="twitter-follow-button" data-show-count="false">Follow @teohm</a>
+  
+</section>
+
+
+<section>
+  <h1>On Delicious</h1>
+  <div id="delicious"></div>
+  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/toydi?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
+  <p><a href="http://delicious.com/toydi">My Delicious Bookmarks &raquo;</a></p>
+</section>
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/100712640845389576742?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - teohm (Huiming Teo) -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'teohm';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://teohm.github.com/blog/2011/05/05/activerecord-model-equality/';
+        var disqus_url = 'http://teohm.github.com/blog/2011/05/05/activerecord-model-equality/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
