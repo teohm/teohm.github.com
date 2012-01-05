@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: rails-frontend - teohm.dev</title>
+  <title>Shortcuts to move faster in Bash command line - teohm.dev</title>
   <meta name="author" content="teohm (Teo Hui Ming)">
 
   
-  <meta name="description" content="Category: rails-frontend">
+  <meta name="description" content="Nowadays, I spend more time in Bash shell, typing longer commands. One of my new year resolutions for this year
+is to stop using left/right arrow &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://teohm.github.comblog/categories/rails-frontend">
+  <link rel="canonical" href="http://teohm.github.com/blog/2012/01/04/shortcuts-to-move-faster-in-bash-command-line">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -75,36 +76,152 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Rails-frontend</h1>
+    
+      <h1 class="entry-title">Shortcuts to Move Faster in Bash Command Line</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-04T20:13:00+08:00" pubdate data-updated="true">Jan 4<span>th</span>, 2012</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>Nowadays, I spend more time in Bash shell, typing longer commands. One of my new year resolutions for this year
+is to <strong>stop using left/right arrow keys to move around in the command line</strong>.
+I learned <a href="http://pivotallabs.com/users/hunter/blog/articles/1925-terminal-beyond-ctrl-a-and-ctrl-e">a few shortcuts</a>
+a while ago.</p>
 
-  
-  <h2>2011</h2>
+<p>Last night, I spent some time to read about <strong>&#8220;Command Line Editing&#8221; in <a href="http://www.gnu.org/software/bash/manual/bashref.html#Command-Line-Editing">the bash manual</a></strong>.
+The bash manual is a well-written piece of documentation. I think I should read it more often.</p>
 
-<article>
-  
-<h1><a href="/blog/2011/05/25/using-jquery-validation-in-rails-remote-form/">Using JQuery Validation in Rails Remote Form</a></h1>
-<time datetime="2011-05-25T00:00:00+08:00" pubdate><span class='month'>May</span> <span class='day'>25</span> <span class='year'>2011</span></time>
+<p>Well, here&#8217;s the new shortcuts I learned:</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails-frontend/'>rails-frontend</a></span>
-</footer>
+<h2>Basic moves</h2>
+
+<ul>
+<li>Move back one character. <code>Ctrl</code> + <code>b</code></li>
+<li>Move forward one character. <code>Ctrl</code> + <code>f</code></li>
+<li>Delete current character. <code>Ctrl</code> + <code>d</code></li>
+<li>Delete previous character. <code>Backspace</code></li>
+<li>Undo. <code>Ctrl</code> + <code>-</code></li>
+</ul>
 
 
-</article>
+<h2>Moving faster</h2>
+
+<ul>
+<li>Move to the start of line. <code>Ctrl</code> + <code>a</code></li>
+<li>Move to the end of line. <code>Ctrl</code> + <code>e</code></li>
+<li>Move forward a word. <code>Meta</code> + <code>f</code> <em>(a word contains alphabets and digits, no symbols)</em></li>
+<li>Move backward a word. <code>Meta</code> + <code>b</code></li>
+<li>Clear the screen. <code>Ctrl</code> + <code>l</code></li>
+</ul>
+
+
+<p><strong>What is Meta?</strong> <code>Meta</code> is your <code>Alt</code> key, normally. For <strong>Mac OSX user, you need to
+enable it yourself</strong>. Open <em>Terminal > Preferences > Settings > Keyboard</em>,
+and enable <em>Use option as meta key</em>. <code>Meta</code> key, by convention, is used for operations on word.</p>
+
+<h2>Cut and paste (&#8216;Kill and yank&#8217; for old schoolers)</h2>
+
+<ul>
+<li>Cut from cursor to the end of line. <code>Ctrl</code> + <code>k</code></li>
+<li>Cut from cursor to the end of word. <code>Meta</code> + <code>d</code></li>
+<li>Cut from cursor to the start of word. <code>Meta</code> + <code>Backspace</code></li>
+<li>Cut from cursor to previous whitespace. <code>Ctrl</code> + <code>w</code></li>
+<li>Paste the last cut text. <code>Ctrl</code> + <code>y</code></li>
+<li>Loop through and paste previously cut text. <code>Meta</code> + <code>y</code> (use it after <code>Ctrl</code> + <code>y</code>)</li>
+<li>Loop through and paste the last argument of previous commands. <code>Meta</code> + <code>.</code></li>
+</ul>
+
+
+<h2>Search the command history</h2>
+
+<ul>
+<li>Search as you type. <code>Ctrl</code> + <code>r</code> and type the search term; Repeat <code>Ctrl</code> + <code>r</code> to loop through results.</li>
+<li>Search the last remembered search term. <code>Ctrl</code> + <code>r</code> twice.</li>
+<li>End the search at current history entry. <code>Ctrl</code> + <code>j</code></li>
+<li>Cancel the search and restore original line. <code>Ctrl</code> + <code>g</code></li>
+</ul>
 
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">teohm (Teo Hui Ming)</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-04T20:13:00+08:00" pubdate data-updated="true">Jan 4<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/tools-/'>tools,</a>, <a class='category' href='/blog/categories/tools-cli/'>tools-cli</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://teohm.github.com/blog/2012/01/04/shortcuts-to-move-faster-in-bash-command-line/" data-via="teohm" data-counturl="http://teohm.github.com/blog/2012/01/04/shortcuts-to-move-faster-in-bash-command-line/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/05/31/using-rabl-in-rails-json-web-api/" title="Previous Post: Using RABL in Rails JSON Web API">&laquo; Using RABL in Rails JSON Web API</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -192,7 +309,10 @@
       var disqus_shortname = 'teohm';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://teohm.github.com/blog/2012/01/04/shortcuts-to-move-faster-in-bash-command-line/';
+        var disqus_url = 'http://teohm.github.com/blog/2012/01/04/shortcuts-to-move-faster-in-bash-command-line/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
