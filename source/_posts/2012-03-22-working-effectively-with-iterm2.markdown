@@ -66,5 +66,5 @@ Here's a set of **shortcut keys I commonly use**. You can always look for other 
 * make font larger `Cmd + +`
 * make font smaller `Cmd + -`
 
-iTerm lovers, did I miss out any cool features?
+iTerm lovers, did I miss anything out?
 
