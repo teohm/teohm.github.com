@@ -4,7 +4,7 @@
   <title><![CDATA[teohm.dev]]></title>
   <link href="http://teohm.github.com/atom.xml" rel="self"/>
   <link href="http://teohm.github.com/"/>
-  <updated>2012-03-23T09:07:23+08:00</updated>
+  <updated>2012-03-23T09:08:26+08:00</updated>
   <id>http://teohm.github.com/</id>
   <author>
     <name><![CDATA[teohm (Huiming Teo)]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Working effectively with iTerm2]]></title>
-    <link href="http://teohm.github.com/blog/2012/03/22/working-effectively-with-witerm2/"/>
+    <link href="http://teohm.github.com/blog/2012/03/22/working-effectively-with-iterm2/"/>
     <updated>2012-03-22T22:42:00+08:00</updated>
-    <id>http://teohm.github.com/blog/2012/03/22/working-effectively-with-witerm2</id>
+    <id>http://teohm.github.com/blog/2012/03/22/working-effectively-with-iterm2</id>
     <content type="html"><![CDATA[<p>I have been using <a href="http://www.iterm2.com">iTerm</a> in <a href="http://www.favoritemedium.com">daily work</a> for almost a year now.
 Along the way, I learned a few handy <strong>settings tweaks and shortcut keys to boost my productivity</strong> in command-line environment.</p>
 
