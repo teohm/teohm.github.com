@@ -4,14 +4,107 @@
   <title><![CDATA[Category: tools | teohm.dev]]></title>
   <link href="http://teohm.github.com/blog/categories/tools/atom.xml" rel="self"/>
   <link href="http://teohm.github.com/"/>
-  <updated>2012-03-22T13:16:32+08:00</updated>
+  <updated>2012-03-23T09:07:23+08:00</updated>
   <id>http://teohm.github.com/</id>
   <author>
-    <name><![CDATA[teohm (Teo Hui Ming)]]></name>
+    <name><![CDATA[teohm (Huiming Teo)]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Working effectively with iTerm2]]></title>
+    <link href="http://teohm.github.com/blog/2012/03/22/working-effectively-with-witerm2/"/>
+    <updated>2012-03-22T22:42:00+08:00</updated>
+    <id>http://teohm.github.com/blog/2012/03/22/working-effectively-with-witerm2</id>
+    <content type="html"><![CDATA[<p>I have been using <a href="http://www.iterm2.com">iTerm</a> in <a href="http://www.favoritemedium.com">daily work</a> for almost a year now.
+Along the way, I learned a few handy <strong>settings tweaks and shortcut keys to boost my productivity</strong> in command-line environment.</p>
+
+<h2>Install iTerm2</h2>
+
+<p>If you haven't heard of <a href="http://www.iterm2.com">iTerm</a>, it's a popular <strong>open source alternative to Mac OS X Terminal</strong>.
+Give it a try, download and install it from <a href="http://www.iterm2.com">http://www.iterm2.com</a>.</p>
+
+<h2>Fine-Tune Settings</h2>
+
+<p>Launch iTerm, open <strong>iTerm > Preferences</strong> or just <code>Cmd + ,</code>.</p>
+
+<h3>Open tab/pane with current working directory</h3>
+
+<p>Under <strong>Profiles</strong> tab, go to <strong>General</strong> subtab, set <strong>Working Directory</strong> to <em>"Reuse previous session's directory"</em>.</p>
+
+<h3>Enable <code>Meta</code> key</h3>
+
+<p>To enable Meta key for <a href="/blog/2012/01/04/shortcuts-to-move-faster-in-bash-command-line">Bash readline editing</a> e.g. <code>Alt + b</code> to move to previous word, under <strong>Profiles</strong> tab, go to <strong>Keys</strong> subtab, set <strong>Left option key acts as:</strong> to <em>"+Esc"</em>.</p>
+
+<h3>Hotkey to toggle iTerm2</h3>
+
+<p>Under <strong>Keys</strong> tab, in <strong>Hotkey</strong> section, enable <em>"Show/hide iTerm2 with  a system-wide hotkey"</em> and input your hotkey combination, e.g. I use <code>Ctrl + Shift + L</code>.</p>
+
+<h3>Switch pane with mouse cursor</h3>
+
+<p>Under <strong>Pointer</strong>, in <strong>Miscellaneous Settings</strong> section, enable <em>"Focus follows mouse"</em>.</p>
+
+<h2>Handy Shortcut Keys</h2>
+
+<p>Here's a set of <strong>shortcut keys I commonly use</strong>. You can always look for other shortcut keys in the iTerm menu.</p>
+
+<h3>Tab navigation</h3>
+
+<ul>
+<li>open new tab <code>Cmd + t</code></li>
+<li>next tab <code>Cmd + Shift + ]</code></li>
+<li>previous tab <code>Cmd + Shift + [</code></li>
+</ul>
+
+
+<h3>Pane navigation</h3>
+
+<ul>
+<li>split pane left-right <code>Cmd + d</code></li>
+<li>split pane top-bottom <code>Cmd + Shift + d</code></li>
+<li>next pane <code>Cmd + ]</code></li>
+<li>previous pane <code>Cmd + [</code></li>
+</ul>
+
+
+<h3>Search</h3>
+
+<ul>
+<li>open search bar <code>Cmd + f</code></li>
+<li>find next <code>Cmd + g</code></li>
+</ul>
+
+
+<h3>Input to all panes</h3>
+
+<ul>
+<li>input to all panes in current tab <code>Cmd + Alt + i</code></li>
+</ul>
+
+
+<h3>Clear screen</h3>
+
+<ul>
+<li>clear buffer <code>Cmd + k</code></li>
+<li>clear lines (Bash command) <code>Ctrl + l</code></li>
+</ul>
+
+
+<h3>Zooming / Font Resize</h3>
+
+<ul>
+<li>toggle maximize window <code>Cmd + Alt + =</code></li>
+<li>toggle full screen <code>Cmd + Enter</code></li>
+<li>make font larger <code>Cmd + +</code></li>
+<li>make font smaller <code>Cmd + -</code></li>
+</ul>
+
+
+<p>iTerm lovers, did I miss out any cool features?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Shortcuts to move faster in Bash command line]]></title>
