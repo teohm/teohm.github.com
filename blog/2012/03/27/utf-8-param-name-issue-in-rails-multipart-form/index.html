@@ -1,0 +1,365 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>UTF-8 param name issue in Rails multipart form - teohm.dev</title>
+  <meta name="author" content="Huiming Teo (teohm)">
+
+  
+  <meta name="description" content="I first stumbled upon this issue when Yasith (@meaningful) showed me a strange bug
+in a Rails project. Here&#8217;s what happened: Issue When submit &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://teohm.github.com/blog/2012/03/27/utf-8-param-name-issue-in-rails-multipart-form">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/teohm" rel="alternate" title="teohm.dev" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-28076807-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">teohm.dev</a></h1>
+  
+    <h2>I enjoy life, and build stuffs for people I care about :)</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/teohm" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:teohm.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">UTF-8 Param Name Issue in Rails Multipart Form</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-27T21:36:00+08:00" pubdate data-updated="true">Mar 27<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I first stumbled upon this issue when <a href="http://thekindof.me">Yasith</a> (<a href="https://twitter.com/meaningful">@meaningful</a>) showed me a strange bug
+in a Rails project. Here&#8217;s what happened:</p>
+
+<h2>Issue</h2>
+
+<p>When submit a multipart form that contains <strong>Unicode parameter name</strong> e.g.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span> <span class="na">enctype=</span><span class="s">&quot;multipart/form-data&quot;</span> <span class="na">action=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">&quot;Iñtërnâtiônàlizætiøn_name&quot;</span>
+</span><span class='line'>         <span class="na">value=</span><span class="s">&quot;Iñtërnâtiônàlizætiøn_value&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;/form&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Rails controller returns the param value <code>"Iñtërnâtiônàlizætiøn_value"</code> as expected.</p>
+
+<p>But the <strong>param name becomes</strong>:
+<code>"I\xC3\xB1t\xC3\xABrn\xC3\xA2ti\xC3\xB4n\xC3\xA0liz\xC3\xA6ti\xC3\xB8n_name"</code>.</p>
+
+<p>It makes life miserable, if you are not expecting this to happen:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">params</span><span class="o">[</span><span class="s2">&quot;Iñtërnâtiônàlizætiøn_name&quot;</span><span class="o">]</span> <span class="c1"># =&gt; nil</span>
+</span><span class='line'><span class="n">params</span><span class="o">[</span><span class="s2">&quot;I</span><span class="se">\xC3\xB1</span><span class="s2">t</span><span class="se">\xC3\xAB</span><span class="s2">rn</span><span class="se">\xC3\xA2</span><span class="s2">ti</span><span class="se">\xC3\xB4</span><span class="s2">n</span><span class="se">\xC3\xA0</span><span class="s2">liz</span><span class="se">\xC3\xA6</span><span class="s2">ti</span><span class="se">\xC3\xB8</span><span class="s2">n_name&quot;</span><span class="o">]</span> <span class="c1"># =&gt; &quot;Iñtërnâtiônàlizætiøn_value&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>What happened?</h2>
+
+<p>When <a href="https://github.com/rack/rack/blob/master/lib/rack/multipart/parser.rb"><strong>Rack</strong></a>
+returns multipart form data to Rails, it returns:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="p">{</span> <span class="s2">&quot;I</span><span class="se">\xC3\xB1</span><span class="s2">t</span><span class="se">\xC3\xAB</span><span class="s2">rn</span><span class="se">\xC3\xA2</span><span class="s2">ti</span><span class="se">\xC3\xB4</span><span class="s2">n</span><span class="se">\xC3\xA0</span><span class="s2">liz</span><span class="se">\xC3\xA6</span><span class="s2">ti</span><span class="se">\xC3\xB8</span><span class="s2">n_name&quot;</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="s2">&quot;I</span><span class="se">\xC3\xB1</span><span class="s2">t</span><span class="se">\xC3\xAB</span><span class="s2">rn</span><span class="se">\xC3\xA2</span><span class="s2">ti</span><span class="se">\xC3\xB4</span><span class="s2">n</span><span class="se">\xC3\xA0</span><span class="s2">liz</span><span class="se">\xC3\xA6</span><span class="s2">ti</span><span class="se">\xC3\xB8</span><span class="s2">n_value&quot;</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>However, <code>ActionDispatch::Http::Parameters#encode_params</code> in <a href="https://github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/http/parameters.rb"><strong>Rails</strong></a>
+decided to <strong> <em>only</em> encode parameter values</strong>, but <em>not</em> parameter names. <strong>As a result, we get:</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="p">{</span> <span class="s2">&quot;I</span><span class="se">\xC3\xB1</span><span class="s2">t</span><span class="se">\xC3\xAB</span><span class="s2">rn</span><span class="se">\xC3\xA2</span><span class="s2">ti</span><span class="se">\xC3\xB4</span><span class="s2">n</span><span class="se">\xC3\xA0</span><span class="s2">liz</span><span class="se">\xC3\xA6</span><span class="s2">ti</span><span class="se">\xC3\xB8</span><span class="s2">n_name&quot;</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="s2">&quot;Iñtërnâtiônàlizætiøn_value&quot;</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Solutions?</h2>
+
+<ol>
+<li><strong>Don&#8217;t use Unicode param name</strong>.</li>
+<li>Patch Rails source code. I added a <a href="https://github.com/teohm/rails/compare/multipart_utf8_param">fix in my forked branch</a>, and <a href="https://github.com/rails/rails/issues/5606">reported the issue</a>. Hopefully it will get fixed soon in the coming release.</li>
+</ol>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Huiming Teo (teohm)</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-27T21:36:00+08:00" pubdate data-updated="true">Mar 27<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/rails/'>rails</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://teohm.github.com/blog/2012/03/27/utf-8-param-name-issue-in-rails-multipart-form/" data-via="teohm" data-counturl="http://teohm.github.com/blog/2012/03/27/utf-8-param-name-issue-in-rails-multipart-form/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/03/22/working-effectively-with-iterm2/" title="Previous Post: Working effectively with iTerm2">&laquo; Working effectively with iTerm2</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/03/27/utf-8-param-name-issue-in-rails-multipart-form/">UTF-8 param name issue in Rails multipart form</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/22/working-effectively-with-iterm2/">Working effectively with iTerm2</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/04/shortcuts-to-move-faster-in-bash-command-line/">Shortcuts to move faster in Bash command line</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/05/31/using-rabl-in-rails-json-web-api/">Using RABL in Rails JSON Web API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/05/30/learning-git-internals-by-example/">Learning Git Internals by Example</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("teohm", 3, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/teohm" class="twitter-follow-button" data-show-count="false">Follow @teohm</a>
+  
+</section>
+
+
+<section>
+  <h1>On Delicious</h1>
+  <div id="delicious"></div>
+  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/toydi?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
+  <p><a href="http://delicious.com/toydi">My Delicious Bookmarks &raquo;</a></p>
+</section>
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/100712640845389576742?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Huiming Teo (teohm) -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'teohm';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://teohm.github.com/blog/2012/03/27/utf-8-param-name-issue-in-rails-multipart-form/';
+        var disqus_url = 'http://teohm.github.com/blog/2012/03/27/utf-8-param-name-issue-in-rails-multipart-form/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

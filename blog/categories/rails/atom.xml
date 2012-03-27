@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: rails | teohm.dev]]></title>
+  <link href="http://teohm.github.com/blog/categories/rails/atom.xml" rel="self"/>
+  <link href="http://teohm.github.com/"/>
+  <updated>2012-03-27T22:56:52+08:00</updated>
+  <id>http://teohm.github.com/</id>
+  <author>
+    <name><![CDATA[Huiming Teo (teohm)]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[UTF-8 param name issue in Rails multipart form]]></title>
+    <link href="http://teohm.github.com/blog/2012/03/27/utf-8-param-name-issue-in-rails-multipart-form/"/>
+    <updated>2012-03-27T21:36:00+08:00</updated>
+    <id>http://teohm.github.com/blog/2012/03/27/utf-8-param-name-issue-in-rails-multipart-form</id>
+    <content type="html"><![CDATA[<p>I first stumbled upon this issue when <a href="http://thekindof.me">Yasith</a> (<a href="https://twitter.com/meaningful">@meaningful</a>) showed me a strange bug
+in a Rails project. Here's what happened:</p>
+
+<h2>Issue</h2>
+
+<p>When submit a multipart form that contains <strong>Unicode parameter name</strong> e.g.</p>
+
+<p>```html
+<form method="post" enctype="multipart/form-data" action="">
+  &lt;input name="Iñtërnâtiônàlizætiøn_name"</p>
+
+<pre><code>     value="Iñtërnâtiônàlizætiøn_value" /&gt;
+</code></pre>
+
+<p></form>
+```</p>
+
+<p>Rails controller returns the param value <code>"Iñtërnâtiônàlizætiøn_value"</code> as expected.</p>
+
+<p>But the <strong>param name becomes</strong>:
+<code>"I\xC3\xB1t\xC3\xABrn\xC3\xA2ti\xC3\xB4n\xC3\xA0liz\xC3\xA6ti\xC3\xB8n_name"</code>.</p>
+
+<p>It makes life miserable, if you are not expecting this to happen:
+<code>ruby
+params["Iñtërnâtiônàlizætiøn_name"] # =&gt; nil
+params["I\xC3\xB1t\xC3\xABrn\xC3\xA2ti\xC3\xB4n\xC3\xA0liz\xC3\xA6ti\xC3\xB8n_name"] # =&gt; "Iñtërnâtiônàlizætiøn_value"
+</code></p>
+
+<h2>What happened?</h2>
+
+<p>When <a href="https://github.com/rack/rack/blob/master/lib/rack/multipart/parser.rb"><strong>Rack</strong></a>
+returns multipart form data to Rails, it returns:
+<code>ruby
+{ "I\xC3\xB1t\xC3\xABrn\xC3\xA2ti\xC3\xB4n\xC3\xA0liz\xC3\xA6ti\xC3\xB8n_name" =&gt;
+  "I\xC3\xB1t\xC3\xABrn\xC3\xA2ti\xC3\xB4n\xC3\xA0liz\xC3\xA6ti\xC3\xB8n_value" }
+</code></p>
+
+<p>However, <code>ActionDispatch::Http::Parameters#encode_params</code> in <a href="https://github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/http/parameters.rb"><strong>Rails</strong></a>
+decided to <strong> <em>only</em> encode parameter values</strong>, but <em>not</em> parameter names. <strong>As a result, we get:</strong>
+<code>ruby
+{ "I\xC3\xB1t\xC3\xABrn\xC3\xA2ti\xC3\xB4n\xC3\xA0liz\xC3\xA6ti\xC3\xB8n_name" =&gt;
+  "Iñtërnâtiônàlizætiøn_value" }
+</code></p>
+
+<h2>Solutions?</h2>
+
+<ol>
+<li><strong>Don't use Unicode param name</strong>.</li>
+<li>Patch Rails source code. I added a <a href="https://github.com/teohm/rails/compare/multipart_utf8_param">fix in my forked branch</a>, and <a href="https://github.com/rails/rails/issues/5606">reported the issue</a>. Hopefully it will get fixed soon in the coming release.</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>
