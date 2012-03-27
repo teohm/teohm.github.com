@@ -7,7 +7,8 @@ categories:
 - rails
 ---
 
-I first stumbled upon this issue when [Yasith](http://thekindof.me) ([@meaningful](https://twitter.com/meaningful)) showed me a strange bug 
+I first stumbled upon this issue when [Yasith](http://thekindof.me) 
+([@meaningful](https://twitter.com/meaningful)) showed me a strange bug 
 in a Rails project. Here's what happened:
  
 ## Issue
