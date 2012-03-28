@@ -4,7 +4,7 @@
   <title><![CDATA[teohm.dev]]></title>
   <link href="http://teohm.github.com/atom.xml" rel="self"/>
   <link href="http://teohm.github.com/"/>
-  <updated>2012-03-27T23:05:16+08:00</updated>
+  <updated>2012-03-28T08:33:36+08:00</updated>
   <id>http://teohm.github.com/</id>
   <author>
     <name><![CDATA[Huiming Teo (teohm)]]></name>
@@ -77,7 +77,7 @@ decided to <strong> <em>only</em> encode parameter values</strong>, but <em>not<
 
 <ol>
 <li><strong>Don&#8217;t use Unicode param name</strong>.</li>
-<li>Patch Rails source code. I added a <a href="https://github.com/teohm/rails/compare/multipart_utf8_param">fix in my forked branch</a>, and <a href="https://github.com/rails/rails/issues/5606">reported the issue</a>. Hopefully it will get fixed soon in the coming release.</li>
+<li>Patch Rails source code. I added a <a href="https://github.com/teohm/rails/compare/multipart_unicode_param_name">fix in my forked branch</a>, and <a href="https://github.com/rails/rails/issues/5606">reported the issue</a>. Hopefully it will get fixed soon in the coming release.</li>
 </ol>
 
 ]]></content>
