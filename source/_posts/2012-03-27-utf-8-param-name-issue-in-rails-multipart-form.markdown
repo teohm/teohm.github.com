@@ -51,5 +51,5 @@ decided to ** *only* encode parameter values**, but *not* parameter names. **As 
 ## Solutions?
 
 1. **Don't use Unicode param name**.
-2. Patch Rails source code. I added a [fix in my forked branch](https://github.com/teohm/rails/compare/multipart_utf8_param), and [reported the issue](https://github.com/rails/rails/issues/5606). Hopefully it will get fixed soon in the coming release.
+2. Patch Rails source code. I added a [fix in my forked branch](https://github.com/teohm/rails/compare/multipart_unicode_param_name), and [reported the issue](https://github.com/rails/rails/issues/5606). Hopefully it will get fixed soon in the coming release.
 
