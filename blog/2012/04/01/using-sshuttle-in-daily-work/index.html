@@ -5,13 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>UTF-8 param name issue in Rails multipart form - teohm.dev</title>
+  <title>Using sshuttle in daily work - teohm.dev</title>
   <meta name="author" content="Huiming Teo (teohm)">
 
   
-  <meta name="description" content="I first stumbled upon this issue when Yasith
-(@meaningful) showed me a strange bug
-in a Rails project. Here&#8217;s what happened: Issue When submit &hellip;">
+  <meta name="description" content="I was first introduced to sshuttle by Sooyoung (@5ooyoung) in Favorite Medium
+as a workaround to The Great Firewall in China. Since then, it has &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +19,7 @@ in a Rails project. Here&#8217;s what happened: Issue When submit &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://teohm.github.com/blog/2012/03/27/utf-8-param-name-issue-in-rails-multipart-form">
+  <link rel="canonical" href="http://teohm.github.com/blog/2012/04/01/using-sshuttle-in-daily-work">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -81,7 +80,7 @@ in a Rails project. Here&#8217;s what happened: Issue When submit &hellip;">
   
   <header>
     
-      <h1 class="entry-title">UTF-8 Param Name Issue in Rails Multipart Form</h1>
+      <h1 class="entry-title">Using Sshuttle in Daily Work</h1>
     
     
       <p class="meta">
@@ -97,74 +96,127 @@ in a Rails project. Here&#8217;s what happened: Issue When submit &hellip;">
   
 
 
-<time datetime="2012-03-27T21:36:00+08:00" pubdate data-updated="true">Mar 27<span>th</span>, 2012</time>
+<time datetime="2012-04-01T13:13:00+08:00" pubdate data-updated="true">Apr 1<span>st</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I first stumbled upon this issue when <a href="http://thekindof.me">Yasith</a>
-(<a href="https://twitter.com/meaningful">@meaningful</a>) showed me a strange bug
-in a Rails project. Here&#8217;s what happened:</p>
+<div class="entry-content"><p>I was first introduced to <a href="https://github.com/apenwarr/sshuttle"><strong>sshuttle</strong></a> by Sooyoung (<a href="https://twitter.com/#!/5ooyoung">@5ooyoung</a>) in <a href="http://favoritemedium.com/">Favorite Medium</a>
+as a workaround to The Great Firewall in China.</p>
 
-<h2>Issue</h2>
+<p>Since then, it has become my <strong>light-weight network tunneling tool</strong> in daily work.</p>
 
-<p>When submit a multipart form that contains <strong>Unicode parameter name</strong> e.g.</p>
+<h2>Install sshuttle</h2>
+
+<p>The installation is easy now. You can install it through Mac OSX Homebrew, or <a href="http://packages.ubuntu.com/precise/sshuttle">Ubuntu apt-get</a>.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span> <span class="na">enctype=</span><span class="s">&quot;multipart/form-data&quot;</span> <span class="na">action=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">&quot;Iñtërnâtiônàlizætiøn_name&quot;</span>
-</span><span class='line'>         <span class="na">value=</span><span class="s">&quot;Iñtërnâtiônàlizætiøn_value&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'><span class="nt">&lt;/form&gt;</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>brew install sshuttle
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Rails controller returns the param value <code>"Iñtërnâtiônàlizætiøn_value"</code> as expected.</p>
+<h2>I use sshuttle to..</h2>
 
-<p>But the <strong>param name becomes</strong>:
-<code>"I\xC3\xB1t\xC3\xABrn\xC3\xA2ti\xC3\xB4n\xC3\xA0liz\xC3\xA6ti\xC3\xB8n_name"</code>.</p>
+<h3>1. Tunnel all traffic</h3>
 
-<p>It makes life miserable, if you are not expecting this to happen:</p>
+<p>This is the first command I learned.
+It <strong>forwards all TCP traffic and DNS requests to a remote SSH server</strong>.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">params</span><span class="o">[</span><span class="s2">&quot;Iñtërnâtiônàlizætiøn_name&quot;</span><span class="o">]</span> <span class="c1"># =&gt; nil</span>
-</span><span class='line'><span class="n">params</span><span class="o">[</span><span class="s2">&quot;I</span><span class="se">\xC3\xB1</span><span class="s2">t</span><span class="se">\xC3\xAB</span><span class="s2">rn</span><span class="se">\xC3\xA2</span><span class="s2">ti</span><span class="se">\xC3\xB4</span><span class="s2">n</span><span class="se">\xC3\xA0</span><span class="s2">liz</span><span class="se">\xC3\xA6</span><span class="s2">ti</span><span class="se">\xC3\xB8</span><span class="s2">n_name&quot;</span><span class="o">]</span> <span class="c1"># =&gt; &quot;Iñtërnâtiônàlizætiøn_value&quot;</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sshuttle --dns -vr ssh_server 0/0
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h2>What happened?</h2>
+<p>Just like <code>ssh</code>, you can use any server specified in <code>~/.ssh/config</code>.
+The <code>-v</code> flag means verbose mode.</p>
 
-<p>When <a href="https://github.com/rack/rack/blob/master/lib/rack/multipart/parser.rb"><strong>Rack</strong></a>
-returns multipart form data to Rails, it returns:</p>
+<p>Besides TCP and DNS, currently <code>sshuttle</code> <strong>does not forward other requests
+<em>such as</em> UDP, ICMP ping etc</strong>.</p>
+
+<h3>2. Tunnel all traffic, but exclude some</h3>
+
+<p>You can <strong>exclude certain TCP traffic using <code>-x</code> option</strong>.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="p">{</span> <span class="s2">&quot;I</span><span class="se">\xC3\xB1</span><span class="s2">t</span><span class="se">\xC3\xAB</span><span class="s2">rn</span><span class="se">\xC3\xA2</span><span class="s2">ti</span><span class="se">\xC3\xB4</span><span class="s2">n</span><span class="se">\xC3\xA0</span><span class="s2">liz</span><span class="se">\xC3\xA6</span><span class="s2">ti</span><span class="se">\xC3\xB8</span><span class="s2">n_name&quot;</span> <span class="o">=&gt;</span>
-</span><span class='line'>  <span class="s2">&quot;I</span><span class="se">\xC3\xB1</span><span class="s2">t</span><span class="se">\xC3\xAB</span><span class="s2">rn</span><span class="se">\xC3\xA2</span><span class="s2">ti</span><span class="se">\xC3\xB4</span><span class="s2">n</span><span class="se">\xC3\xA0</span><span class="s2">liz</span><span class="se">\xC3\xA6</span><span class="s2">ti</span><span class="se">\xC3\xB8</span><span class="s2">n_value&quot;</span> <span class="p">}</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sshuttle --dns -vr ssh_server -x 121.9.204.0/24 -x 61.135.196.21 0/0
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>However, <code>ActionDispatch::Http::Parameters#encode_params</code> in <a href="https://github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/http/parameters.rb"><strong>Rails</strong></a>
-decided to <strong> <em>only</em> encode parameter values</strong>, but <em>not</em> parameter names. <strong>As a result, we get:</strong></p>
+<p>For instance, when I am in China, I don&#8217;t want to tunnel
+<a href="http://youku.com">Youku.com</a> traffic to a foreign server,
+because its movie streaming service is only available within China.</p>
+
+<p>In this case, I use <code>-x</code> option to exclude Youku.com IP addresses.</p>
+
+<h3>3. Tunnel only certain traffic</h3>
+
+<p>To tunnel only certain TCP traffic, <strong>specify the IP addresses
+or <a href="http://www.subnet-calculator.com/cidr.php">IP ranges</a> that need tunneling</strong>.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="p">{</span> <span class="s2">&quot;I</span><span class="se">\xC3\xB1</span><span class="s2">t</span><span class="se">\xC3\xAB</span><span class="s2">rn</span><span class="se">\xC3\xA2</span><span class="s2">ti</span><span class="se">\xC3\xB4</span><span class="s2">n</span><span class="se">\xC3\xA0</span><span class="s2">liz</span><span class="se">\xC3\xA6</span><span class="s2">ti</span><span class="se">\xC3\xB8</span><span class="s2">n_name&quot;</span> <span class="o">=&gt;</span>
-</span><span class='line'>  <span class="s2">&quot;Iñtërnâtiônàlizætiøn_value&quot;</span> <span class="p">}</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sshuttle -vr ssh_server 121.9.204.0/24 61.135.196.21
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h2>Solutions?</h2>
+<p>This command comes in handy, whenever I need to test an app feature (e.g. Netflix movie streaming)
+which only available in certain countries, or to bypass ISP faulty caches.</p>
 
-<ol>
-<li><strong>Don&#8217;t use Unicode param name</strong>.</li>
-<li>Patch Rails source code. I added a <a href="https://github.com/teohm/rails/compare/multipart_unicode_param_name">fix in my forked branch</a>, and <a href="https://github.com/rails/rails/issues/5606">reported the issue</a>. Hopefully it will get fixed soon in the coming release.</li>
-</ol>
+<h3>4. VPN to office network</h3>
+
+<p>I seldom do VPN, but all you need is <strong>the remote SSH server with <code>-NH</code> flags turned on</strong>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sshuttle -NHvr office_ssh_server
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>-N</code> flag tells sshuttle to figure out by itself the IP subnets to forward,
+and <code>-H</code> flag to scan for hostnames within remote subnets and store them temporarily in <code>/etc/hosts</code>.</p>
+
+<h2>IP addresses.. troublesome?</h2>
+
+<p>Well, that&#8217;s how I feel :) So I have some
+<strong><a href="https://github.com/teohm/dotfiles/blob/master/.bashrc.d/sshuttle_helpers">sshuttle helpers</a>
+(few lines of Bash functions)</strong> that allow me to <strong>use domain names instead of IP addresses</strong>:</p>
+
+<h3>Tunnel all traffic</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>tnl
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Tunnel all traffic, but exclude some</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>tnlbut youku.com weibo.com
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Tunnel only certain traffic</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>tnlonly netflix.com movies.netflix.com
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>VPN to office network</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vpnto office_ssh_server
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The script is available on <a href="https://github.com/teohm/dotfiles/blob/master/.bashrc.d/sshuttle_helpers">my GitHub repo</a>.
+You can load it into your <code>~/.bashrc</code>. <strong>To override the default tunneling SSH server</strong> in the script:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">TNL_SERVER</span><span class="o">=</span>user@another_server tnl
+</span></code></pre></td></tr></table></div></figure>
+
+
 
 </div>
 
@@ -188,12 +240,12 @@ decided to <strong> <em>only</em> encode parameter values</strong>, but <em>not<
   
 
 
-<time datetime="2012-03-27T21:36:00+08:00" pubdate data-updated="true">Mar 27<span>th</span>, 2012</time>
+<time datetime="2012-04-01T13:13:00+08:00" pubdate data-updated="true">Apr 1<span>st</span>, 2012</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/rails/'>rails</a>
+    <a class='category' href='/blog/categories/sshuttle/'>sshuttle</a>, <a class='category' href='/blog/categories/tools/'>tools</a>, <a class='category' href='/blog/categories/tools-network/'>tools-network</a>
   
 </span>
 
@@ -202,7 +254,7 @@ decided to <strong> <em>only</em> encode parameter values</strong>, but <em>not<
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://teohm.github.com/blog/2012/03/27/utf-8-param-name-issue-in-rails-multipart-form/" data-via="teohm" data-counturl="http://teohm.github.com/blog/2012/03/27/utf-8-param-name-issue-in-rails-multipart-form/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://teohm.github.com/blog/2012/04/01/using-sshuttle-in-daily-work/" data-via="teohm" data-counturl="http://teohm.github.com/blog/2012/04/01/using-sshuttle-in-daily-work/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -215,10 +267,8 @@ decided to <strong> <em>only</em> encode parameter values</strong>, but <em>not<
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/03/22/working-effectively-with-iterm2/" title="Previous Post: Working effectively with iTerm2">&laquo; Working effectively with iTerm2</a>
+        <a class="basic-alignment left" href="/blog/2012/03/27/utf-8-param-name-issue-in-rails-multipart-form/" title="Previous Post: UTF-8 param name issue in Rails multipart form">&laquo; UTF-8 param name issue in Rails multipart form</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2012/04/01/using-sshuttle-in-daily-work/" title="Next Post: Using sshuttle in daily work">Using sshuttle in daily work &raquo;</a>
       
     </p>
   </footer>
@@ -317,8 +367,8 @@ decided to <strong> <em>only</em> encode parameter values</strong>, but <em>not<
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://teohm.github.com/blog/2012/03/27/utf-8-param-name-issue-in-rails-multipart-form/';
-        var disqus_url = 'http://teohm.github.com/blog/2012/03/27/utf-8-param-name-issue-in-rails-multipart-form/';
+        var disqus_identifier = 'http://teohm.github.com/blog/2012/04/01/using-sshuttle-in-daily-work/';
+        var disqus_url = 'http://teohm.github.com/blog/2012/04/01/using-sshuttle-in-daily-work/';
         var disqus_script = 'embed.js';
       
     (function () {

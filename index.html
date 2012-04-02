@@ -9,9 +9,8 @@
   <meta name="author" content="Huiming Teo (teohm)">
 
   
-  <meta name="description" content="I first stumbled upon this issue when Yasith
-(@meaningful) showed me a strange bug
-in a Rails project. Here&#8217;s what happened: Issue When submit &hellip;">
+  <meta name="description" content="I was first introduced to sshuttle by Sooyoung (@5ooyoung) in Favorite Medium
+as a workaround to The Great Firewall in China. Since then, it has &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +77,156 @@ in a Rails project. Here&#8217;s what happened: Issue When submit &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/01/using-sshuttle-in-daily-work/">Using Sshuttle in Daily Work</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-01T13:13:00+08:00" pubdate data-updated="true">Apr 1<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was first introduced to <a href="https://github.com/apenwarr/sshuttle"><strong>sshuttle</strong></a> by Sooyoung (<a href="https://twitter.com/#!/5ooyoung">@5ooyoung</a>) in <a href="http://favoritemedium.com/">Favorite Medium</a>
+as a workaround to The Great Firewall in China.</p>
+
+<p>Since then, it has become my <strong>light-weight network tunneling tool</strong> in daily work.</p>
+
+<h2>Install sshuttle</h2>
+
+<p>The installation is easy now. You can install it through Mac OSX Homebrew, or <a href="http://packages.ubuntu.com/precise/sshuttle">Ubuntu apt-get</a>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>brew install sshuttle
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>I use sshuttle to..</h2>
+
+<h3>1. Tunnel all traffic</h3>
+
+<p>This is the first command I learned.
+It <strong>forwards all TCP traffic and DNS requests to a remote SSH server</strong>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sshuttle --dns -vr ssh_server 0/0
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Just like <code>ssh</code>, you can use any server specified in <code>~/.ssh/config</code>.
+The <code>-v</code> flag means verbose mode.</p>
+
+<p>Besides TCP and DNS, currently <code>sshuttle</code> <strong>does not forward other requests
+<em>such as</em> UDP, ICMP ping etc</strong>.</p>
+
+<h3>2. Tunnel all traffic, but exclude some</h3>
+
+<p>You can <strong>exclude certain TCP traffic using <code>-x</code> option</strong>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sshuttle --dns -vr ssh_server -x 121.9.204.0/24 -x 61.135.196.21 0/0
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For instance, when I am in China, I don&#8217;t want to tunnel
+<a href="http://youku.com">Youku.com</a> traffic to a foreign server,
+because its movie streaming service is only available within China.</p>
+
+<p>In this case, I use <code>-x</code> option to exclude Youku.com IP addresses.</p>
+
+<h3>3. Tunnel only certain traffic</h3>
+
+<p>To tunnel only certain TCP traffic, <strong>specify the IP addresses
+or <a href="http://www.subnet-calculator.com/cidr.php">IP ranges</a> that need tunneling</strong>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sshuttle -vr ssh_server 121.9.204.0/24 61.135.196.21
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This command comes in handy, whenever I need to test an app feature (e.g. Netflix movie streaming)
+which only available in certain countries, or to bypass ISP faulty caches.</p>
+
+<h3>4. VPN to office network</h3>
+
+<p>I seldom do VPN, but all you need is <strong>the remote SSH server with <code>-NH</code> flags turned on</strong>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sshuttle -NHvr office_ssh_server
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>-N</code> flag tells sshuttle to figure out by itself the IP subnets to forward,
+and <code>-H</code> flag to scan for hostnames within remote subnets and store them temporarily in <code>/etc/hosts</code>.</p>
+
+<h2>IP addresses.. troublesome?</h2>
+
+<p>Well, that&#8217;s how I feel :) So I have some
+<strong><a href="https://github.com/teohm/dotfiles/blob/master/.bashrc.d/sshuttle_helpers">sshuttle helpers</a>
+(few lines of Bash functions)</strong> that allow me to <strong>use domain names instead of IP addresses</strong>:</p>
+
+<h3>Tunnel all traffic</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>tnl
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Tunnel all traffic, but exclude some</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>tnlbut youku.com weibo.com
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Tunnel only certain traffic</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>tnlonly netflix.com movies.netflix.com
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>VPN to office network</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vpnto office_ssh_server
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The script is available on <a href="https://github.com/teohm/dotfiles/blob/master/.bashrc.d/sshuttle_helpers">my GitHub repo</a>.
+You can load it into your <code>~/.bashrc</code>. <strong>To override the default tunneling SSH server</strong> in the script:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">TNL_SERVER</span><span class="o">=</span>user@another_server tnl
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1292,6 +1441,10 @@ post them here occationally if interesting enough to share.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/04/01/using-sshuttle-in-daily-work/">Using sshuttle in daily work</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/03/27/utf-8-param-name-issue-in-rails-multipart-form/">UTF-8 param name issue in Rails multipart form</a>
       </li>
     
@@ -1305,10 +1458,6 @@ post them here occationally if interesting enough to share.</p>
     
       <li class="post">
         <a href="/blog/2011/05/31/using-rabl-in-rails-json-web-api/">Using RABL in Rails JSON Web API</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2011/05/30/learning-git-internals-by-example/">Learning Git Internals by Example</a>
       </li>
     
   </ul>
