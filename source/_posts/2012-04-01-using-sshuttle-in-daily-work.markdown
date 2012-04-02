@@ -78,7 +78,7 @@ and `-H` flag to scan for hostnames within remote subnets and store them tempora
 
 IP addresses.. troublesome?
 -----
-Well, that's how I feel :) So I have some 
+I try not to deal with IP addresses manually. So I wrote a few 
 **[sshuttle helpers](https://github.com/teohm/dotfiles/blob/master/.bashrc.d/sshuttle_helpers)
 (few lines of Bash functions)** that allow me to **use domain names instead of IP addresses**:
 
