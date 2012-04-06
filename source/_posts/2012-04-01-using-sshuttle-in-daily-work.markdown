@@ -3,6 +3,11 @@ layout: post
 title: "Using sshuttle in daily work"
 date: 2012-04-01 13:13
 comments: true
+description: > 
+  I explain common use cases of sshuttle in my
+  daily work as a network tunneling tool, and Bash helper 
+  functions that make it easy to use. 
+keywords: sshuttle, vpn, network tunneling, ssh, proxy
 categories: 
 - tools
 - tools-network

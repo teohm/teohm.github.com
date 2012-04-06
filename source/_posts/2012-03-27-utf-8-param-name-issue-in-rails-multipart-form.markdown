@@ -1,8 +1,13 @@
 ---
 layout: post
 title: "UTF-8 param name issue in Rails multipart form"
+description: >
+  This post explains Rails bug #5606, where unicode param keys
+  in multipart form are not properly encoded. Attached with test cases 
+  and fixes.
 date: 2012-03-27 21:36
 comments: true
+keywords: rails, bug, unicode, multipart form, utf8.
 categories: 
 - rails
 ---
