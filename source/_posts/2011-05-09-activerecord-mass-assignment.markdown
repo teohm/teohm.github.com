@@ -1,8 +1,16 @@
 ---
 layout: post
 title: ActiveRecord Mass Assignment
+description: >
+  This post explains why Rails mass assignment protection is important
+  and shows how to apply minimal protection.
 comments: true
-categories: [rails-model, lt-rails]
+image: /images/tags/ruby-rails.png
+keywords: rails, ruby, model, security, mass assignment, active-record.
+categories: 
+- rails
+- rails-model
+- rails-security
 ---
 
 Even you haven't heard of 

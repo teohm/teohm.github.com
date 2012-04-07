@@ -6,3 +6,7 @@
 <meta property="og:image" content="{{ page.image }}">
 <link rel="img_src" href="{{ page.image }}">
 {% endif %} 
+
+{% if description %}
+<meta property="og:description" content="{{ description | strip_html | condense_spaces | truncate:300 }}">
+{% endif %}

@@ -6,10 +6,11 @@ description: >
   iTerm2.
 date: 2012-03-22 22:42
 comments: true
-keywords: cli, iterm, iterm2, command line, Mac OSX, shortcuts, settings.
+image: /images/tags/command-line.png
+keywords: cli, iterm, iterm2, command line, shortcuts, settings.
 categories: 
-- tools 
-- tools-cli 
+- command-line
+- iterm
 
 ---
 

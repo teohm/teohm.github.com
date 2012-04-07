@@ -1,8 +1,15 @@
 ---
 layout: post
 title: ActiveRecord Model Equality
+description: >
+  In Rails ActiveRecord, how to check if 2 model objects are equal, in a
+  proper way. 
 comments: true
-categories: [rails-model, lt-rails]
+image: /images/tags/ruby-rails.png
+keywords: rails, ruby, active-record, model, equality, howto.
+categories: 
+- rails
+- rails-model
 ---
 
 In daily web app development, we often need to check if two model objects are equal.

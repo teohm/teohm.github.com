@@ -1,8 +1,16 @@
 ---
 layout: post
 title: Using JQuery Validation in Rails Remote Form
+description: >
+  This post describes how to integrate JQuery Validation's 
+  submitHandler(form) with Rails 3 remote form.
 comments: true
-categories: [rails-frontend]
+image: /images/tags/ruby-rails.png
+keywords: rails, jquery, input validation, remote form, ruby, jquery UJS.
+categories: 
+- rails
+- rails-view
+- rails-frontend
 ---
 
 In a recent project, I was trying to use [JQuery Validation](http://bassistance.de/jquery-plugins/jquery-plugin-validation/) in an [earlier version](https://github.com/rails/jquery-ujs/blob/bb620a29199214b5c7a3a015372fda28b69c69a1/src/rails.js) of Rails 3 remote form ([jquery-ujs](https://github.com/rails/jquery-ujs)). They didn't work out well in IE.
@@ -27,9 +35,6 @@ The example is tested with:
 - JQuery 1.6.1
 - JQuery Vaidation 1.8.1
 - Latest Rails UJS (commit: [dad6982dc592686677e6](https://github.com/rails/jquery-ujs/blob/dad6982dc592686677e6845e681233c40d2ead27/src/rails.js))
-
-Try run the example page on IE7/8: [/quirks/jquery-validate-ujs-conflict/jquery-ujs-latest.html](/quirks/jquery-validate-ujs-conflict/jquery-ujs-latest.html)
-
 
 ### When using `submitHandler` in JQuery Validation
 

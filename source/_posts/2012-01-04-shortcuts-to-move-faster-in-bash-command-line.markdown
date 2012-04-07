@@ -1,9 +1,16 @@
 ---
 layout: post
 title: "Shortcuts to move faster in Bash command line"
+description: >
+  I stopped using arrow keys recently, and start using shortcut keys to 
+  move around and edit efficiently on the Bash command line.
 date: 2012-01-04 20:13
 comments: true
-categories: [tools, tools-cli]
+image: /images/tags/command-line.png
+keywords: bash, command line editing, shortcuts, arrow keys, tips.
+categories: 
+- command-line
+- bash
 ---
 
 Nowadays, I spend more time in Bash shell, typing longer commands. One of my new year resolutions for this year 

@@ -1,8 +1,15 @@
 ---
 layout: post
 title: Learning Git Internals by Example
+description: >
+  The post explains basic Git internals (what happens in .git directory
+  when you run a git command) using examples and pictures.  
 comments: true
-categories: [git]
+image: /images/tags/git.png
+keywords: git, version control, git internals, visual example, graphical diagram.
+categories: 
+- version-control
+- git
 ---
 
 *Status: Draft.*  
