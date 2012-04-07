@@ -9,7 +9,7 @@
   <meta name="author" content="Huiming Teo (teohm)">
 
   
-  <meta name="description" content="This post explains Rails bug #5606, where unicode param keys in multipart form are not properly encoded. Attached with test cases and fixes.
+  <meta name="description" content="This post explains Rails bug #5606, where unicode param keys in multipart form are not properly encoded. Test cases and patch included.
 ">
   <meta name="keywords" content="rails, bug, unicode, multipart form, utf8.">
 
@@ -30,7 +30,15 @@
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
+
+<meta property="og:image" content="/images/tags/ruby-rails.png">
+<link rel="img_src" href="/images/tags/ruby-rails.png">
  
+
+
+<meta property="og:description" content="This post explains Rails bug #5606, where unicode param keys in multipart form are not properly encoded. Test cases and patch included.
+">
+
 
   
   <script type="text/javascript">
@@ -194,7 +202,7 @@ decided to <strong> <em>only</em> encode parameter values</strong>, but <em>not<
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/rails/'>rails</a>
+    <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/unicode/'>unicode</a>
   
 </span>
 

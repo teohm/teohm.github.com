@@ -9,8 +9,9 @@
   <meta name="author" content="Huiming Teo (teohm)">
 
   
-  <meta name="description" content="In a recent project, I was trying to use JQuery Validation in an earlier version of Rails 3 remote form (jquery-ujs). They didn&#8217;t work out well &hellip;">
-  
+  <meta name="description" content="This post describes how to integrate JQuery Validation's submitHandler(form) with Rails 3 remote form.
+">
+  <meta name="keywords" content="rails, jquery, input validation, remote form, ruby, jquery UJS.">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -29,7 +30,15 @@
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
+
+<meta property="og:image" content="/images/tags/ruby-rails.png">
+<link rel="img_src" href="/images/tags/ruby-rails.png">
  
+
+
+<meta property="og:description" content="This post describes how to integrate JQuery Validation's submitHandler(form) with Rails 3 remote form.
+">
+
 
   
   <script type="text/javascript">
@@ -131,8 +140,6 @@
 </ul>
 
 
-<p>Try run the example page on IE7/8: <a href="/quirks/jquery-validate-ujs-conflict/jquery-ujs-latest.html">/quirks/jquery-validate-ujs-conflict/jquery-ujs-latest.html</a></p>
-
 <h3>When using <code>submitHandler</code> in JQuery Validation</h3>
 
 <p>If you are using JQuery Validation&#8217;s <code>submitHandler(form)</code> function, you need to
@@ -181,7 +188,7 @@ call <code>$.rails.handleRemote( $(form) )</code> function manually, so that it 
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/rails-frontend/'>rails-frontend</a>
+    <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/rails-frontend/'>rails-frontend</a>, <a class='category' href='/blog/categories/rails-view/'>rails-view</a>
   
 </span>
 
