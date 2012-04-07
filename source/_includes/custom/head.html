@@ -3,8 +3,8 @@
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
 {% if page.image %}
-<meta property="og:image" content="{{ page.image }}">
-<link rel="img_src" href="{{ page.image }}">
+<meta property="og:image" content="{{ site.url }}{{ page.image }}">
+<link rel="img_src" href="{{ site.url }}{{ page.image }}">
 {% endif %} 
 
 {% if description %}
