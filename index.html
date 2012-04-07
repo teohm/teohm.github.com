@@ -9,8 +9,9 @@
   <meta name="author" content="Huiming Teo (teohm)">
 
   
-  <meta name="description" content="Enable SSH server on Mac OSX is surprisingly easy. Open System Preferences >
-Sharing, and turn on Remote Login. You can futher restrict which user &hellip;">
+  <meta name="description" content="To switch the default application for file type,
+right-click the file, select Get Info and change the application in
+Open With section. Remember, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -33,9 +34,10 @@ Sharing, and turn on Remote Login. You can futher restrict which user &hellip;">
  
 
 
-<meta property="og:description" content="Enable SSH server on Mac OSX is surprisingly easy. Open System Preferences >
-Sharing, and turn on Remote Login. You can futher restrict which user can
-login via SSH on the same screen. ">
+<meta property="og:description" content="To switch the default application for file type,
+right-click the file, select Get Info and change the application in
+Open With section. Remember, remember.. click Change All&#8230; button to apply the changes to all
+files. It seems obvious, but took me a while to figure this out. :) ">
 
 
   
@@ -85,6 +87,49 @@ login via SSH on the same screen. ">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/07/mac-tips-change-default-application-for-a-file-type/">Mac Tips: Change Default Application for a File Type</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-07T18:46:00+08:00" pubdate data-updated="true">Apr 7<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>To switch the default application for file type,
+right-click the file, select <strong>Get Info</strong> and change the application in
+<strong>Open With</strong> section.</p>
+
+<p>Remember, remember.. click <strong>Change All&#8230;</strong> button to <strong>apply the changes to <em>all</em>
+files</strong>. It seems obvious, but took me a while to figure this out. :)</p>
+
+<p><img src="/images/mac-tips/default-application-for-file-type.png" title="A screenshot of Get Info dialog" alt="A screenshot of Get Info dialog"></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1363,118 +1408,9 @@ ActiveRecord::Base.send(:attr_accessible, nil)</code>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/05/05/activerecord-model-equality/">ActiveRecord Model Equality</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-05-05T00:00:00+08:00" pubdate data-updated="true">May 5<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In daily web app development, we often need to check if two model objects are equal.
-When I first started using Rails, this is what I wrote:</p>
-
-<div>
-  <pre>
-    <code class='ruby'>if user.id == current_user.id
-  # do something
-end</code>
-  </pre>
-</div>
-
-
-<h2>Use obj1 == obj2 instead</h2>
-
-<p>Of course, that reflects my ignorance on learning the new tool.</p>
-
-<p>So, here&#8217;s a proper way to compare if
-<a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#method-i-3D-3D">two model objects are equal</a>:</p>
-
-<div>
-  <pre>
-    <code class='ruby'>test &quot;2 records with same #id equal to each others.&quot; do
-  c1 = Comment.create
-  c2 = Comment.find(c1.id)
-
-  assert c1 == c2
-  assert c2 == c1
-end</code>
-  </pre>
-</div>
-
-
-<h2>What about new record?</h2>
-
-<p>Basically, a new model object only equals to itself:</p>
-
-<div>
-  <pre>
-    <code class='ruby'>test &quot;New record does not equal to another new record.&quot; do
-  new_record = Comment.new
-  another_new = Comment.new
-
-  assert new_record == new_record
-  assert another_new == another_new
-  assert new_record != another_new
-end</code>
-  </pre>
-</div>
-
-
-<p>Learning to use <code>==</code> operator for checking model equality
-is useful. Because now, we can start using other methods
-that depend on <code>==</code> operator. For instance, <code>Array#include?</code>.</p>
-
-<div>
-  <pre>
-    <code class='ruby'>test &quot;When applied in Array&quot; do
-  c1 = Comment.create
-  c2 = Comment.find(c1.id)
-
-  assert [c1].include? c2
-  assert [c2].include? c1
-  assert [c1, c2] == [c1, c2]
-end</code>
-  </pre>
-</div>
-
-
-<h2>Rails learning tests</h2>
-
-<p>You may notice the code examples are written as tests.
-This is my first <a href="https://github.com/teohm/lt_rails">Rails learning test</a>.
-So the plan is to write more tests as a way to learn Rails. I will
-post them here occationally if interesting enough to share.</p>
-
-<p>Source code: <a href="https://github.com/teohm/lt_rails/blob/master/test/unit/model_equality_test.rb">model_equality_test.rb</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/2/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -1485,6 +1421,10 @@ post them here occationally if interesting enough to share.</p>
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/04/07/mac-tips-change-default-application-for-a-file-type/">Mac Tips: Change default application for a file type</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2012/04/07/mac-tips-turn-on-remote-login-ssh-server/">Mac Tips: Turn on remote login (SSH server)</a>
@@ -1500,10 +1440,6 @@ post them here occationally if interesting enough to share.</p>
     
       <li class="post">
         <a href="/blog/2012/03/22/working-effectively-with-iterm2/">Working effectively with iTerm2</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/01/04/shortcuts-to-move-faster-in-bash-command-line/">Shortcuts to move faster in Bash command line</a>
       </li>
     
   </ul>

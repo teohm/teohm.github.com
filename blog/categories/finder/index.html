@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>ActiveRecord Model Equality - teohm.dev</title>
+  <title>Category: finder - teohm.dev</title>
   <meta name="author" content="Huiming Teo (teohm)">
 
   
-  <meta name="description" content="In Rails ActiveRecord, how to check if 2 model objects are equal, in a proper way. ">
-  <meta name="keywords" content="rails, ruby, active-record, model, equality, howto.">
+  <meta name="description" content="Category: finder">
+  
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://teohm.github.com/blog/2011/05/05/activerecord-model-equality">
+  <link rel="canonical" href="http://teohm.github.comblog/categories/finder">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -29,13 +29,10 @@
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
-
-<meta property="og:image" content="http://teohm.github.com/images/tags/ruby-rails.png">
-<link rel="img_src" href="http://teohm.github.com/images/tags/ruby-rails.png">
  
 
 
-<meta property="og:description" content="In Rails ActiveRecord, how to check if 2 model objects are equal, in a proper way. ">
+<meta property="og:description" content="Category: finder">
 
 
   
@@ -84,170 +81,36 @@
   <div id="main">
     <div id="content">
       <div>
-<article class="hentry" role="article">
+<article role="article">
   
   <header>
-    
-      <h1 class="entry-title">ActiveRecord Model Equality</h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-05-05T00:00:00+08:00" pubdate data-updated="true">May 5<span>th</span>, 2011</time>
-        
-      </p>
+    <h1 class="entry-title">Category: Finder</h1>
     
   </header>
-
-
-<div class="entry-content"><p>In daily web app development, we often need to check if two model objects are equal.
-When I first started using Rails, this is what I wrote:</p>
-
-<div>
-  <pre>
-    <code class='ruby'>if user.id == current_user.id
-  # do something
-end</code>
-  </pre>
-</div>
-
-
-<h2>Use obj1 == obj2 instead</h2>
-
-<p>Of course, that reflects my ignorance on learning the new tool.</p>
-
-<p>So, here&#8217;s a proper way to compare if
-<a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#method-i-3D-3D">two model objects are equal</a>:</p>
-
-<div>
-  <pre>
-    <code class='ruby'>test &quot;2 records with same #id equal to each others.&quot; do
-  c1 = Comment.create
-  c2 = Comment.find(c1.id)
-
-  assert c1 == c2
-  assert c2 == c1
-end</code>
-  </pre>
-</div>
-
-
-<h2>What about new record?</h2>
-
-<p>Basically, a new model object only equals to itself:</p>
-
-<div>
-  <pre>
-    <code class='ruby'>test &quot;New record does not equal to another new record.&quot; do
-  new_record = Comment.new
-  another_new = Comment.new
-
-  assert new_record == new_record
-  assert another_new == another_new
-  assert new_record != another_new
-end</code>
-  </pre>
-</div>
-
-
-<p>Learning to use <code>==</code> operator for checking model equality
-is useful. Because now, we can start using other methods
-that depend on <code>==</code> operator. For instance, <code>Array#include?</code>.</p>
-
-<div>
-  <pre>
-    <code class='ruby'>test &quot;When applied in Array&quot; do
-  c1 = Comment.create
-  c2 = Comment.find(c1.id)
-
-  assert [c1].include? c2
-  assert [c2].include? c1
-  assert [c1, c2] == [c1, c2]
-end</code>
-  </pre>
-</div>
-
-
-<h2>Rails learning tests</h2>
-
-<p>You may notice the code examples are written as tests.
-This is my first <a href="https://github.com/teohm/lt_rails">Rails learning test</a>.
-So the plan is to write more tests as a way to learn Rails. I will
-post them here occationally if interesting enough to share.</p>
-
-<p>Source code: <a href="https://github.com/teohm/lt_rails/blob/master/test/unit/model_equality_test.rb">model_equality_test.rb</a></p>
-</div>
-
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">Huiming Teo (teohm)</span></span>
-
-      
-
-
-
-
-
+  <div id="blog-archives" class="category">
 
 
 
   
+  <h2>2012</h2>
+
+<article>
+  
+<h1><a href="/blog/2012/04/07/mac-tips-change-default-application-for-a-file-type/">Mac Tips: Change default application for a file type</a></h1>
+<time datetime="2012-04-07T18:46:00+08:00" pubdate><span class='month'>Apr</span> <span class='day'>07</span> <span class='year'>2012</span></time>
+
+<footer>
+  <span class="categories">posted in <a class='category' href='/blog/categories/finder/'>finder</a>, <a class='category' href='/blog/categories/mac-tips/'>mac-tips</a></span>
+</footer>
 
 
-<time datetime="2011-05-05T00:00:00+08:00" pubdate data-updated="true">May 5<span>th</span>, 2011</time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/rails-model/'>rails-model</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://teohm.github.com/blog/2011/05/05/activerecord-model-equality/" data-via="teohm" data-counturl="http://teohm.github.com/blog/2011/05/05/activerecord-model-equality/" >Tweet</a>
-  
-  
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
-</div>
-
-    
-    <p class="meta">
-      
-      
-        <a class="basic-alignment right" href="/blog/2011/05/09/activerecord-mass-assignment/" title="Next Post: ActiveRecord Mass Assignment">ActiveRecord Mass Assignment &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
 
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
-  </section>
+
+  
+</article>
 
 </div>
 
@@ -335,10 +198,7 @@ post them here occationally if interesting enough to share.</p>
       var disqus_shortname = 'teohm';
       
         
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://teohm.github.com/blog/2011/05/05/activerecord-model-equality/';
-        var disqus_url = 'http://teohm.github.com/blog/2011/05/05/activerecord-model-equality/';
-        var disqus_script = 'embed.js';
+        var disqus_script = 'count.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
