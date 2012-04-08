@@ -9,9 +9,9 @@
   <meta name="author" content="Huiming Teo (teohm)">
 
   
-  <meta name="description" content="To switch the default application for file type,
-right-click the file, select Get Info and change the application in
-Open With section. Remember, &hellip;">
+  <meta name="description" content="After using tmux, I start using Control
+key a lot often. I decided to move my Control key up to the home row,
+by assigning it to Caps Lock. For Mac &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -34,10 +34,10 @@ Open With section. Remember, &hellip;">
  
 
 
-<meta property="og:description" content="To switch the default application for file type,
-right-click the file, select Get Info and change the application in
-Open With section. Remember, remember.. click Change All&#8230; button to apply the changes to all
-files. It seems obvious, but took me a while to figure this out. :) ">
+<meta property="og:description" content="After using tmux, I start using Control
+key a lot often. I decided to move my Control key up to the home row,
+by assigning it to Caps Lock. For Mac users, open System Preferences > Keyboard, choose Keyboard tab.
+Click button Modifier Keys.. and change Caps Lock Key: to ^ Control. ">
 
 
   
@@ -87,6 +87,49 @@ files. It seems obvious, but took me a while to figure this out. :) ">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/08/mac-tips-use-caps-lock-as-control-key/">Mac Tips: Use Caps Lock as Control Key</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-08T10:20:00+08:00" pubdate data-updated="true">Apr 8<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>After using <a href="http://tmux.sourceforge.net/">tmux</a>, I start using Control
+key a lot often. I decided to move my Control key up to the home row,
+by assigning it to <strong>Caps Lock</strong>.</p>
+
+<p>For Mac users, open <strong>System Preferences > Keyboard</strong>, choose <strong>Keyboard</strong> tab.
+Click button <strong>Modifier Keys..</strong> and change <strong>Caps Lock Key:</strong> to <strong>^ Control</strong>.</p>
+
+<p><img src="/images/mac-tips/caps-lock-as-control-key.png" title="A screenshot of Key Modifier Keys dialog" alt="A screenshot of Key Modifier Key dialog"></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1289,125 +1332,6 @@ call <code>$.rails.handleRemote( $(form) )</code> function manually, so that it 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/05/09/activerecord-mass-assignment/">ActiveRecord Mass Assignment</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-05-09T00:00:00+08:00" pubdate data-updated="true">May 9<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Even you haven&#8217;t heard of
-<a href="http://guides.rubyonrails.org/security.html#mass-assignment">mass assignment</a>,
-it already exists in your first Rails generated scaffold code.</p>
-
-<div>
-  <pre>
-    <code class='ruby'>def create
-  @comment = Comment.new(params[:comment])
-  ..
-end
-
-def update
-  ..
-  @comment.update_attributes(params[:comment])
-  ..
-end</code>
-  </pre>
-</div>
-
-
-<h2>Why knowing mass assignment is important?</h2>
-
-<p>By default, mass assignment opens up an undesirable <strong>security hole</strong>,
-by allowing web clients to update any attributes they passing in,
-including attributes like <code>created_at</code>.</p>
-
-<p>For details, you can read:</p>
-
-<ul>
-<li><a href="http://guides.rubyonrails.org/security.html#mass-assignment">Ruby On Rails Security Guide - Mass Assignment</a></li>
-<li><a href="http://railspikes.com/2008/9/22/is-your-rails-application-safe-from-mass-assignment">Rail Spikes: Is your Rails application safe?</a></li>
-</ul>
-
-
-<h2>Mass assignment methods</h2>
-
-<p>There are a few <strong>ActiveRecord methods</strong> that accept mass assignment:</p>
-
-<ul>
-<li><a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#method-c-new"><code>new</code></a></li>
-<li><a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#method-c-create"><code>create</code></a></li>
-<li><a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#method-i-attributes-3D"><code>attributes=</code></a></li>
-<li><a href="http://apidock.com/rails/ActiveRecord/Base/update_attributes"><code>update_attributes</code></a></li>
-</ul>
-
-
-<p>Using any of these methods, means you are now responsible for the safety
-of the web application.</p>
-
-<h2>Minimal protection</h2>
-
-<p>To use mass assignment safely, we want to specify exactly which attributes
-allowed to be updated.</p>
-
-<h3>1. Define <code>attr_accessible</code> on every model</h3>
-
-<p><code>attr_accessible</code> defines a white-list of attributes
-that can be updated during mass assignment.</p>
-
-<div>
-  <pre>
-    <code class='ruby'>class Comment &lt; ActiveRecord::Base
-  attr_accessible :title, :content
-end</code>
-  </pre>
-</div>
-
-
-<h3>2. Enforce <code>attr_accessible</code> usage</h3>
-
-<p>You may set the white-list default to empty. This forces you
-to define the whitelist explicitly on a model, before
-mass assignment can be used.</p>
-
-<div>
-  <pre>
-    <code class='ruby'># config/initializer/enforce_attr_accessible.rb
-
-ActiveRecord::Base.send(:attr_accessible, nil)</code>
-  </pre>
-</div>
-
-
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1423,6 +1347,10 @@ ActiveRecord::Base.send(:attr_accessible, nil)</code>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/04/08/mac-tips-use-caps-lock-as-control-key/">Mac Tips: Use Caps Lock as Control key</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/04/07/mac-tips-change-default-application-for-a-file-type/">Mac Tips: Change default application for a file type</a>
       </li>
     
@@ -1436,10 +1364,6 @@ ActiveRecord::Base.send(:attr_accessible, nil)</code>
     
       <li class="post">
         <a href="/blog/2012/03/27/utf-8-param-name-issue-in-rails-multipart-form/">UTF-8 param name issue in Rails multipart form</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/03/22/working-effectively-with-iterm2/">Working effectively with iTerm2</a>
       </li>
     
   </ul>
