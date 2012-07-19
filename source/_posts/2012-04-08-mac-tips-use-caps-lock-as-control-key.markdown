@@ -6,7 +6,6 @@ description: >
   Click button Modifier Keys.. and change Caps Lock Key: to '^ Control'.
 date: 2012-04-08 10:20
 comments: true
-image: /images/tags/mac-tips.png
 keywords: Mac Tips, Mac OSX, keyboard, caps lock, Ctrl key, Control key.
 categories: 
 - mac-tips

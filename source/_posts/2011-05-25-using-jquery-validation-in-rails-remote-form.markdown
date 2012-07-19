@@ -5,7 +5,6 @@ description: >
   This post describes how to integrate JQuery Validation's 
   submitHandler(form) with Rails 3 remote form.
 comments: true
-image: /images/tags/ruby-rails.png
 keywords: rails, jquery, input validation, remote form, ruby, jquery UJS.
 categories: 
 - rails

@@ -5,7 +5,6 @@ description: >
   In Rails ActiveRecord, how to check if 2 model objects are equal, in a
   proper way. 
 comments: true
-image: /images/tags/ruby-rails.png
 keywords: rails, ruby, active-record, model, equality, howto.
 categories: 
 - rails

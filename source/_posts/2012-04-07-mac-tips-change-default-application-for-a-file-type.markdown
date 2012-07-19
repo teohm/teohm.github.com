@@ -6,7 +6,6 @@ description: >
   Remember to click button 'Change All..'
 date: 2012-04-07 18:46
 comments: true
-image: /images/tags/mac-tips.png
 keywords: Mac Tips, Mac OSX, default application, file type, finder
 categories: 
 - mac-tips

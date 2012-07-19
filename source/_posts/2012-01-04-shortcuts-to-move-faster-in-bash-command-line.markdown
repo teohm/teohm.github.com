@@ -6,7 +6,6 @@ description: >
   move around and edit efficiently on the Bash command line.
 date: 2012-01-04 20:13
 comments: true
-image: /images/tags/command-line.png
 keywords: bash, command line editing, shortcuts, arrow keys, tips.
 categories: 
 - command-line

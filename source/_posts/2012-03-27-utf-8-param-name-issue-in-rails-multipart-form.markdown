@@ -7,7 +7,6 @@ description: >
   and patch included.
 date: 2012-03-27 21:36
 comments: true
-image: /images/tags/ruby-rails.png
 keywords: rails, bug, unicode, multipart form, utf8.
 categories: 
 - rails

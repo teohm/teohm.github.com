@@ -5,7 +5,6 @@ description: >
   Quick Tips: Open System Preferences > Sharing, and turn on Remote Login.
 date: 2012-04-07 15:12
 comments: true
-image: /images/tags/mac-tips.png
 keywords: Mac Tips, Mac OSX, remote login, SSH server, ssh, network.
 categories: 
 - mac-tips

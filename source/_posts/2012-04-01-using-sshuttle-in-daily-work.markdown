@@ -7,7 +7,6 @@ description: >
   functions that make life even easier. 
 date: 2012-04-01 13:13
 comments: true
-image: /images/tags/command-line.png
 keywords: sshuttle, vpn, network tunneling, ssh, proxy
 categories: 
 - command-line

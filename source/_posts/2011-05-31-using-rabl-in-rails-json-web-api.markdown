@@ -5,7 +5,6 @@ description: >
   This post explains how to use RABL effectively to expose
   JSON Web API for a simple event management app. Sample code included.
 comments: true
-image: /images/tags/ruby-rails.png
 keywords: rails, rabl, ruby, json, view renderer, web api, example. 
 categories: 
 - rails

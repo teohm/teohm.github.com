@@ -6,7 +6,6 @@ description: >
   iTerm2.
 date: 2012-03-22 22:42
 comments: true
-image: /images/tags/command-line.png
 keywords: cli, iterm, iterm2, command line, shortcuts, settings.
 categories: 
 - command-line
