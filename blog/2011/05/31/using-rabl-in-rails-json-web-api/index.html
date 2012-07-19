@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://teohm.github.com/blog/2011/05/31/using-rabl-in-rails-json-web-api">
+  <link rel="canonical" href="http://teohm.github.com/blog/2011/05/31/using-rabl-in-rails-json-web-api/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -31,8 +31,8 @@
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
 
-<meta property="og:image" content="http://teohm.github.com/images/tags/ruby-rails.png">
-<link rel="img_src" href="http://teohm.github.com/images/tags/ruby-rails.png">
+<meta property="og:image" content="http://teohm.github.com/images/tags/rails.png">
+<link rel="img_src" href="http://teohm.github.com/images/tags/rails.png">
  
 
 
@@ -137,18 +137,15 @@
 <p>In RABL, we can define the attribute whitelist in a RABL template.</p>
 
 <div>
-  <pre>
-    <code class='ruby'># tryrabl/app/views/users/base.rabl
-attributes :id, :username, :email, :display_name</code>
-  </pre>
+  <pre><code class='ruby'># tryrabl/app/views/users/base.rabl
+attributes :id, :username, :email, :display_name</code></pre>
 </div>
 
 
 <p>To show individual user, we can now reuse the template through RABL <code>extends</code>.</p>
 
 <div>
-  <pre>
-    <code class='ruby'># tryrabl/app/views/users/show.rabl
+  <pre><code class='ruby'># tryrabl/app/views/users/show.rabl
 extends &quot;users/base&quot;
 object @user
 
@@ -160,16 +157,14 @@ object @user
 #         &quot;email&quot;: &quot;matteo@wilkinsonhuel.name&quot;,
 #         &quot;display_name&quot;: &quot;Ms. Noe Lowe&quot;
 #     }
-# }</code>
-  </pre>
+# }</code></pre>
 </div>
 
 
 <p>Here&#8217;s another example to show a list of users.</p>
 
 <div>
-  <pre>
-    <code class='ruby'># tryrabl/app/views/users/index.rabl
+  <pre><code class='ruby'># tryrabl/app/views/users/index.rabl
 extends &quot;users/base&quot;
 collection @users
 
@@ -188,16 +183,14 @@ collection @users
 #         &quot;email&quot;: &quot;jarod@eichmann.com&quot;,
 #         &quot;display_name&quot;: &quot;Oran Lebsack&quot;
 #     }
-# }]</code>
-  </pre>
+# }]</code></pre>
 </div>
 
 
 <p>The template can be reused in nested child as well, through RABL <code>child</code>.</p>
 
 <div>
-  <pre>
-    <code class='ruby'>attributes :id, :title, :description, :start, :end, :location
+  <pre><code class='ruby'>attributes :id, :title, :description, :start, :end, :location
 child :creator =&gt; :creator do
   extends 'users/base'
 end
@@ -218,8 +211,7 @@ end
 #             &quot;display_name&quot;: &quot;Mrs. Gaylord Hoeger&quot;
 #         }
 #     }
-# }</code>
-  </pre>
+# }</code></pre>
 </div>
 
 
@@ -230,21 +222,18 @@ end
 <p>When query database, usually we need to query the join table: <code>event_guests</code>.</p>
 
 <div>
-  <pre>
-    <code class='ruby'>class GuestsController &lt; ApplicationController
+  <pre><code class='ruby'>class GuestsController &lt; ApplicationController
   def index
     @guests = EventGuest.where(:event_id =&gt; params[:event_id])
   end
-end</code>
-  </pre>
+end</code></pre>
 </div>
 
 
 <p>But when rendering, the result set needs to be rendered as a list of Users. RABL allows you to do that easily, using its <code>glue</code> feature (a weird name though :).</p>
 
 <div>
-  <pre>
-    <code class='ruby'># tryrabl/app/views/guests/index.rabl
+  <pre><code class='ruby'># tryrabl/app/views/guests/index.rabl
 collection @event_guests
 
 # include the additional attribute
@@ -272,8 +261,7 @@ end
 #         &quot;email&quot;: &quot;brendon.howe@cormiergrady.info&quot;,
 #         &quot;display_name&quot;: &quot;Edgardo Dickens&quot;
 #     }
-# }]</code>
-  </pre>
+# }]</code></pre>
 </div>
 
 

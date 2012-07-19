@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://teohm.github.com/blog/2011/05/30/learning-git-internals-by-example">
+  <link rel="canonical" href="http://teohm.github.com/blog/2011/05/30/learning-git-internals-by-example/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -175,9 +175,7 @@
 <h3>Initialize New Repository</h3>
 
 <div>
-  <pre>
-    <code class='bash'>$ git init canai</code>
-  </pre>
+  <pre><code class='bash'>$ git init canai</code></pre>
 </div>
 
 
@@ -199,10 +197,8 @@ ref: refs/heads/master
 <h3>Add New File</h3>
 
 <div>
-  <pre>
-    <code class='bash'>$ echo &quot;A roti canai project.&quot; &gt;&gt; README
-$ git add README</code>
-  </pre>
+  <pre><code class='bash'>$ echo &quot;A roti canai project.&quot; &gt;&gt; README
+$ git add README</code></pre>
 </div>
 
 
@@ -230,12 +226,10 @@ A roti canai project.
 <h3>First Commit</h3>
 
 <div>
-  <pre>
-    <code class='bash'>$ git commit -m'first commit'
+  <pre><code class='bash'>$ git commit -m'first commit'
 [master (root-commit) d9976cf] first commit
  1 files changed, 1 insertions(+), 0 deletions(-)
- create mode 100644 README</code>
-  </pre>
+ create mode 100644 README</code></pre>
 </div>
 
 
@@ -274,10 +268,8 @@ $ git ls-tree 0ff699
 <h3>Add Modified File</h3>
 
 <div>
-  <pre>
-    <code class='bash'>$ echo &quot;Welcome everyone.&quot; &gt;&gt; README
-$ git add README</code>
-  </pre>
+  <pre><code class='bash'>$ echo &quot;Welcome everyone.&quot; &gt;&gt; README
+$ git add README</code></pre>
 </div>
 
 
@@ -306,11 +298,9 @@ Welcome everyone.
 <h3>Add File into Subdirectory</h3>
 
 <div>
-  <pre>
-    <code class='bash'>$ mkdir doc
+  <pre><code class='bash'>$ mkdir doc
 $ echo &quot;[[TBD]] manual toc&quot; &gt;&gt; doc/manual.txt
-$ git add doc</code>
-  </pre>
+$ git add doc</code></pre>
 </div>
 
 
@@ -337,12 +327,10 @@ $ git cat-file blob ea283
 <h3>Second Commit</h3>
 
 <div>
-  <pre>
-    <code class='bash'>$ git commit -m'second commit'
+  <pre><code class='bash'>$ git commit -m'second commit'
 [master 556eaf3] second commit
  2 files changed, 2 insertions(+), 0 deletions(-)
- create mode 100644 doc/manual.txt</code>
-  </pre>
+ create mode 100644 doc/manual.txt</code></pre>
 </div>
 
 
@@ -385,9 +373,7 @@ second commit
 <h3>Add Annotated Tag</h3>
 
 <div>
-  <pre>
-    <code class='bash'>$ git tag -a -m'this is annotated tag' v0.1 d9976</code>
-  </pre>
+  <pre><code class='bash'>$ git tag -a -m'this is annotated tag' v0.1 d9976</code></pre>
 </div>
 
 
@@ -418,9 +404,7 @@ this is annotated tag
 <h3>Add new (lightweight) tag</h3>
 
 <div>
-  <pre>
-    <code class='bash'>$ git tag root-commit d9976</code>
-  </pre>
+  <pre><code class='bash'>$ git tag root-commit d9976</code></pre>
 </div>
 
 

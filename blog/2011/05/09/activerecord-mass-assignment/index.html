@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://teohm.github.com/blog/2011/05/09/activerecord-mass-assignment">
+  <link rel="canonical" href="http://teohm.github.com/blog/2011/05/09/activerecord-mass-assignment/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -31,8 +31,8 @@
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
 
-<meta property="og:image" content="http://teohm.github.com/images/tags/ruby-rails.png">
-<link rel="img_src" href="http://teohm.github.com/images/tags/ruby-rails.png">
+<meta property="og:image" content="http://teohm.github.com/images/tags/rails.png">
+<link rel="img_src" href="http://teohm.github.com/images/tags/rails.png">
  
 
 
@@ -118,8 +118,7 @@
 it already exists in your first Rails generated scaffold code.</p>
 
 <div>
-  <pre>
-    <code class='ruby'>def create
+  <pre><code class='ruby'>def create
   @comment = Comment.new(params[:comment])
   ..
 end
@@ -128,8 +127,7 @@ def update
   ..
   @comment.update_attributes(params[:comment])
   ..
-end</code>
-  </pre>
+end</code></pre>
 </div>
 
 
@@ -173,11 +171,9 @@ allowed to be updated.</p>
 that can be updated during mass assignment.</p>
 
 <div>
-  <pre>
-    <code class='ruby'>class Comment &lt; ActiveRecord::Base
+  <pre><code class='ruby'>class Comment &lt; ActiveRecord::Base
   attr_accessible :title, :content
-end</code>
-  </pre>
+end</code></pre>
 </div>
 
 
@@ -188,11 +184,9 @@ to define the whitelist explicitly on a model, before
 mass assignment can be used.</p>
 
 <div>
-  <pre>
-    <code class='ruby'># config/initializer/enforce_attr_accessible.rb
+  <pre><code class='ruby'># config/initializer/enforce_attr_accessible.rb
 
-ActiveRecord::Base.send(:attr_accessible, nil)</code>
-  </pre>
+ActiveRecord::Base.send(:attr_accessible, nil)</code></pre>
 </div>
 
 

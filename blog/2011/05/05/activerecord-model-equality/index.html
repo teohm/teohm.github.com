@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://teohm.github.com/blog/2011/05/05/activerecord-model-equality">
+  <link rel="canonical" href="http://teohm.github.com/blog/2011/05/05/activerecord-model-equality/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -30,8 +30,8 @@
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
 
-<meta property="og:image" content="http://teohm.github.com/images/tags/ruby-rails.png">
-<link rel="img_src" href="http://teohm.github.com/images/tags/ruby-rails.png">
+<meta property="og:image" content="http://teohm.github.com/images/tags/rails.png">
+<link rel="img_src" href="http://teohm.github.com/images/tags/rails.png">
  
 
 
@@ -115,11 +115,9 @@
 When I first started using Rails, this is what I wrote:</p>
 
 <div>
-  <pre>
-    <code class='ruby'>if user.id == current_user.id
+  <pre><code class='ruby'>if user.id == current_user.id
   # do something
-end</code>
-  </pre>
+end</code></pre>
 </div>
 
 
@@ -131,15 +129,13 @@ end</code>
 <a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#method-i-3D-3D">two model objects are equal</a>:</p>
 
 <div>
-  <pre>
-    <code class='ruby'>test &quot;2 records with same #id equal to each others.&quot; do
+  <pre><code class='ruby'>test &quot;2 records with same #id equal to each others.&quot; do
   c1 = Comment.create
   c2 = Comment.find(c1.id)
 
   assert c1 == c2
   assert c2 == c1
-end</code>
-  </pre>
+end</code></pre>
 </div>
 
 
@@ -148,16 +144,14 @@ end</code>
 <p>Basically, a new model object only equals to itself:</p>
 
 <div>
-  <pre>
-    <code class='ruby'>test &quot;New record does not equal to another new record.&quot; do
+  <pre><code class='ruby'>test &quot;New record does not equal to another new record.&quot; do
   new_record = Comment.new
   another_new = Comment.new
 
   assert new_record == new_record
   assert another_new == another_new
   assert new_record != another_new
-end</code>
-  </pre>
+end</code></pre>
 </div>
 
 
@@ -166,16 +160,14 @@ is useful. Because now, we can start using other methods
 that depend on <code>==</code> operator. For instance, <code>Array#include?</code>.</p>
 
 <div>
-  <pre>
-    <code class='ruby'>test &quot;When applied in Array&quot; do
+  <pre><code class='ruby'>test &quot;When applied in Array&quot; do
   c1 = Comment.create
   c2 = Comment.find(c1.id)
 
   assert [c1].include? c2
   assert [c2].include? c1
   assert [c1, c2] == [c1, c2]
-end</code>
-  </pre>
+end</code></pre>
 </div>
 
 

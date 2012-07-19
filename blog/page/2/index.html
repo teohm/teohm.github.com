@@ -20,7 +20,7 @@ it already exists in your first Rails generated scaffold code. def create @comme
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://teohm.github.com/blog/page/2">
+  <link rel="canonical" href="http://teohm.github.com/blog/page/2/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -122,8 +122,7 @@ end Why knowing mass assignment is important? By default, mass &hellip;">
 it already exists in your first Rails generated scaffold code.</p>
 
 <div>
-  <pre>
-    <code class='ruby'>def create
+  <pre><code class='ruby'>def create
   @comment = Comment.new(params[:comment])
   ..
 end
@@ -132,8 +131,7 @@ def update
   ..
   @comment.update_attributes(params[:comment])
   ..
-end</code>
-  </pre>
+end</code></pre>
 </div>
 
 
@@ -177,11 +175,9 @@ allowed to be updated.</p>
 that can be updated during mass assignment.</p>
 
 <div>
-  <pre>
-    <code class='ruby'>class Comment &lt; ActiveRecord::Base
+  <pre><code class='ruby'>class Comment &lt; ActiveRecord::Base
   attr_accessible :title, :content
-end</code>
-  </pre>
+end</code></pre>
 </div>
 
 
@@ -192,11 +188,9 @@ to define the whitelist explicitly on a model, before
 mass assignment can be used.</p>
 
 <div>
-  <pre>
-    <code class='ruby'># config/initializer/enforce_attr_accessible.rb
+  <pre><code class='ruby'># config/initializer/enforce_attr_accessible.rb
 
-ActiveRecord::Base.send(:attr_accessible, nil)</code>
-  </pre>
+ActiveRecord::Base.send(:attr_accessible, nil)</code></pre>
 </div>
 
 
@@ -240,11 +234,9 @@ ActiveRecord::Base.send(:attr_accessible, nil)</code>
 When I first started using Rails, this is what I wrote:</p>
 
 <div>
-  <pre>
-    <code class='ruby'>if user.id == current_user.id
+  <pre><code class='ruby'>if user.id == current_user.id
   # do something
-end</code>
-  </pre>
+end</code></pre>
 </div>
 
 
@@ -256,15 +248,13 @@ end</code>
 <a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#method-i-3D-3D">two model objects are equal</a>:</p>
 
 <div>
-  <pre>
-    <code class='ruby'>test &quot;2 records with same #id equal to each others.&quot; do
+  <pre><code class='ruby'>test &quot;2 records with same #id equal to each others.&quot; do
   c1 = Comment.create
   c2 = Comment.find(c1.id)
 
   assert c1 == c2
   assert c2 == c1
-end</code>
-  </pre>
+end</code></pre>
 </div>
 
 
@@ -273,16 +263,14 @@ end</code>
 <p>Basically, a new model object only equals to itself:</p>
 
 <div>
-  <pre>
-    <code class='ruby'>test &quot;New record does not equal to another new record.&quot; do
+  <pre><code class='ruby'>test &quot;New record does not equal to another new record.&quot; do
   new_record = Comment.new
   another_new = Comment.new
 
   assert new_record == new_record
   assert another_new == another_new
   assert new_record != another_new
-end</code>
-  </pre>
+end</code></pre>
 </div>
 
 
@@ -291,16 +279,14 @@ is useful. Because now, we can start using other methods
 that depend on <code>==</code> operator. For instance, <code>Array#include?</code>.</p>
 
 <div>
-  <pre>
-    <code class='ruby'>test &quot;When applied in Array&quot; do
+  <pre><code class='ruby'>test &quot;When applied in Array&quot; do
   c1 = Comment.create
   c2 = Comment.find(c1.id)
 
   assert [c1].include? c2
   assert [c2].include? c1
   assert [c1, c2] == [c1, c2]
-end</code>
-  </pre>
+end</code></pre>
 </div>
 
 
