@@ -102,6 +102,13 @@ body {
                  0 20px 20px rgba(0,0,0,.15);
 }
 
+.reveal h1 small,
+.reveal h2 small,
+.reveal h3 small,
+.reveal h4 small,
+.reveal h5 small {
+  color: #aaa;
+}
 
 /*********************************************
  * VIEW FRAGMENTS
