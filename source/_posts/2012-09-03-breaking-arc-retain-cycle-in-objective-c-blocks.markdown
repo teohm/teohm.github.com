@@ -4,9 +4,7 @@ title: "Breaking ARC retain cycle in Objective-C blocks"
 date: 2012-09-03 17:50
 comments: true
 categories: 
-- iOS
-- Objective-C
-- Memory-Management
+- ios
 ---
 
 In a recent client project, we noticed its iOS app often **received low memory
@@ -59,7 +57,7 @@ If your app is targeted for iOS 5, you can use `__weak` lifetime qualifier to br
 @interface DetailPageViewController : UIViewController
 - (void)loadView {
   ...
-  __weak DetailPageViewController controller = self;
+  __weak DetailPageViewController *controller = self;
   [self.doneButton onTouch:^(id sender) {
     [controller doSomething];
     controller.isDone = YES;
