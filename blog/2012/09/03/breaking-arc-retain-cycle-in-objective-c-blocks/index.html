@@ -191,7 +191,7 @@ qualifiers</strong>. It is definitely a <strong>must read</strong> for iOS devel
 </pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">@interface</span> <span class="nc">DetailPageViewController</span> : <span class="nc">UIViewController</span>
 </span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">loadView</span> <span class="p">{</span>
 </span><span class='line'>  <span class="p">...</span>
-</span><span class='line'>  <span class="n">__weak</span> <span class="n">DetailPageViewController</span> <span class="n">controller</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">__weak</span> <span class="n">DetailPageViewController</span> <span class="o">*</span><span class="n">controller</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
 </span><span class='line'>  <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">doneButton</span> <span class="nl">onTouch:</span><span class="o">^</span><span class="p">(</span><span class="kt">id</span> <span class="n">sender</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>    <span class="p">[</span><span class="n">controller</span> <span class="n">doSomething</span><span class="p">];</span>
 </span><span class='line'>    <span class="n">controller</span><span class="p">.</span><span class="n">isDone</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
