@@ -9,9 +9,8 @@
   <meta name="author" content="Huiming Teo (teohm)">
 
   
-  <meta name="description" content="After using tmux, I start using Control
-key a lot often. I decided to move my Control key up to the home row,
-by assigning it to Caps Lock. For Mac &hellip;">
+  <meta name="description" content="In a recent client project, we noticed its iOS app often received low memory
+warning. The iOS app is developed with ARC-enabled (Automatic Reference &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -34,10 +33,9 @@ by assigning it to Caps Lock. For Mac &hellip;">
  
 
 
-<meta property="og:description" content="After using tmux, I start using Control
-key a lot often. I decided to move my Control key up to the home row,
-by assigning it to Caps Lock. For Mac users, open System Preferences > Keyboard, choose Keyboard tab.
-Click button Modifier Keys.. and change Caps Lock Key: to ^ Control. ">
+<meta property="og:description" content="In a recent client project, we noticed its iOS app often received low memory
+warning. The iOS app is developed with ARC-enabled (Automatic Reference Counting). When profiled the app using Instruments > Allocations, we found that
+a lot of unused ViewController objects were not released from memory. &hellip;">
 
 
   
@@ -87,6 +85,131 @@ Click button Modifier Keys.. and change Caps Lock Key: to ^ Control. ">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/09/03/breaking-arc-retain-cycle-in-objective-c-blocks/">Breaking ARC Retain Cycle in Objective-C Blocks</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-03T17:50:00+08:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In a recent client project, we noticed its iOS app often <strong>received low memory
+warning</strong>. The iOS app is developed with ARC-enabled (Automatic Reference Counting).</p>
+
+<p>When profiled the app using <strong>Instruments > Allocations</strong>, we found that
+a lot of unused ViewController objects were not released from memory.</p>
+
+<h2>Retain Cycle</h2>
+
+<p>The codebase uses a lot of <strong>Objective-C blocks</strong> as shown below, and
+<code>self</code> is often being called within the blocks:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">@interface</span> <span class="nc">DetailPageViewController</span> : <span class="nc">UIViewController</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">UIButton</span> <span class="o">*</span><span class="n">backButton</span><span class="p">;</span>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">@</span><span class="n">implementation</span> <span class="n">DetailPageViewController</span>
+</span><span class='line'><span class="k">@synthesize</span> <span class="n">backButton</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">loadView</span> <span class="p">{</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'>  <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">doneButton</span> <span class="nl">onTouch:</span><span class="o">^</span><span class="p">(</span><span class="kt">id</span> <span class="n">sender</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="n">doSomething</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">isDone</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this example code, the controller object holds a <strong>strong reference to
+<code>doneButton</code> object</strong>. But because <code>doneButton onTouch:</code> block is calling
+<code>self</code>, now the button object <strong>holds a strong reference back to the controller
+object</strong>.</p>
+
+<p>When object A points strongly to object B, and B points strongly to A, a
+<a href="http://cocoawithlove.com/2009/07/rules-to-avoid-retain-cycles.html"><strong>retain cycle</strong></a> is created,
+and both objects cannot be released from memory.</p>
+
+<h2>Use Lifetime Qualifiers</h2>
+
+<p><a href="http://developer.apple.com/library/mac/#releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html#//apple_ref/doc/uid/TP40011226-CH1-SW9">Apple Developer&#8217;s guide on ARC transition</a> suggested a few ways to <strong>break the retain cycle using different lifetime
+qualifiers</strong>. It is definitely a <strong>must read</strong> for iOS development.</p>
+
+<p>If your app is targeted for iOS 5, you can use <code>__weak</code> lifetime qualifier to break the cycle:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">@interface</span> <span class="nc">DetailPageViewController</span> : <span class="nc">UIViewController</span>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">loadView</span> <span class="p">{</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'>  <span class="n">__weak</span> <span class="n">DetailPageViewController</span> <span class="n">controller</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">doneButton</span> <span class="nl">onTouch:</span><span class="o">^</span><span class="p">(</span><span class="kt">id</span> <span class="n">sender</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">controller</span> <span class="n">doSomething</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">controller</span><span class="p">.</span><span class="n">isDone</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Because we are using <code>__weak</code> qualifier, <code>doneButton onTouch:</code> block
+only has <strong>a weak reference to the controller object</strong>. Now, the controller
+object can be released from memory when its reference count drops to 0.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1221,87 +1344,6 @@ d9976cfe0430557885d162927dd70186d0f521e8
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/05/25/using-jquery-validation-in-rails-remote-form/">Using JQuery Validation in Rails Remote Form</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-05-25T00:00:00+08:00" pubdate data-updated="true">May 25<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In a recent project, I was trying to use <a href="http://bassistance.de/jquery-plugins/jquery-plugin-validation/">JQuery Validation</a> in an <a href="https://github.com/rails/jquery-ujs/blob/bb620a29199214b5c7a3a015372fda28b69c69a1/src/rails.js">earlier version</a> of Rails 3 remote form (<a href="https://github.com/rails/jquery-ujs">jquery-ujs</a>). They didn&#8217;t work out well in IE.</p>
-
-<p>After experimenting with the <a href="https://github.com/rails/jquery-ujs/blob/dad6982dc592686677e6845e681233c40d2ead27/src/rails.js">latest jquery-ujs</a> and making an embarrassing mistake, it turns out that the issue is resolved in the latest version.</p>
-
-<p>(<em>Mistake</em>: You may notice I removed a previous post about this topic, where I mistakenly concluded the latest jquery-ujs is not working with JQuery Validation. Thanks to JangoSteve for <a href="https://github.com/rails/jquery-ujs/issues/165#comment_1228899">pointing it out</a>. The post was misleading, so I believe it&#8217;s best to remove it to avoid confusion. :-)</p>
-
-<h2>Get the latest <code>jquery-ujs</code></h2>
-
-<p>There are 2 reasons to use the latest jquery-ujs:</p>
-
-<ol>
-<li>it has a patch that fixes the issue (see <a href="https://github.com/rails/jquery-ujs/issues/118">issue #118</a>).</li>
-<li>it exposes an internal function that we may need &#8211; <code>$.rails.handleRemote()</code> (see <a href="http://www.alfajango.com/blog/rails-jquery-ujs-now-interactive/">more details</a>)</li>
-</ol>
-
-
-<h2>Working example</h2>
-
-<p>The example is tested with:</p>
-
-<ul>
-<li>JQuery 1.6.1</li>
-<li>JQuery Vaidation 1.8.1</li>
-<li>Latest Rails UJS (commit: <a href="https://github.com/rails/jquery-ujs/blob/dad6982dc592686677e6845e681233c40d2ead27/src/rails.js">dad6982dc592686677e6</a>)</li>
-</ul>
-
-
-<h3>When using <code>submitHandler</code> in JQuery Validation</h3>
-
-<p>If you are using JQuery Validation&#8217;s <code>submitHandler(form)</code> function, you need to
-call <code>$.rails.handleRemote( $(form) )</code> function manually, so that it submits the form via XHR.</p>
-
-<div>
-  <pre><code class='javascript'>$('#submit_form').validate({
-
-  submitHandler: function(form) {
-    // .. do something before submit ..
-    $.rails.handleRemote( $(form) );  // submit via xhr
-    //form.submit();                  // don't use, it submits the form directly
-  }
-
-});</code></pre>
-</div>
-
-
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1317,6 +1359,10 @@ call <code>$.rails.handleRemote( $(form) )</code> function manually, so that it 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/09/03/breaking-arc-retain-cycle-in-objective-c-blocks/">Breaking ARC retain cycle in Objective-C blocks</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/04/08/mac-tips-use-caps-lock-as-control-key/">Mac Tips: Use Caps Lock as Control key</a>
       </li>
     
@@ -1330,10 +1376,6 @@ call <code>$.rails.handleRemote( $(form) )</code> function manually, so that it 
     
       <li class="post">
         <a href="/blog/2012/04/01/using-sshuttle-in-daily-work/">Using sshuttle in daily work</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/03/27/utf-8-param-name-issue-in-rails-multipart-form/">UTF-8 param name issue in Rails multipart form</a>
       </li>
     
   </ul>

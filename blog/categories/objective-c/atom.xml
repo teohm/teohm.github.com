@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Objective-C | teohm.dev]]></title>
+  <link href="http://teohm.github.com/blog/categories/objective-c/atom.xml" rel="self"/>
+  <link href="http://teohm.github.com/"/>
+  <updated>2012-09-03T19:15:20+08:00</updated>
+  <id>http://teohm.github.com/</id>
+  <author>
+    <name><![CDATA[Huiming Teo (teohm)]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Breaking ARC retain cycle in Objective-C blocks]]></title>
+    <link href="http://teohm.github.com/blog/2012/09/03/breaking-arc-retain-cycle-in-objective-c-blocks/"/>
+    <updated>2012-09-03T17:50:00+08:00</updated>
+    <id>http://teohm.github.com/blog/2012/09/03/breaking-arc-retain-cycle-in-objective-c-blocks</id>
+    <content type="html"><![CDATA[<p>In a recent client project, we noticed its iOS app often <strong>received low memory
+warning</strong>. The iOS app is developed with ARC-enabled (Automatic Reference Counting).</p>
+
+<p>When profiled the app using <strong>Instruments > Allocations</strong>, we found that
+a lot of unused ViewController objects were not released from memory.</p>
+
+<h2>Retain Cycle</h2>
+
+<p>The codebase uses a lot of <strong>Objective-C blocks</strong> as shown below, and
+<code>self</code> is often being called within the blocks:
+```objective-c
+@interface DetailPageViewController : UIViewController
+@property(nonatomic, strong) UIButton *backButton;
+...
+@end</p>
+
+<p>@implementation DetailPageViewController
+@synthesize backButton;</p>
+
+<ul>
+<li>(void)loadView {
+...
+[self.doneButton onTouch:<sup>(id</sup> sender) {
+  [self doSomething];
+  self.isDone = YES;
+}];
+}
+...
+@end
+```</li>
+</ul>
+
+
+<p>In this example code, the controller object holds a <strong>strong reference to
+<code>doneButton</code> object</strong>. But because <code>doneButton onTouch:</code> block is calling
+<code>self</code>, now the button object <strong>holds a strong reference back to the controller
+object</strong>.</p>
+
+<p>When object A points strongly to object B, and B points strongly to A, a
+<a href="http://cocoawithlove.com/2009/07/rules-to-avoid-retain-cycles.html"><strong>retain cycle</strong></a> is created,
+and both objects cannot be released from memory.</p>
+
+<h2>Use Lifetime Qualifiers</h2>
+
+<p><a href="http://developer.apple.com/library/mac/#releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html#//apple_ref/doc/uid/TP40011226-CH1-SW9">Apple Developer's guide on ARC transition</a> suggested a few ways to <strong>break the retain cycle using different lifetime
+qualifiers</strong>. It is definitely a <strong>must read</strong> for iOS development.</p>
+
+<p>If your app is targeted for iOS 5, you can use <code>__weak</code> lifetime qualifier to break the cycle:
+```
+@interface DetailPageViewController : UIViewController
+- (void)loadView {
+  ...
+  __weak DetailPageViewController controller = self;
+  [self.doneButton onTouch:<sup>(id</sup> sender) {</p>
+
+<pre><code>[controller doSomething];
+controller.isDone = YES;
+</code></pre>
+
+<p>  }];
+}
+@end
+```</p>
+
+<p>Because we are using <code>__weak</code> qualifier, <code>doneButton onTouch:</code> block
+only has <strong>a weak reference to the controller object</strong>. Now, the controller
+object can be released from memory when its reference count drops to 0.</p>
+]]></content>
+  </entry>
+  
+</feed>

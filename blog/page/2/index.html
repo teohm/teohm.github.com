@@ -9,9 +9,7 @@
   <meta name="author" content="Huiming Teo (teohm)">
 
   
-  <meta name="description" content="Even you haven&#8217;t heard of
-mass assignment,
-it already exists in your first Rails generated scaffold code. def create @comment = Comment.new( &hellip;">
+  <meta name="description" content="In a recent project, I was trying to use JQuery Validation in an earlier version of Rails 3 remote form (jquery-ujs). They didn&#8217;t work out well &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -34,11 +32,7 @@ it already exists in your first Rails generated scaffold code. def create @comme
  
 
 
-<meta property="og:description" content="Even you haven&#8217;t heard of
-mass assignment,
-it already exists in your first Rails generated scaffold code. def create @comment = Comment.new(params[:comment]) ..
-end def update .. @comment.update_attributes(params[:comment]) ..
-end Why knowing mass assignment is important? By default, mass &hellip;">
+<meta property="og:description" content="In a recent project, I was trying to use JQuery Validation in an earlier version of Rails 3 remote form (jquery-ujs). They didn&#8217;t work out well in IE. After experimenting with the latest jquery-ujs and making an embarrassing mistake, it turns out that the issue is resolved in the latest &hellip;">
 
 
   
@@ -88,6 +82,87 @@ end Why knowing mass assignment is important? By default, mass &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/05/25/using-jquery-validation-in-rails-remote-form/">Using JQuery Validation in Rails Remote Form</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-25T00:00:00+08:00" pubdate data-updated="true">May 25<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In a recent project, I was trying to use <a href="http://bassistance.de/jquery-plugins/jquery-plugin-validation/">JQuery Validation</a> in an <a href="https://github.com/rails/jquery-ujs/blob/bb620a29199214b5c7a3a015372fda28b69c69a1/src/rails.js">earlier version</a> of Rails 3 remote form (<a href="https://github.com/rails/jquery-ujs">jquery-ujs</a>). They didn&#8217;t work out well in IE.</p>
+
+<p>After experimenting with the <a href="https://github.com/rails/jquery-ujs/blob/dad6982dc592686677e6845e681233c40d2ead27/src/rails.js">latest jquery-ujs</a> and making an embarrassing mistake, it turns out that the issue is resolved in the latest version.</p>
+
+<p>(<em>Mistake</em>: You may notice I removed a previous post about this topic, where I mistakenly concluded the latest jquery-ujs is not working with JQuery Validation. Thanks to JangoSteve for <a href="https://github.com/rails/jquery-ujs/issues/165#comment_1228899">pointing it out</a>. The post was misleading, so I believe it&#8217;s best to remove it to avoid confusion. :-)</p>
+
+<h2>Get the latest <code>jquery-ujs</code></h2>
+
+<p>There are 2 reasons to use the latest jquery-ujs:</p>
+
+<ol>
+<li>it has a patch that fixes the issue (see <a href="https://github.com/rails/jquery-ujs/issues/118">issue #118</a>).</li>
+<li>it exposes an internal function that we may need &#8211; <code>$.rails.handleRemote()</code> (see <a href="http://www.alfajango.com/blog/rails-jquery-ujs-now-interactive/">more details</a>)</li>
+</ol>
+
+
+<h2>Working example</h2>
+
+<p>The example is tested with:</p>
+
+<ul>
+<li>JQuery 1.6.1</li>
+<li>JQuery Vaidation 1.8.1</li>
+<li>Latest Rails UJS (commit: <a href="https://github.com/rails/jquery-ujs/blob/dad6982dc592686677e6845e681233c40d2ead27/src/rails.js">dad6982dc592686677e6</a>)</li>
+</ul>
+
+
+<h3>When using <code>submitHandler</code> in JQuery Validation</h3>
+
+<p>If you are using JQuery Validation&#8217;s <code>submitHandler(form)</code> function, you need to
+call <code>$.rails.handleRemote( $(form) )</code> function manually, so that it submits the form via XHR.</p>
+
+<div>
+  <pre><code class='javascript'>$('#submit_form').validate({
+
+  submitHandler: function(form) {
+    // .. do something before submit ..
+    $.rails.handleRemote( $(form) );  // submit via xhr
+    //form.submit();                  // don't use, it submits the form directly
+  }
+
+});</code></pre>
+</div>
+
+
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -320,6 +395,10 @@ post them here occationally if interesting enough to share.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/09/03/breaking-arc-retain-cycle-in-objective-c-blocks/">Breaking ARC retain cycle in Objective-C blocks</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/04/08/mac-tips-use-caps-lock-as-control-key/">Mac Tips: Use Caps Lock as Control key</a>
       </li>
     
@@ -333,10 +412,6 @@ post them here occationally if interesting enough to share.</p>
     
       <li class="post">
         <a href="/blog/2012/04/01/using-sshuttle-in-daily-work/">Using sshuttle in daily work</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/03/27/utf-8-param-name-issue-in-rails-multipart-form/">UTF-8 param name issue in Rails multipart form</a>
       </li>
     
   </ul>
