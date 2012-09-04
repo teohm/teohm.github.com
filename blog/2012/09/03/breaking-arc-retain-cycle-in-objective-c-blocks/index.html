@@ -9,9 +9,9 @@
   <meta name="author" content="Huiming Teo (teohm)">
 
   
-  <meta name="description" content="In a recent client project, we noticed its iOS app often received low memory
-warning. The iOS app is developed with ARC-enabled (Automatic Reference &hellip;">
-  
+  <meta name="description" content="This post documented how to break retain cycle in Objective-C blocks with lifetime qualifiers.
+">
+  <meta name="keywords" content="iOS, ARC, Memory Management, Objective-C, blocks">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -36,9 +36,8 @@ warning. The iOS app is developed with ARC-enabled (Automatic Reference &hellip;
  
 
 
-<meta property="og:description" content="In a recent client project, we noticed its iOS app often received low memory
-warning. The iOS app is developed with ARC-enabled (Automatic Reference Counting). When profiled the app using Instruments > Allocations, we found that
-a lot of unused ViewController objects were not released from memory. &hellip;">
+<meta property="og:description" content="This post documented how to break retain cycle in Objective-C blocks with lifetime qualifiers.
+">
 
 
   
