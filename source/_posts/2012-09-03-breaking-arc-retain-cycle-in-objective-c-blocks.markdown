@@ -1,8 +1,12 @@
 ---
 layout: post
 title: "Breaking ARC retain cycle in Objective-C blocks"
+description: >
+  This post documented how to break retain cycle in Objective-C blocks
+  with lifetime qualifiers.
 date: 2012-09-03 17:50
 comments: true
+keywords: iOS, ARC, Memory Management, Objective-C, blocks
 categories: 
 - ios
 ---
