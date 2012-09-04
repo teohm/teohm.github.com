@@ -6,9 +6,10 @@ description: >
   with lifetime qualifiers.
 date: 2012-09-03 17:50
 comments: true
-keywords: iOS, ARC, Memory Management, Objective-C, blocks
+keywords: iOS, ARC, Memory Management, Objective-C, blocks, lifetime qualifiers
 categories: 
 - ios
+- memory-management
 ---
 
 In a recent client project, we noticed its iOS app often **received low memory
