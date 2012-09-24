@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: version-control - teohm.dev</title>
+  <title>Objective-C Collection Operators - teohm.dev</title>
   <meta name="author" content="Huiming Teo (teohm)">
 
   
-  <meta name="description" content="Category: version-control">
+  <meta name="description" content="Calculate average - a shorter way When you have a collection of Transactions objects and want to
+calculate its average amount, instead of looping &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://teohm.github.comblog/categories/version-control/">
+  <link rel="canonical" href="http://teohm.github.com/blog/2012/09/24/objective-c-collection-operators/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -29,10 +30,22 @@
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
+
+<meta property="og:image" content="http://teohm.github.com/images/tags/objective-c.png">
+<link rel="img_src" href="http://teohm.github.com/images/tags/objective-c.png">
  
 
 
-<meta property="og:description" content="Category: version-control">
+<meta property="og:description" content="Calculate average - a shorter way When you have a collection of Transactions objects and want to
+calculate its average amount, instead of looping through the collection
+like this: 1
+2
+3
+4
+5
+double sum = 0;
+for (Transaction *transaction in transactions) { sum += [transaction.amount doubleValue];
+} &hellip;">
 
 
   
@@ -81,36 +94,132 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Version-control</h1>
+    
+      <h1 class="entry-title">Objective-C Collection Operators</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-24T13:52:00+08:00" pubdate data-updated="true">Sep 24<span>th</span>, 2012</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><h2>Calculate average - a shorter way</h2>
 
-  
-  <h2>2011</h2>
+<p>When you have a collection of <code>Transactions</code> objects and want to
+calculate its average amount, instead of looping through the collection
+like this:</p>
 
-<article>
-  
-<h1><a href="/blog/2011/05/30/learning-git-internals-by-example/">Learning Git Internals by Example</a></h1>
-<time datetime="2011-05-30T00:00:00+08:00" pubdate><span class='month'>May</span> <span class='day'>30</span> <span class='year'>2011</span></time>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="kt">double</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="k">for</span> <span class="p">(</span><span class="n">Transaction</span> <span class="o">*</span><span class="n">transaction</span> <span class="k">in</span> <span class="n">transactions</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">sum</span> <span class="o">+=</span> <span class="p">[</span><span class="n">transaction</span><span class="p">.</span><span class="n">amount</span> <span class="n">doubleValue</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="n">NSNumber</span> <span class="o">*</span><span class="n">avg</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSNumber</span> <span class="nl">numberWithDouble:</span><span class="p">(</span><span class="n">sum</span> <span class="o">/</span> <span class="p">[</span><span class="n">transactions</span> <span class="n">count</span><span class="p">])];</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/git/'>git</a>, <a class='category' href='/blog/categories/version-control/'>version-control</a></span>
-</footer>
+
+<p>you can <strong>reduce the loop to 1 line of code</strong>, using
+<a href="http://developer.apple.com/library/mac/#documentation/cocoa/Conceptual/KeyValueCoding/Articles/CollectionOperators.html">Objective-C key-value coding</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">NSNumber</span> <span class="o">*</span><span class="n">avg</span> <span class="o">=</span> <span class="p">[</span><span class="n">transactions</span> <span class="nl">valueForKeyPath:</span><span class="s">@&quot;@avg.amount&quot;</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-</article>
+<p>Currently, there is a <strong>fixed set</strong> of collection operators:</p>
 
+<ul>
+<li>Simple collection operators (<code>@avg</code>, <code>@count</code>, <code>@sum</code>, <code>@max</code>, <code>@min</code>)</li>
+<li>Object operators (<code>@distinctUnionOfObjects</code>, <code>@unionOfObjects</code>)</li>
+<li>Array and set operators (<code>@distinctUnionOfArrays</code>, <code>@unionOfArrays</code>)</li>
+</ul>
+
+
+<p>For details, refer to more
+<a href="http://developer.apple.com/library/mac/#documentation/cocoa/Conceptual/KeyValueCoding/Articles/CollectionOperators.html">usage</a> <a href="https://github.com/teohm/a-dip-in-objective-c/blob/master/ADipInObjectiveCTests/CollectionOperatorTests.m">examples</a>.</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Huiming Teo (teohm)</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-24T13:52:00+08:00" pubdate data-updated="true">Sep 24<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/objective-c/'>objective-c</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://teohm.github.com/blog/2012/09/24/objective-c-collection-operators/" data-via="teohm" data-counturl="http://teohm.github.com/blog/2012/09/24/objective-c-collection-operators/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/09/03/breaking-arc-retain-cycle-in-objective-c-blocks/" title="Previous Post: Breaking ARC retain cycle in Objective-C blocks">&laquo; Breaking ARC retain cycle in Objective-C blocks</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -198,7 +307,10 @@
       var disqus_shortname = 'teohm';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://teohm.github.com/blog/2012/09/24/objective-c-collection-operators/';
+        var disqus_url = 'http://teohm.github.com/blog/2012/09/24/objective-c-collection-operators/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

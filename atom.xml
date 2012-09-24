@@ -4,7 +4,7 @@
   <title><![CDATA[teohm.dev]]></title>
   <link href="http://teohm.github.com/atom.xml" rel="self"/>
   <link href="http://teohm.github.com/"/>
-  <updated>2012-09-05T03:25:45+08:00</updated>
+  <updated>2012-09-24T16:20:57+08:00</updated>
   <id>http://teohm.github.com/</id>
   <author>
     <name><![CDATA[Huiming Teo (teohm)]]></name>
@@ -12,6 +12,52 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Objective-C Collection Operators]]></title>
+    <link href="http://teohm.github.com/blog/2012/09/24/objective-c-collection-operators/"/>
+    <updated>2012-09-24T13:52:00+08:00</updated>
+    <id>http://teohm.github.com/blog/2012/09/24/objective-c-collection-operators</id>
+    <content type="html"><![CDATA[<h2>Calculate average - a shorter way</h2>
+
+<p>When you have a collection of <code>Transactions</code> objects and want to
+calculate its average amount, instead of looping through the collection
+like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="kt">double</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="k">for</span> <span class="p">(</span><span class="n">Transaction</span> <span class="o">*</span><span class="n">transaction</span> <span class="k">in</span> <span class="n">transactions</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">sum</span> <span class="o">+=</span> <span class="p">[</span><span class="n">transaction</span><span class="p">.</span><span class="n">amount</span> <span class="n">doubleValue</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="n">NSNumber</span> <span class="o">*</span><span class="n">avg</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSNumber</span> <span class="nl">numberWithDouble:</span><span class="p">(</span><span class="n">sum</span> <span class="o">/</span> <span class="p">[</span><span class="n">transactions</span> <span class="n">count</span><span class="p">])];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>you can <strong>reduce the loop to 1 line of code</strong>, using
+<a href="http://developer.apple.com/library/mac/#documentation/cocoa/Conceptual/KeyValueCoding/Articles/CollectionOperators.html">Objective-C key-value coding</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">NSNumber</span> <span class="o">*</span><span class="n">avg</span> <span class="o">=</span> <span class="p">[</span><span class="n">transactions</span> <span class="nl">valueForKeyPath:</span><span class="s">@&quot;@avg.amount&quot;</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Currently, there is a <strong>fixed set</strong> of collection operators:</p>
+
+<ul>
+<li>Simple collection operators (<code>@avg</code>, <code>@count</code>, <code>@sum</code>, <code>@max</code>, <code>@min</code>)</li>
+<li>Object operators (<code>@distinctUnionOfObjects</code>, <code>@unionOfObjects</code>)</li>
+<li>Array and set operators (<code>@distinctUnionOfArrays</code>, <code>@unionOfArrays</code>)</li>
+</ul>
+
+
+<p>For details, refer to more
+<a href="http://developer.apple.com/library/mac/#documentation/cocoa/Conceptual/KeyValueCoding/Articles/CollectionOperators.html">usage</a> <a href="https://github.com/teohm/a-dip-in-objective-c/blob/master/ADipInObjectiveCTests/CollectionOperatorTests.m">examples</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Breaking ARC retain cycle in Objective-C blocks]]></title>
