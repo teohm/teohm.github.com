@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ruby | teohm.dev]]></title>
+  <link href="http://teohm.github.com/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://teohm.github.com/"/>
+  <updated>2012-10-02T23:50:44+08:00</updated>
+  <id>http://teohm.github.com/</id>
+  <author>
+    <name><![CDATA[Huiming Teo (teohm)]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Ruby idiom to ensure variable is Array]]></title>
+    <link href="http://teohm.github.com/blog/2012/10/02/ruby-idiom-to-ensure-variable-is-array/"/>
+    <updated>2012-10-02T23:27:00+08:00</updated>
+    <id>http://teohm.github.com/blog/2012/10/02/ruby-idiom-to-ensure-variable-is-array</id>
+    <content type="html"><![CDATA[<p><strong>Stop</strong> doing this:
+```ruby
+arry = input || []  # handle input == nil
+arry = [input] unless arry.kind_of?(Array)  # handle single value object</p>
+
+<p>arry.each do |item|
+  #process item
+end
+```</p>
+
+<p>In Ruby, you should use
+<a href="http://www.ruby-doc.org/core-1.9.3/Kernel.html#method-i-Array">Kernel#Array</a>
+to <strong>convert the variable into an array object</strong>:</p>
+
+<p>```ruby
+Array(input).each do |item|
+  # process item
+end</p>
+
+<h1>Array(nil)     # => []</h1>
+
+<h1>Array("foo")   # => ["foo"]</h1>
+
+<h1>Array([1,2,3]) # => [1,2,3]</h1>
+
+<p>```</p>
+
+<p><a href="https://github.com/teohm/a-dip-in-ruby/blob/master/spec/kernel_array_spec.rb">More usage examples</a> written in minitest.</p>
+]]></content>
+  </entry>
+  
+</feed>

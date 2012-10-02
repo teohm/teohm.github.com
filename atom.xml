@@ -4,7 +4,7 @@
   <title><![CDATA[teohm.dev]]></title>
   <link href="http://teohm.github.com/atom.xml" rel="self"/>
   <link href="http://teohm.github.com/"/>
-  <updated>2012-09-24T16:20:57+08:00</updated>
+  <updated>2012-10-02T23:50:44+08:00</updated>
   <id>http://teohm.github.com/</id>
   <author>
     <name><![CDATA[Huiming Teo (teohm)]]></name>
@@ -12,6 +12,53 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Ruby idiom to ensure variable is Array]]></title>
+    <link href="http://teohm.github.com/blog/2012/10/02/ruby-idiom-to-ensure-variable-is-array/"/>
+    <updated>2012-10-02T23:27:00+08:00</updated>
+    <id>http://teohm.github.com/blog/2012/10/02/ruby-idiom-to-ensure-variable-is-array</id>
+    <content type="html"><![CDATA[<p><strong>Stop</strong> doing this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">arry</span> <span class="o">=</span> <span class="n">input</span> <span class="o">||</span> <span class="o">[]</span>  <span class="c1"># handle input == nil</span>
+</span><span class='line'><span class="n">arry</span> <span class="o">=</span> <span class="o">[</span><span class="n">input</span><span class="o">]</span> <span class="k">unless</span> <span class="n">arry</span><span class="o">.</span><span class="n">kind_of?</span><span class="p">(</span><span class="nb">Array</span><span class="p">)</span>  <span class="c1"># handle single value object</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">arry</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span>
+</span><span class='line'>  <span class="c1">#process item</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In Ruby, you should use
+<a href="http://www.ruby-doc.org/core-1.9.3/Kernel.html#method-i-Array">Kernel#Array</a>
+to <strong>convert the variable into an array object</strong>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">Array</span><span class="p">(</span><span class="n">input</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span>
+</span><span class='line'>  <span class="c1"># process item</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Array(nil)     # =&gt; []</span>
+</span><span class='line'><span class="c1"># Array(&quot;foo&quot;)   # =&gt; [&quot;foo&quot;]</span>
+</span><span class='line'><span class="c1"># Array([1,2,3]) # =&gt; [1,2,3]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="https://github.com/teohm/a-dip-in-ruby/blob/master/spec/kernel_array_spec.rb">More usage examples</a> written in minitest.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Objective-C Collection Operators]]></title>

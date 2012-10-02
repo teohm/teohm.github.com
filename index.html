@@ -9,8 +9,14 @@
   <meta name="author" content="Huiming Teo (teohm)">
 
   
-  <meta name="description" content="Calculate average - a shorter way When you have a collection of Transactions objects and want to
-calculate its average amount, instead of looping &hellip;">
+  <meta name="description" content="Stop doing this: 1
+2
+3
+4
+5
+6
+arry = input || [] # handle input == nil
+arry = [input] unless arry.kind_of?(Array) # handle single value object arry. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -33,16 +39,24 @@ calculate its average amount, instead of looping &hellip;">
  
 
 
-<meta property="og:description" content="Calculate average - a shorter way When you have a collection of Transactions objects and want to
-calculate its average amount, instead of looping through the collection
-like this: 1
+<meta property="og:description" content="Stop doing this: 1
 2
 3
 4
 5
-double sum = 0;
-for (Transaction *transaction in transactions) { sum += [transaction.amount doubleValue];
-} &hellip;">
+6
+arry = input || [] # handle input == nil
+arry = [input] unless arry.kind_of?(Array) # handle single value object arry.each do |item| #process item
+end In Ruby, you should use
+Kernel#Array
+to convert the variable into an array object: 1
+2
+3
+4
+5
+6
+7
+Array(input).each do | &hellip;">
 
 
   
@@ -92,6 +106,80 @@ for (Transaction *transaction in transactions) { sum += [transaction.amount doub
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/10/02/ruby-idiom-to-ensure-variable-is-array/">Ruby Idiom to Ensure Variable Is Array</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-02T23:27:00+08:00" pubdate data-updated="true">Oct 2<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Stop</strong> doing this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">arry</span> <span class="o">=</span> <span class="n">input</span> <span class="o">||</span> <span class="o">[]</span>  <span class="c1"># handle input == nil</span>
+</span><span class='line'><span class="n">arry</span> <span class="o">=</span> <span class="o">[</span><span class="n">input</span><span class="o">]</span> <span class="k">unless</span> <span class="n">arry</span><span class="o">.</span><span class="n">kind_of?</span><span class="p">(</span><span class="nb">Array</span><span class="p">)</span>  <span class="c1"># handle single value object</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">arry</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span>
+</span><span class='line'>  <span class="c1">#process item</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In Ruby, you should use
+<a href="http://www.ruby-doc.org/core-1.9.3/Kernel.html#method-i-Array">Kernel#Array</a>
+to <strong>convert the variable into an array object</strong>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">Array</span><span class="p">(</span><span class="n">input</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span>
+</span><span class='line'>  <span class="c1"># process item</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Array(nil)     # =&gt; []</span>
+</span><span class='line'><span class="c1"># Array(&quot;foo&quot;)   # =&gt; [&quot;foo&quot;]</span>
+</span><span class='line'><span class="c1"># Array([1,2,3]) # =&gt; [1,2,3]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="https://github.com/teohm/a-dip-in-ruby/blob/master/spec/kernel_array_spec.rb">More usage examples</a> written in minitest.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -877,196 +965,6 @@ and enable <em>Use option as meta key</em>. <code>Meta</code> key, by convention
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/05/31/using-rabl-in-rails-json-web-api/">Using RABL in Rails JSON Web API</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-05-31T00:00:00+08:00" pubdate data-updated="true">May 31<span>st</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Let&#8217;s use an event management app as the example.</p>
-
-<p>The app has a simple feature: a user can add some events, then invite other users to attend the event. Its data are represented in 3 models: User, Event, and Event Guest.
-<img src="/images/2011-05-31-using-rabl-in-rails-json-web-api/models.png" alt="An ER digram that shows the domain models." /></p>
-
-<p>Let say, we are going to add a read-only JSON web API for clients to browse data records from the app.</p>
-
-<h2>Problems</h2>
-
-<h3>Model is not view</h3>
-
-<p>When working on a non-trivial web API, you will soon <a href="http://engineering.gomiso.com/2011/05/16/if-youre-using-to_json-youre-doing-it-wrong/">realize</a> that, model often cannot be serialized directly in web API.</p>
-
-<p>Within the same app, one API may need to render a summary view of the model, while another needs a detail view of the same model. You want to serialize a view or view object, not a model.</p>
-
-<p><a href="https://github.com/nesquena/rabl"><strong>RABL (Ruby API Builder Language) gem</strong></a> is designed for this purpose.</p>
-
-<h3>Define once, reuse everywhere</h3>
-
-<p>Let say, we need to render these user attributes: <code>id</code>, <code>username</code>, <code>email</code>, <code>display_name</code>, except <code>password</code>.</p>
-
-<p>In RABL, we can define the attribute whitelist in a RABL template.</p>
-
-<div>
-  <pre><code class='ruby'># tryrabl/app/views/users/base.rabl
-attributes :id, :username, :email, :display_name</code></pre>
-</div>
-
-
-<p>To show individual user, we can now reuse the template through RABL <code>extends</code>.</p>
-
-<div>
-  <pre><code class='ruby'># tryrabl/app/views/users/show.rabl
-extends &quot;users/base&quot;
-object @user
-
-## JSON output:
-# {
-#     &quot;user&quot;: {
-#         &quot;id&quot;: 8,
-#         &quot;username&quot;: &quot;blaise&quot;,
-#         &quot;email&quot;: &quot;matteo@wilkinsonhuel.name&quot;,
-#         &quot;display_name&quot;: &quot;Ms. Noe Lowe&quot;
-#     }
-# }</code></pre>
-</div>
-
-
-<p>Here&#8217;s another example to show a list of users.</p>
-
-<div>
-  <pre><code class='ruby'># tryrabl/app/views/users/index.rabl
-extends &quot;users/base&quot;
-collection @users
-
-## JSON output:
-# [{
-#     &quot;user&quot;: {
-#         &quot;id&quot;: 1,
-#         &quot;username&quot;: &quot;alanna&quot;,
-#         &quot;email&quot;: &quot;rubie@hayes.name&quot;,
-#         &quot;display_name&quot;: &quot;Mrs. Gaylord Hoeger&quot;
-#     }
-# }, {
-#     &quot;user&quot;: {
-#         &quot;id&quot;: 2,
-#         &quot;username&quot;: &quot;jarrell.robel&quot;,
-#         &quot;email&quot;: &quot;jarod@eichmann.com&quot;,
-#         &quot;display_name&quot;: &quot;Oran Lebsack&quot;
-#     }
-# }]</code></pre>
-</div>
-
-
-<p>The template can be reused in nested child as well, through RABL <code>child</code>.</p>
-
-<div>
-  <pre><code class='ruby'>attributes :id, :title, :description, :start, :end, :location
-child :creator =&gt; :creator do
-  extends 'users/base'
-end
-
-## JSON output:
-# {
-#     &quot;event&quot;: {
-#         &quot;id&quot;: 7,
-#         &quot;title&quot;: &quot;Et earum sed fuga.&quot;,
-#         &quot;description&quot;: &quot;Quis sed ..e ad.&quot;,
-#         &quot;start&quot;: &quot;2011-05-31T08:31:45Z&quot;,
-#         &quot;end&quot;: &quot;2011-06-01T08:31:45Z&quot;,
-#         &quot;location&quot;: &quot;Saul Tunnel&quot;,
-#         &quot;creator&quot;: {
-#             &quot;id&quot;: 1,
-#             &quot;username&quot;: &quot;alanna&quot;,
-#             &quot;email&quot;: &quot;rubie@hayes.name&quot;,
-#             &quot;display_name&quot;: &quot;Mrs. Gaylord Hoeger&quot;
-#         }
-#     }
-# }</code></pre>
-</div>
-
-
-<h3>Join table rendered as subclass</h3>
-
-<p>I notice a recurring pattern in two recent projects. For instance, in this example, from client&#8217;s point of view, Event Guest is basically a User with an additional attribute: RSVP status.</p>
-
-<p>When query database, usually we need to query the join table: <code>event_guests</code>.</p>
-
-<div>
-  <pre><code class='ruby'>class GuestsController &lt; ApplicationController
-  def index
-    @guests = EventGuest.where(:event_id =&gt; params[:event_id])
-  end
-end</code></pre>
-</div>
-
-
-<p>But when rendering, the result set needs to be rendered as a list of Users. RABL allows you to do that easily, using its <code>glue</code> feature (a weird name though :).</p>
-
-<div>
-  <pre><code class='ruby'># tryrabl/app/views/guests/index.rabl
-collection @event_guests
-
-# include the additional attribute
-attributes :rsvp
-
-# add child attributes to parent model
-glue :user do
-  extends &quot;users/base&quot;
-end
-
-## JSON output:
-# [{
-#     &quot;event_guest&quot;: {
-#         &quot;rsvp&quot;: &quot;PENDING&quot;,
-#         &quot;id&quot;: 3,
-#         &quot;username&quot;: &quot;myrna_harvey&quot;,
-#         &quot;email&quot;: &quot;shad.armstrong@littelpouros.name&quot;,
-#         &quot;display_name&quot;: &quot;Savion Balistreri&quot;
-#     }
-# }, {
-#     &quot;event_guest&quot;: {
-#         &quot;rsvp&quot;: &quot;PENDING&quot;,
-#         &quot;id&quot;: 4,
-#         &quot;username&quot;: &quot;adelle.nader&quot;,
-#         &quot;email&quot;: &quot;brendon.howe@cormiergrady.info&quot;,
-#         &quot;display_name&quot;: &quot;Edgardo Dickens&quot;
-#     }
-# }]</code></pre>
-</div>
-
-
-<p>I think I will use RABL for the next Rails web API project.</p>
-
-<p>The complete Rails example code is available at <a href="https://github.com/teohm/tryrabl">github.com/teohm/tryrabl</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1082,6 +980,10 @@ end
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/10/02/ruby-idiom-to-ensure-variable-is-array/">Ruby idiom to ensure variable is Array</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/09/24/objective-c-collection-operators/">Objective-C Collection Operators</a>
       </li>
     
@@ -1095,10 +997,6 @@ end
     
       <li class="post">
         <a href="/blog/2012/04/07/mac-tips-change-default-application-for-a-file-type/">Mac Tips: Change default application for a file type</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/04/07/mac-tips-turn-on-remote-login-ssh-server/">Mac Tips: Turn on remote login (SSH server)</a>
       </li>
     
   </ul>
