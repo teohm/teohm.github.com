@@ -5,13 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Breaking ARC retain cycle in Objective-C blocks - teohm.dev</title>
+  <title>Using Ruby % (Percent) Notation - teohm.dev</title>
   <meta name="author" content="Huiming Teo (teohm)">
 
   
-  <meta name="description" content="This post documented how to break retain cycle in Objective-C blocks with lifetime qualifiers.
-">
-  <meta name="keywords" content="iOS, ARC, Memory Management, Objective-C, blocks, lifetime qualifiers">
+  <meta name="description" content="If you seldom use Ruby percent (%) notation in daily work, here&#8217;s a
+quick summary of what I picked up recently. Delimiter allows any non- &hellip;">
+  
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://teohm.github.com/blog/2012/09/03/breaking-arc-retain-cycle-in-objective-c-blocks/">
+  <link rel="canonical" href="http://teohm.github.com/blog/2012/10/15/start-using-ruby-percent-notation/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -31,13 +31,20 @@
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
 
-<meta property="og:image" content="http://teohm.github.com/images/tags/ios.png">
-<link rel="img_src" href="http://teohm.github.com/images/tags/ios.png">
+<meta property="og:image" content="http://teohm.github.com/images/tags/ruby.png">
+<link rel="img_src" href="http://teohm.github.com/images/tags/ruby.png">
  
 
 
-<meta property="og:description" content="This post documented how to break retain cycle in Objective-C blocks with lifetime qualifiers.
-">
+<meta property="og:description" content="If you seldom use Ruby percent (%) notation in daily work, here&#8217;s a
+quick summary of what I picked up recently. Delimiter allows any non-alphanum You can use any non alpha-numeric character as delimiter: 1
+2
+3
+4
+%(any alpha-numeric)
+%[char can be]
+%%used as%
+%!delimiter\!! # need to unescape &hellip;">
 
 
   
@@ -90,7 +97,7 @@
   
   <header>
     
-      <h1 class="entry-title">Breaking ARC Retain Cycle in Objective-C Blocks</h1>
+      <h1 class="entry-title">Using Ruby % (Percent) Notation</h1>
     
     
       <p class="meta">
@@ -106,23 +113,51 @@
   
 
 
-<time datetime="2012-09-03T17:50:00+08:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2012</time>
+<time datetime="2012-10-15T18:04:00+08:00" pubdate data-updated="true">Oct 15<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>In a recent client project, we noticed its iOS app often <strong>received low memory
-warning</strong>. The iOS app is developed with ARC-enabled (Automatic Reference Counting).</p>
+<div class="entry-content"><p>If you seldom use Ruby percent (%) notation in daily work, here&#8217;s a
+<strong>quick summary</strong> of what I picked up recently.</p>
 
-<p>When profiled the app using <strong>Instruments > Allocations</strong>, we found that
-a lot of unused ViewController objects were not released from memory.</p>
+<h2>Delimiter allows any non-alphanum</h2>
 
-<h2>Retain Cycle</h2>
+<p>You can use any <strong>non alpha-numeric character</strong> as delimiter:</p>
 
-<p>The codebase uses a lot of <strong>Objective-C blocks</strong> as shown below, and
-<code>self</code> is often being called within the blocks:</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="sx">%(any alpha-numeric)</span>
+</span><span class='line'><span class="sx">%[char can be]</span>
+</span><span class='line'><span class="sx">%%used as%</span>
+</span><span class='line'><span class="sx">%!delimiter\!!</span> <span class="c1"># need to unescape !</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Bracket pairs no need to escape</h2>
+
+<p><strong>No need to escape bracket pairs</strong>, even when <strong>nested</strong>.
+If escape, you need to escape both opening and closing brackets.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="sx">%( (pa(re(nt)he)sis) )</span> <span class="c1">#=&gt; &quot;(pa(re(nt)he)sis)&quot;</span>
+</span><span class='line'><span class="sx">%[ [square bracket] ]</span>  <span class="c1">#=&gt; &quot;[square bracket]&quot;</span>
+</span><span class='line'><span class="sx">%{ {curly bracket} }</span>   <span class="c1">#=&gt; &quot;{curly bracket}&quot;</span>
+</span><span class='line'><span class="sx">%&lt; &lt;pointy bracket&gt; &gt;</span>  <span class="c1">#=&gt; &quot;&lt;pointy bracket&gt;&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Modifiers for String, Regex, Array, Symbol, Shell command</h2>
+
+<p>We often use % notation to <strong>create String and Array</strong> literals. But it
+also supports <strong>Symbol, Regex and shell command</strong>.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -140,69 +175,26 @@ a lot of unused ViewController objects were not released from memory.</p>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">@interface</span> <span class="nc">DetailPageViewController</span> : <span class="nc">UIViewController</span>
-</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">UIButton</span> <span class="o">*</span><span class="n">backButton</span><span class="p">;</span>
-</span><span class='line'><span class="p">...</span>
-</span><span class='line'><span class="k">@end</span>
-</span><span class='line'>
-</span><span class='line'><span class="err">@</span><span class="n">implementation</span> <span class="n">DetailPageViewController</span>
-</span><span class='line'><span class="k">@synthesize</span> <span class="n">backButton</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">loadView</span> <span class="p">{</span>
-</span><span class='line'>  <span class="p">...</span>
-</span><span class='line'>  <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">doneButton</span> <span class="nl">onTouch:</span><span class="o">^</span><span class="p">(</span><span class="kt">id</span> <span class="n">sender</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="n">doSomething</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">isDone</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}];</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="p">...</span>
-</span><span class='line'><span class="k">@end</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="sx">%(interpolated string (</span><span class="si">#{</span> <span class="s2">&quot;default&quot;</span> <span class="si">}</span><span class="sx">))</span>
+</span><span class='line'>  <span class="c1">#=&gt; &quot;interpolated string (default)&quot;</span>
+</span><span class='line'><span class="sx">%Q(interpolated string (</span><span class="si">#{</span> <span class="s2">&quot;default&quot;</span> <span class="si">}</span><span class="sx">))</span>
+</span><span class='line'>  <span class="c1">#=&gt; &quot;interpolated string (default)&quot;</span>
+</span><span class='line'><span class="sx">%q(non-interpolated string)</span>
+</span><span class='line'>  <span class="c1">#=&gt; &quot;non-interpolated string&quot;</span>
+</span><span class='line'><span class="sr">%r(</span><span class="si">#{</span> <span class="s2">&quot;interpolated&quot;</span> <span class="si">}</span><span class="sr"> regexp)i</span>
+</span><span class='line'>  <span class="c1">#=&gt; /interpolated regexp/i</span>
+</span><span class='line'><span class="sx">%w(non-interpolated\ string  separated\ by\ whitespaces)</span>
+</span><span class='line'>  <span class="c1">#=&gt; [&#39;non-interpolated string&#39;, &#39;separated by whitespaces&#39;]</span>
+</span><span class='line'><span class="sx">%W(interpolated\ string </span><span class="si">#{</span> <span class="s2">&quot;separated by whitespaces&quot;</span> <span class="si">}</span><span class="sx">)</span>
+</span><span class='line'>  <span class="c1">#=&gt; [&#39;interpolated string&#39;, &#39;separated by whitespaces&#39;]</span>
+</span><span class='line'><span class="sx">%s(non-interpolated symbol)</span>
+</span><span class='line'>  <span class="c1">#=&gt; :&#39;non-interpolated symbol&#39;</span>
+</span><span class='line'><span class="sx">%x(echo </span><span class="si">#{</span> <span class="s2">&quot;interpolated shell command&quot;</span> <span class="si">}</span><span class="sx">)</span>
+</span><span class='line'>  <span class="c1">#=&gt; &quot;interpolated shell command\n&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>In this example code, the controller object holds a <strong>strong reference to
-<code>doneButton</code> object</strong>. But because <code>doneButton onTouch:</code> block is calling
-<code>self</code>, now the button object <strong>holds a strong reference back to the controller
-object</strong>.</p>
-
-<p>When object A points strongly to object B, and B points strongly to A, a
-<a href="http://cocoawithlove.com/2009/07/rules-to-avoid-retain-cycles.html"><strong>retain cycle</strong></a> is created,
-and both objects cannot be released from memory.</p>
-
-<h2>Use Lifetime Qualifiers</h2>
-
-<p><a href="http://developer.apple.com/library/mac/#releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html#//apple_ref/doc/uid/TP40011226-CH1-SW9">Apple Developer&#8217;s guide on ARC transition</a> suggested a few ways to <strong>break the retain cycle using different lifetime
-qualifiers</strong>. It is definitely a <strong>must read</strong> for iOS development.</p>
-
-<p>If your app is targeted for iOS 5, you can use <code>__weak</code> lifetime qualifier to break the cycle:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">@interface</span> <span class="nc">DetailPageViewController</span> : <span class="nc">UIViewController</span>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">loadView</span> <span class="p">{</span>
-</span><span class='line'>  <span class="p">...</span>
-</span><span class='line'>  <span class="n">__weak</span> <span class="n">DetailPageViewController</span> <span class="o">*</span><span class="n">controller</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">doneButton</span> <span class="nl">onTouch:</span><span class="o">^</span><span class="p">(</span><span class="kt">id</span> <span class="n">sender</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">controller</span> <span class="n">doSomething</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">controller</span><span class="p">.</span><span class="n">isDone</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}];</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Because we are using <code>__weak</code> qualifier, <code>doneButton onTouch:</code> block
-only has <strong>a weak reference to the controller object</strong>. Now, the controller
-object can be released from memory when its reference count drops to 0.</p>
+<p>Anyway, I have <a href="https://github.com/teohm/a-dip-in-ruby/blob/master/spec/percent_notation_spec.rb">some minitest examples</a> in case you interested.</p>
 </div>
 
 
@@ -225,12 +217,12 @@ object can be released from memory when its reference count drops to 0.</p>
   
 
 
-<time datetime="2012-09-03T17:50:00+08:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2012</time>
+<time datetime="2012-10-15T18:04:00+08:00" pubdate data-updated="true">Oct 15<span>th</span>, 2012</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/ios/'>ios</a>, <a class='category' href='/blog/categories/memory-management/'>memory-management</a>
+    <a class='category' href='/blog/categories/ruby/'>ruby</a>
   
 </span>
 
@@ -239,7 +231,7 @@ object can be released from memory when its reference count drops to 0.</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://teohm.github.com/blog/2012/09/03/breaking-arc-retain-cycle-in-objective-c-blocks/" data-via="teohm" data-counturl="http://teohm.github.com/blog/2012/09/03/breaking-arc-retain-cycle-in-objective-c-blocks/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://teohm.github.com/blog/2012/10/15/start-using-ruby-percent-notation/" data-via="teohm" data-counturl="http://teohm.github.com/blog/2012/10/15/start-using-ruby-percent-notation/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -252,10 +244,8 @@ object can be released from memory when its reference count drops to 0.</p>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/04/08/mac-tips-use-caps-lock-as-control-key/" title="Previous Post: Mac Tips: Use Caps Lock as Control key">&laquo; Mac Tips: Use Caps Lock as Control key</a>
+        <a class="basic-alignment left" href="/blog/2012/10/02/ruby-idiom-to-ensure-variable-is-array/" title="Previous Post: Ruby idiom to ensure variable is Array">&laquo; Ruby idiom to ensure variable is Array</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2012/09/24/objective-c-collection-operators/" title="Next Post: Objective-C Collection Operators">Objective-C Collection Operators &raquo;</a>
       
     </p>
   </footer>
@@ -354,8 +344,8 @@ object can be released from memory when its reference count drops to 0.</p>
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://teohm.github.com/blog/2012/09/03/breaking-arc-retain-cycle-in-objective-c-blocks/';
-        var disqus_url = 'http://teohm.github.com/blog/2012/09/03/breaking-arc-retain-cycle-in-objective-c-blocks/';
+        var disqus_identifier = 'http://teohm.github.com/blog/2012/10/15/start-using-ruby-percent-notation/';
+        var disqus_url = 'http://teohm.github.com/blog/2012/10/15/start-using-ruby-percent-notation/';
         var disqus_script = 'embed.js';
       
     (function () {

@@ -4,7 +4,7 @@
   <title><![CDATA[teohm.dev]]></title>
   <link href="http://teohm.github.com/atom.xml" rel="self"/>
   <link href="http://teohm.github.com/"/>
-  <updated>2012-10-02T23:55:46+08:00</updated>
+  <updated>2012-10-15T21:12:18+08:00</updated>
   <id>http://teohm.github.com/</id>
   <author>
     <name><![CDATA[Huiming Teo (teohm)]]></name>
@@ -12,6 +12,89 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Using Ruby % (Percent) Notation]]></title>
+    <link href="http://teohm.github.com/blog/2012/10/15/start-using-ruby-percent-notation/"/>
+    <updated>2012-10-15T18:04:00+08:00</updated>
+    <id>http://teohm.github.com/blog/2012/10/15/start-using-ruby-percent-notation</id>
+    <content type="html"><![CDATA[<p>If you seldom use Ruby percent (%) notation in daily work, here&#8217;s a
+<strong>quick summary</strong> of what I picked up recently.</p>
+
+<h2>Delimiter allows any non-alphanum</h2>
+
+<p>You can use any <strong>non alpha-numeric character</strong> as delimiter:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="sx">%(any alpha-numeric)</span>
+</span><span class='line'><span class="sx">%[char can be]</span>
+</span><span class='line'><span class="sx">%%used as%</span>
+</span><span class='line'><span class="sx">%!delimiter\!!</span> <span class="c1"># need to unescape !</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Bracket pairs no need to escape</h2>
+
+<p><strong>No need to escape bracket pairs</strong>, even when <strong>nested</strong>.
+If escape, you need to escape both opening and closing brackets.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="sx">%( (pa(re(nt)he)sis) )</span> <span class="c1">#=&gt; &quot;(pa(re(nt)he)sis)&quot;</span>
+</span><span class='line'><span class="sx">%[ [square bracket] ]</span>  <span class="c1">#=&gt; &quot;[square bracket]&quot;</span>
+</span><span class='line'><span class="sx">%{ {curly bracket} }</span>   <span class="c1">#=&gt; &quot;{curly bracket}&quot;</span>
+</span><span class='line'><span class="sx">%&lt; &lt;pointy bracket&gt; &gt;</span>  <span class="c1">#=&gt; &quot;&lt;pointy bracket&gt;&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Modifiers for String, Regex, Array, Symbol, Shell command</h2>
+
+<p>We often use % notation to <strong>create String and Array</strong> literals. But it
+also supports <strong>Symbol, Regex and shell command</strong>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="sx">%(interpolated string (</span><span class="si">#{</span> <span class="s2">&quot;default&quot;</span> <span class="si">}</span><span class="sx">))</span>
+</span><span class='line'>  <span class="c1">#=&gt; &quot;interpolated string (default)&quot;</span>
+</span><span class='line'><span class="sx">%Q(interpolated string (</span><span class="si">#{</span> <span class="s2">&quot;default&quot;</span> <span class="si">}</span><span class="sx">))</span>
+</span><span class='line'>  <span class="c1">#=&gt; &quot;interpolated string (default)&quot;</span>
+</span><span class='line'><span class="sx">%q(non-interpolated string)</span>
+</span><span class='line'>  <span class="c1">#=&gt; &quot;non-interpolated string&quot;</span>
+</span><span class='line'><span class="sr">%r(</span><span class="si">#{</span> <span class="s2">&quot;interpolated&quot;</span> <span class="si">}</span><span class="sr"> regexp)i</span>
+</span><span class='line'>  <span class="c1">#=&gt; /interpolated regexp/i</span>
+</span><span class='line'><span class="sx">%w(non-interpolated\ string  separated\ by\ whitespaces)</span>
+</span><span class='line'>  <span class="c1">#=&gt; [&#39;non-interpolated string&#39;, &#39;separated by whitespaces&#39;]</span>
+</span><span class='line'><span class="sx">%W(interpolated\ string </span><span class="si">#{</span> <span class="s2">&quot;separated by whitespaces&quot;</span> <span class="si">}</span><span class="sx">)</span>
+</span><span class='line'>  <span class="c1">#=&gt; [&#39;interpolated string&#39;, &#39;separated by whitespaces&#39;]</span>
+</span><span class='line'><span class="sx">%s(non-interpolated symbol)</span>
+</span><span class='line'>  <span class="c1">#=&gt; :&#39;non-interpolated symbol&#39;</span>
+</span><span class='line'><span class="sx">%x(echo </span><span class="si">#{</span> <span class="s2">&quot;interpolated shell command&quot;</span> <span class="si">}</span><span class="sx">)</span>
+</span><span class='line'>  <span class="c1">#=&gt; &quot;interpolated shell command\n&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Anyway, I have <a href="https://github.com/teohm/a-dip-in-ruby/blob/master/spec/percent_notation_spec.rb">some minitest examples</a> in case you interested.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Ruby idiom to ensure variable is Array]]></title>

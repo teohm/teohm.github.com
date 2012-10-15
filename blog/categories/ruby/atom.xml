@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | teohm.dev]]></title>
   <link href="http://teohm.github.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://teohm.github.com/"/>
-  <updated>2012-10-02T23:55:46+08:00</updated>
+  <updated>2012-10-15T21:12:18+08:00</updated>
   <id>http://teohm.github.com/</id>
   <author>
     <name><![CDATA[Huiming Teo (teohm)]]></name>
@@ -12,6 +12,62 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Using Ruby % (Percent) Notation]]></title>
+    <link href="http://teohm.github.com/blog/2012/10/15/start-using-ruby-percent-notation/"/>
+    <updated>2012-10-15T18:04:00+08:00</updated>
+    <id>http://teohm.github.com/blog/2012/10/15/start-using-ruby-percent-notation</id>
+    <content type="html"><![CDATA[<p>If you seldom use Ruby percent (%) notation in daily work, here's a
+<strong>quick summary</strong> of what I picked up recently.</p>
+
+<h2>Delimiter allows any non-alphanum</h2>
+
+<p>You can use any <strong>non alpha-numeric character</strong> as delimiter:
+<code>ruby
+%(any alpha-numeric)
+%[char can be]
+%%used as%
+%!delimiter\!! # need to unescape !
+</code></p>
+
+<h2>Bracket pairs no need to escape</h2>
+
+<p><strong>No need to escape bracket pairs</strong>, even when <strong>nested</strong>.
+If escape, you need to escape both opening and closing brackets.
+<code>ruby
+%( (pa(re(nt)he)sis) ) #=&gt; "(pa(re(nt)he)sis)"
+%[ [square bracket] ]  #=&gt; "[square bracket]"
+%{ {curly bracket} }   #=&gt; "{curly bracket}"
+%&lt; &lt;pointy bracket&gt; &gt;  #=&gt; "&lt;pointy bracket&gt;"
+</code></p>
+
+<h2>Modifiers for String, Regex, Array, Symbol, Shell command</h2>
+
+<p>We often use % notation to <strong>create String and Array</strong> literals. But it
+also supports <strong>Symbol, Regex and shell command</strong>.
+<code>ruby
+%(interpolated string (#{ "default" }))
+  #=&gt; "interpolated string (default)"
+%Q(interpolated string (#{ "default" }))
+  #=&gt; "interpolated string (default)"
+%q(non-interpolated string)
+  #=&gt; "non-interpolated string"
+%r(#{ "interpolated" } regexp)i
+  #=&gt; /interpolated regexp/i
+%w(non-interpolated\ string  separated\ by\ whitespaces)
+  #=&gt; ['non-interpolated string', 'separated by whitespaces']
+%W(interpolated\ string #{ "separated by whitespaces" })
+  #=&gt; ['interpolated string', 'separated by whitespaces']
+%s(non-interpolated symbol)
+  #=&gt; :'non-interpolated symbol'
+%x(echo #{ "interpolated shell command" })
+  #=&gt; "interpolated shell command\n"
+</code></p>
+
+<p>Anyway, I have <a href="https://github.com/teohm/a-dip-in-ruby/blob/master/spec/percent_notation_spec.rb">some minitest examples</a> in case you interested.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Ruby idiom to ensure variable is Array]]></title>
