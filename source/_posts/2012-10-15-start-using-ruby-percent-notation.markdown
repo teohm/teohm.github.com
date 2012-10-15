@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Using Ruby % (Percent) Notation"
+title: "Start Using Ruby % (Percent) Notation"
 date: 2012-10-15 18:04
 comments: true
 categories: 
