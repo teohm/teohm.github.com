@@ -4,7 +4,7 @@
   <title><![CDATA[teohm.dev]]></title>
   <link href="http://teohm.github.com/atom.xml" rel="self"/>
   <link href="http://teohm.github.com/"/>
-  <updated>2012-10-15T21:12:18+08:00</updated>
+  <updated>2012-10-15T21:14:28+08:00</updated>
   <id>http://teohm.github.com/</id>
   <author>
     <name><![CDATA[Huiming Teo (teohm)]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Using Ruby % (Percent) Notation]]></title>
+    <title type="html"><![CDATA[Start Using Ruby % (Percent) Notation]]></title>
     <link href="http://teohm.github.com/blog/2012/10/15/start-using-ruby-percent-notation/"/>
     <updated>2012-10-15T18:04:00+08:00</updated>
     <id>http://teohm.github.com/blog/2012/10/15/start-using-ruby-percent-notation</id>
