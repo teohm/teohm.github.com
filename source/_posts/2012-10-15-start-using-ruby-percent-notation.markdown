@@ -23,7 +23,7 @@ You can use any **non alpha-numeric character** as delimiter:
 Bracket pairs no need to escape
 ----
 **No need to escape bracket pairs**, even when **nested**. 
-If escape, you need to escape both opening and closing brackets.
+You can escape, but will need to escape both open and close bracket.
 ```ruby
 %( (pa(re(nt)he)sis) ) #=> "(pa(re(nt)he)sis)"
 %[ [square bracket] ]  #=> "[square bracket]"
@@ -54,4 +54,4 @@ also supports **Symbol, Regex and shell command**.
   #=> "interpolated shell command\n"
 ```
 
-Anyway, I have [some minitest examples](https://github.com/teohm/a-dip-in-ruby/blob/master/spec/percent_notation_spec.rb) in case you interested.
+Here's some [% notation examples written in minitest](https://github.com/teohm/a-dip-in-ruby/blob/master/spec/percent_notation_spec.rb) in case you interested.
