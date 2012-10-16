@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | teohm.dev]]></title>
   <link href="http://teohm.github.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://teohm.github.com/"/>
-  <updated>2012-10-15T21:14:28+08:00</updated>
+  <updated>2012-10-16T10:46:58+08:00</updated>
   <id>http://teohm.github.com/</id>
   <author>
     <name><![CDATA[Huiming Teo (teohm)]]></name>
@@ -34,7 +34,7 @@
 <h2>Bracket pairs no need to escape</h2>
 
 <p><strong>No need to escape bracket pairs</strong>, even when <strong>nested</strong>.
-If escape, you need to escape both opening and closing brackets.
+You can escape, but will need to escape both open and close bracket.
 <code>ruby
 %( (pa(re(nt)he)sis) ) #=&gt; "(pa(re(nt)he)sis)"
 %[ [square bracket] ]  #=&gt; "[square bracket]"
@@ -65,7 +65,7 @@ also supports <strong>Symbol, Regex and shell command</strong>.
   #=&gt; "interpolated shell command\n"
 </code></p>
 
-<p>Anyway, I have <a href="https://github.com/teohm/a-dip-in-ruby/blob/master/spec/percent_notation_spec.rb">some minitest examples</a> in case you interested.</p>
+<p>Here's some <a href="https://github.com/teohm/a-dip-in-ruby/blob/master/spec/percent_notation_spec.rb">% notation examples written in minitest</a> in case you interested.</p>
 ]]></content>
   </entry>
   
