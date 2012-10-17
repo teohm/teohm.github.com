@@ -4,7 +4,7 @@
   <title><![CDATA[teohm.dev]]></title>
   <link href="http://teohm.github.com/atom.xml" rel="self"/>
   <link href="http://teohm.github.com/"/>
-  <updated>2012-10-16T10:46:58+08:00</updated>
+  <updated>2012-10-18T03:52:56+08:00</updated>
   <id>http://teohm.github.com/</id>
   <author>
     <name><![CDATA[Huiming Teo (teohm)]]></name>
@@ -32,7 +32,7 @@
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="sx">%(any alpha-numeric)</span>
 </span><span class='line'><span class="sx">%[char can be]</span>
 </span><span class='line'><span class="sx">%%used as%</span>
-</span><span class='line'><span class="sx">%!delimiter\!!</span> <span class="c1"># need to unescape !</span>
+</span><span class='line'><span class="sx">%!delimiter\!!</span> <span class="c1"># escape &#39;!&#39; literal</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -45,10 +45,12 @@ You can escape, but will need to escape both open and close bracket.</p>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
+<span class='line-number'>5</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="sx">%( (pa(re(nt)he)sis) )</span> <span class="c1">#=&gt; &quot;(pa(re(nt)he)sis)&quot;</span>
 </span><span class='line'><span class="sx">%[ [square bracket] ]</span>  <span class="c1">#=&gt; &quot;[square bracket]&quot;</span>
 </span><span class='line'><span class="sx">%{ {curly bracket} }</span>   <span class="c1">#=&gt; &quot;{curly bracket}&quot;</span>
 </span><span class='line'><span class="sx">%&lt; &lt;pointy bracket&gt; &gt;</span>  <span class="c1">#=&gt; &quot;&lt;pointy bracket&gt;&quot;</span>
+</span><span class='line'><span class="sx">%&lt; \&lt;this works as well\&gt; &gt;</span>  <span class="c1">#=&gt; &quot;&lt;this works as well&gt;&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
