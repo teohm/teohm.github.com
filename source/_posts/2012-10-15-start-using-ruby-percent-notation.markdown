@@ -17,7 +17,7 @@ You can use any **non alpha-numeric character** as delimiter:
 %(any alpha-numeric)
 %[char can be]
 %%used as%
-%!delimiter\!! # need to unescape !
+%!delimiter\!! # escape '!' literal
 ```
 
 Bracket pairs no need to escape
@@ -29,6 +29,7 @@ You can escape, but will need to escape both open and close bracket.
 %[ [square bracket] ]  #=> "[square bracket]"
 %{ {curly bracket} }   #=> "{curly bracket}"
 %< <pointy bracket> >  #=> "<pointy bracket>"
+%< \<this works as well\> >  #=> "<this works as well>"
 ```
 
 Modifiers for String, Regex, Array, Symbol, Shell command
