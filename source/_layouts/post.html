@@ -7,6 +7,9 @@ single: true
 <article class="hentry" role="article">
   {% include article.html %}
   <footer>
+    <p class="sponsor-tags">
+      <input type="hidden" name="IL_IN_TAG" value="1"/>
+    </p>
     <p class="meta">
       {% include post/author.html %}
       {% include post/date.html %}{% if updated %}{{ updated }}{% else %}{{ time }}{% endif %}
