@@ -59,3 +59,11 @@ Search the command history
 * End the search at current history entry. `Ctrl` + `j`
 * Cancel the search and restore original line. `Ctrl` + `g`
 
+Need more?
+-----
+- A comprehensive [**bash editing mode cheatsheet**](http://www.catonmat.net/blog/bash-emacs-editing-mode-cheat-sheet/) by Peteris Krumin ([catonmat.net](http://catonmat.net)).
+- **Vim users!** Do you know you can switch to Vi-style editing mode?
+  Here: [vi-style cheatsheet](http://www.catonmat.net/blog/bash-vi-editing-mode-cheat-sheet/).
+- Bash command line editing is actually handled by **GNU Readline Library**. So 
+  just dive into [Readline manual](http://www.gnu.org/software/readline/#Documentation) 
+  for everything else.
