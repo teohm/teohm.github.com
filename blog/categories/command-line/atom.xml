@@ -4,7 +4,7 @@
   <title><![CDATA[Category: command-line | teohm.dev]]></title>
   <link href="http://teohm.github.com/blog/categories/command-line/atom.xml" rel="self"/>
   <link href="http://teohm.github.com/"/>
-  <updated>2012-10-24T13:14:06+08:00</updated>
+  <updated>2012-10-24T23:39:45+08:00</updated>
   <id>http://teohm.github.com/</id>
   <author>
     <name><![CDATA[Huiming Teo (teohm)]]></name>
@@ -276,6 +276,18 @@ and enable <em>Use option as meta key</em>. <code>Meta</code> key, by convention
 <li>Search the last remembered search term. <code>Ctrl</code> + <code>r</code> twice.</li>
 <li>End the search at current history entry. <code>Ctrl</code> + <code>j</code></li>
 <li>Cancel the search and restore original line. <code>Ctrl</code> + <code>g</code></li>
+</ul>
+
+
+<h2>Need more?</h2>
+
+<ul>
+<li>A comprehensive <a href="http://www.catonmat.net/blog/bash-emacs-editing-mode-cheat-sheet/"><strong>bash editing mode cheatsheet</strong></a> by Peteris Krumin (<a href="http://catonmat.net">catonmat.net</a>).</li>
+<li><strong>Vim users!</strong> Do you know you can switch to Vi-style editing mode?
+Here: <a href="http://www.catonmat.net/blog/bash-vi-editing-mode-cheat-sheet/">vi-style cheatsheet</a>.</li>
+<li>Bash command line editing is actually handled by <strong>GNU Readline Library</strong>. So
+just dive into <a href="http://www.gnu.org/software/readline/#Documentation">Readline manual</a>
+for everything else.</li>
 </ul>
 
 ]]></content>
