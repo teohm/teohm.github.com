@@ -2,8 +2,8 @@
 layout: page
 title: "Revoke authorized access"
 description: >
-  Arggh, I can't find the page to remove or manage authorized access 
-  for apps to my Google/Facebook/Twitter/Linkedin/Yahoo/etc. account! 
+  Tired of searching for the page to remove/manage authorized access 
+  for apps to your Google/Facebook/Twitter/Linkedin/Yahoo/etc. account? 
 date: 2012-11-08 11:42
 comments: true
 sharing: true
@@ -11,10 +11,6 @@ footer: true
 categories:
 - tools
 ---
-
-Why are you here?
-----
-Arggh, I can't find the page to **remove or manage authorized access for apps** to my Google/Facebook/Twitter/etc account! 
 
 Choose your account provider:
 ----
@@ -24,6 +20,11 @@ Choose your account provider:
 - [Linkedin](https://www.linkedin.com/secure/settings?userAgree=)
 - [GitHub](https://github.com/settings/applications)
 - [Yahoo!](https://api.login.yahoo.com/WSLogin/V1/unlink)
+
+Why are you here?
+----
+Arggh, I can't find the page to **remove or manage authorized access for apps** to my Google/Facebook/Twitter/etc account! 
+
 
 Not in list?
 ----
