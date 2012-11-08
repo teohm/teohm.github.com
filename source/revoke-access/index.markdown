@@ -1,17 +1,25 @@
 ---
 layout: page
-title: "Manage Accounts"
+title: "Revoke authorized access"
 date: 2012-11-08 11:42
 comments: true
 sharing: true
 footer: true
 ---
 
-Manage authorized access to your accounts
+Why are you here?
 ----
+Arggh, I can't find the page to **remove or manage authorized access for apps** to my Google/Facebook/Twitter/etc account! 
 
+Choose your account provider:
+----
 - [Google](https://accounts.google.com/IssuedAuthSubTokens)
 - [Facebook](https://www.facebook.com/settings?tab=applications)
 - [Twitter](https://twitter.com/settings/applications)
 - [Linkedin](https://www.linkedin.com/secure/settings?userAgree=)
 - [GitHub](https://github.com/settings/applications)
+- [Yahoo!](https://api.login.yahoo.com/WSLogin/V1/unlink)
+
+Not in list?
+----
+Post the link as comment, I will add it later.
