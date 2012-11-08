@@ -1,10 +1,15 @@
 ---
 layout: page
 title: "Revoke authorized access"
+description: >
+  Arggh, I can't find the page to remove or manage authorized access 
+  for apps to my Google/Facebook/Twitter/Linkedin/Yahoo/etc. account! 
 date: 2012-11-08 11:42
 comments: true
 sharing: true
 footer: true
+categories:
+- tools
 ---
 
 Why are you here?
