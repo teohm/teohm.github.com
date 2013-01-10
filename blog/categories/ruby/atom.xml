@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | teohm.dev]]></title>
   <link href="http://teohm.github.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://teohm.github.com/"/>
-  <updated>2012-11-23T00:05:01+08:00</updated>
+  <updated>2013-01-10T14:15:21+08:00</updated>
   <id>http://teohm.github.com/</id>
   <author>
     <name><![CDATA[Huiming Teo (teohm)]]></name>
@@ -12,6 +12,92 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Reload required files in Rails]]></title>
+    <link href="http://teohm.github.com/blog/2013/01/10/reload-required-files-in-rails/"/>
+    <updated>2013-01-10T12:34:00+08:00</updated>
+    <id>http://teohm.github.com/blog/2013/01/10/reload-required-files-in-rails</id>
+    <content type="html"><![CDATA[<p>When a Rails project grows, I often notice the need to <strong>refactor domain logic into a separate module, isolated from Rails framework</strong>.</p>
+
+<p>The isolated module will still stay in the main Rails app codebase, but can be easily packaged as a Ruby gem, tested separately, and used in other related applications.</p>
+
+<h2>Requirements</h2>
+
+<p>During the refactoring, we want to:</p>
+
+<ol>
+<li><p><strong>Use <code>require</code> to load the module like a normal gem</strong>. If possible, no dependency on Rails autoload features such as<code>require_dependency</code> and <code>autoload_paths</code>.</p></li>
+<li><p><strong>Edit the module without restarting server during development</strong>. In other words, we need to find a way to <strong>reload the module on every request</strong>.</p></li>
+</ol>
+
+
+<h2>Reload <code>require</code> files</h2>
+
+<p>After some research, I found a <a href="http://timcardenas.com/automatically-reload-gems-in-rails-327-on-eve"><strong>working solution</strong></a> by Timothy Cardenas:</p>
+
+<p>```
+ActionDispatch::Callbacks.to_prepare do
+  if Object.const_defined?("Module1")</p>
+
+<pre><code>Object.send(:remove_const, "Module1")
+</code></pre>
+
+<p>  end
+  $".delete_if {|s| s.include?('module1') }
+  require 'module1'
+end
+```</p>
+
+<p>What it does is, before each request,</p>
+
+<ol>
+<li>Unload the top-level module.</li>
+<li>Un-require all required files from the module.</li>
+<li>Re-require the top-level module.</li>
+</ol>
+
+
+<h2>An extra step in Rails 3.2</h2>
+
+<p>In Rails 3.2, <code>ActionDispatch::Callbacks.to_prepare</code> has a slightly different behavior. It will run before a request <strong>only if a watchable file is modified</strong>.</p>
+
+<p>You need to specify your own <a href="http://api.rubyonrails.org/classes/Rails/Railtie/Configuration.html#method-i-watchable_dirs">watchable files</a>:</p>
+
+<p>```</p>
+
+<h1>watch all .rb files recursively under modules/module1/ dir</h1>
+
+<p>config.watchable_dirs['modules/module1'] = [:rb]
+```</p>
+
+<h2>Introduce <code>require_reloader</code> gem</h2>
+
+<p>Before bundling the solution into a gem, I did a search on RubyGems.org and found Colin Young's <a href="https://github.com/colinyoung/gem_reloader">gem_reloader</a>. It's based on Timy's solution as well. I forked it and started playing around.</p>
+
+<p>In the end, I made some major changes to include Rails 3.2 support, some fixes and new features.</p>
+
+<p>So I decided to <strong>release it as a new Ruby gem: <a href="https://github.com/teohm/require_reloader">require_reloader</a></strong>.</p>
+
+<p>```</p>
+
+<h1>config/environments/development.rb</h1>
+
+<p>YourApp::Application.configure do
+  ...
+  RequireReloader.watch :module1,</p>
+
+<pre><code>path: 'modules/module1'
+</code></pre>
+
+<p>end
+```</p>
+
+<p>Currently it supports Rails 3, including 3.1 and 3.2.</p>
+
+<p>If you are working on something similar, looking forward for your feedbacks and pull requests. It is not tested on Rails 2 yet, so pull requests are definitely welcomed!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Start Using Ruby % (Percent) Notation]]></title>

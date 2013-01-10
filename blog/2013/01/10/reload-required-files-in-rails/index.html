@@ -5,13 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html xmlns:wb="http://open.weibo.com/wb" class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Mac Tips: Turn on remote login (SSH server) - teohm.dev</title>
+  <title>Reload required files in Rails - teohm.dev</title>
   <meta name="author" content="Huiming Teo (teohm)">
 
   
-  <meta name="description" content="Quick Tips: Open System Preferences > Sharing, and turn on Remote Login.
-">
-  <meta name="keywords" content="Mac Tips, Mac OSX, remote login, SSH server, ssh, network.">
+  <meta name="description" content="When a Rails project grows, I often notice the need to refactor domain logic into a separate module, isolated from Rails framework. The isolated &hellip;">
+  
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -19,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://teohm.github.com/blog/2012/04/07/mac-tips-turn-on-remote-login-ssh-server/">
+  <link rel="canonical" href="http://teohm.github.com/blog/2013/01/10/reload-required-files-in-rails/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -31,13 +30,12 @@
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
 
-<meta property="og:image" content="http://teohm.github.com/images/tags/mac-tips.png">
-<link rel="img_src" href="http://teohm.github.com/images/tags/mac-tips.png">
+<meta property="og:image" content="http://teohm.github.com/images/tags/ruby.png">
+<link rel="img_src" href="http://teohm.github.com/images/tags/ruby.png">
  
 
 
-<meta property="og:description" content="Quick Tips: Open System Preferences > Sharing, and turn on Remote Login.
-">
+<meta property="og:description" content="When a Rails project grows, I often notice the need to refactor domain logic into a separate module, isolated from Rails framework. The isolated module will still stay in the main Rails app codebase, but can be easily packaged as a Ruby gem, tested separately, and used in other related applications &hellip;">
 
 
   
@@ -90,7 +88,7 @@
   
   <header>
     
-      <h1 class="entry-title">Mac Tips: Turn on Remote Login (SSH Server)</h1>
+      <h1 class="entry-title">Reload Required Files in Rails</h1>
     
     
       <p class="meta">
@@ -106,18 +104,93 @@
   
 
 
-<time datetime="2012-04-07T15:12:00+08:00" pubdate data-updated="true">Apr 7<span>th</span>, 2012</time>
+<time datetime="2013-01-10T12:34:00+08:00" pubdate data-updated="true">Jan 10<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Enable SSH server on Mac OSX is surprisingly easy. Open <strong>System Preferences >
-Sharing</strong>, and turn on <strong>Remote Login</strong>. You can futher restrict which user can
-login via SSH on the same screen.</p>
+<div class="entry-content"><p>When a Rails project grows, I often notice the need to <strong>refactor domain logic into a separate module, isolated from Rails framework</strong>.</p>
 
-<p><img src="/images/mac-tips/remote-login.png" title="A screenshot Sharing dialog box." alt="A screenshot Sharing dialog box."></p>
+<p>The isolated module will still stay in the main Rails app codebase, but can be easily packaged as a Ruby gem, tested separately, and used in other related applications.</p>
+
+<h2>Requirements</h2>
+
+<p>During the refactoring, we want to:</p>
+
+<ol>
+<li><p><strong>Use <code>require</code> to load the module like a normal gem</strong>. If possible, no dependency on Rails autoload features such as<code>require_dependency</code> and <code>autoload_paths</code>.</p></li>
+<li><p><strong>Edit the module without restarting server during development</strong>. In other words, we need to find a way to <strong>reload the module on every request</strong>.</p></li>
+</ol>
+
+
+<h2>Reload <code>require</code> files</h2>
+
+<p>After some research, I found a <a href="http://timcardenas.com/automatically-reload-gems-in-rails-327-on-eve"><strong>working solution</strong></a> by Timothy Cardenas:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ActionDispatch::Callbacks.to_prepare do
+</span><span class='line'>  if Object.const_defined?("Module1")
+</span><span class='line'>    Object.send(:remove_const, "Module1")
+</span><span class='line'>  end
+</span><span class='line'>  $".delete_if {|s| s.include?('module1') }
+</span><span class='line'>  require 'module1'
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>What it does is, before each request,</p>
+
+<ol>
+<li>Unload the top-level module.</li>
+<li>Un-require all required files from the module.</li>
+<li>Re-require the top-level module.</li>
+</ol>
+
+
+<h2>An extra step in Rails 3.2</h2>
+
+<p>In Rails 3.2, <code>ActionDispatch::Callbacks.to_prepare</code> has a slightly different behavior. It will run before a request <strong>only if a watchable file is modified</strong>.</p>
+
+<p>You need to specify your own <a href="http://api.rubyonrails.org/classes/Rails/Railtie/Configuration.html#method-i-watchable_dirs">watchable files</a>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># watch all .rb files recursively under modules/module1/ dir
+</span><span class='line'>config.watchable_dirs['modules/module1'] = [:rb]</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Introduce <code>require_reloader</code> gem</h2>
+
+<p>Before bundling the solution into a gem, I did a search on RubyGems.org and found Colin Young&#8217;s <a href="https://github.com/colinyoung/gem_reloader">gem_reloader</a>. It&#8217;s based on Timy&#8217;s solution as well. I forked it and started playing around.</p>
+
+<p>In the end, I made some major changes to include Rails 3.2 support, some fixes and new features.</p>
+
+<p>So I decided to <strong>release it as a new Ruby gem: <a href="https://github.com/teohm/require_reloader">require_reloader</a></strong>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># config/environments/development.rb
+</span><span class='line'>YourApp::Application.configure do
+</span><span class='line'>  ...
+</span><span class='line'>  RequireReloader.watch :module1,
+</span><span class='line'>    path: 'modules/module1'
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Currently it supports Rails 3, including 3.1 and 3.2.</p>
+
+<p>If you are working on something similar, looking forward for your feedbacks and pull requests. It is not tested on Rails 2 yet, so pull requests are definitely welcomed!</p>
 </div>
 
 
@@ -143,12 +216,12 @@ login via SSH on the same screen.</p>
   
 
 
-<time datetime="2012-04-07T15:12:00+08:00" pubdate data-updated="true">Apr 7<span>th</span>, 2012</time>
+<time datetime="2013-01-10T12:34:00+08:00" pubdate data-updated="true">Jan 10<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/mac-tips/'>mac-tips</a>, <a class='category' href='/blog/categories/network/'>network</a>, <a class='category' href='/blog/categories/ssh/'>ssh</a>
+    <a class='category' href='/blog/categories/ruby/'>ruby</a>
   
 </span>
 
@@ -157,7 +230,7 @@ login via SSH on the same screen.</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://teohm.github.com/blog/2012/04/07/mac-tips-turn-on-remote-login-ssh-server/" data-via="teohm" data-counturl="http://teohm.github.com/blog/2012/04/07/mac-tips-turn-on-remote-login-ssh-server/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://teohm.github.com/blog/2013/01/10/reload-required-files-in-rails/" data-via="teohm" data-counturl="http://teohm.github.com/blog/2013/01/10/reload-required-files-in-rails/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -166,7 +239,7 @@ login via SSH on the same screen.</p>
     <wb:share-button relateuid="2678248043"></wb:share-button>
   </div>
   <div class="reddit-button" style="margin-right:2em; display:inline-block; position:relative; top:0.2em">
-    <script type="text/javascript">reddit_url='http://teohm.github.com/blog/2012/04/07/mac-tips-turn-on-remote-login-ssh-server/'</script>
+    <script type="text/javascript">reddit_url='http://teohm.github.com/blog/2013/01/10/reload-required-files-in-rails/'</script>
     <script type="text/javascript" src="http://www.reddit.com/static/button/button1.js"></script>
   </div>
   
@@ -177,10 +250,8 @@ login via SSH on the same screen.</p>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/04/01/using-sshuttle-in-daily-work/" title="Previous Post: Using sshuttle in daily work">&laquo; Using sshuttle in daily work</a>
+        <a class="basic-alignment left" href="/blog/2012/10/15/start-using-ruby-percent-notation/" title="Previous Post: Start Using Ruby % (Percent) Notation">&laquo; Start Using Ruby % (Percent) Notation</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2012/04/07/mac-tips-change-default-application-for-a-file-type/" title="Next Post: Mac Tips: Change default application for a file type">Mac Tips: Change default application for a file type &raquo;</a>
       
     </p>
   </footer>
@@ -288,8 +359,8 @@ login via SSH on the same screen.</p>
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://teohm.github.com/blog/2012/04/07/mac-tips-turn-on-remote-login-ssh-server/';
-        var disqus_url = 'http://teohm.github.com/blog/2012/04/07/mac-tips-turn-on-remote-login-ssh-server/';
+        var disqus_identifier = 'http://teohm.github.com/blog/2013/01/10/reload-required-files-in-rails/';
+        var disqus_url = 'http://teohm.github.com/blog/2013/01/10/reload-required-files-in-rails/';
         var disqus_script = 'embed.js';
       
     (function () {

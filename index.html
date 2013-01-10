@@ -9,8 +9,7 @@
   <meta name="author" content="Huiming Teo (teohm)">
 
   
-  <meta name="description" content="If you seldom use Ruby percent (%) notation in daily work, here&#8217;s a
-quick summary of what I picked up recently. Delimiter allows any non- &hellip;">
+  <meta name="description" content="When a Rails project grows, I often notice the need to refactor domain logic into a separate module, isolated from Rails framework. The isolated &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -33,15 +32,7 @@ quick summary of what I picked up recently. Delimiter allows any non- &hellip;">
  
 
 
-<meta property="og:description" content="If you seldom use Ruby percent (%) notation in daily work, here&#8217;s a
-quick summary of what I picked up recently. Delimiter allows any non-alphanum You can use any non alpha-numeric character as delimiter: 1
-2
-3
-4
-%(any alpha-numeric)
-%[char can be]
-%%used as%
-%!delimiter\!! # escape &#39;!&#39 &hellip;">
+<meta property="og:description" content="When a Rails project grows, I often notice the need to refactor domain logic into a separate module, isolated from Rails framework. The isolated module will still stay in the main Rails app codebase, but can be easily packaged as a Ruby gem, tested separately, and used in other related applications &hellip;">
 
 
   
@@ -91,6 +82,121 @@ quick summary of what I picked up recently. Delimiter allows any non-alphanum Yo
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/01/10/reload-required-files-in-rails/">Reload Required Files in Rails</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-10T12:34:00+08:00" pubdate data-updated="true">Jan 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>When a Rails project grows, I often notice the need to <strong>refactor domain logic into a separate module, isolated from Rails framework</strong>.</p>
+
+<p>The isolated module will still stay in the main Rails app codebase, but can be easily packaged as a Ruby gem, tested separately, and used in other related applications.</p>
+
+<h2>Requirements</h2>
+
+<p>During the refactoring, we want to:</p>
+
+<ol>
+<li><p><strong>Use <code>require</code> to load the module like a normal gem</strong>. If possible, no dependency on Rails autoload features such as<code>require_dependency</code> and <code>autoload_paths</code>.</p></li>
+<li><p><strong>Edit the module without restarting server during development</strong>. In other words, we need to find a way to <strong>reload the module on every request</strong>.</p></li>
+</ol>
+
+
+<h2>Reload <code>require</code> files</h2>
+
+<p>After some research, I found a <a href="http://timcardenas.com/automatically-reload-gems-in-rails-327-on-eve"><strong>working solution</strong></a> by Timothy Cardenas:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ActionDispatch::Callbacks.to_prepare do
+</span><span class='line'>  if Object.const_defined?("Module1")
+</span><span class='line'>    Object.send(:remove_const, "Module1")
+</span><span class='line'>  end
+</span><span class='line'>  $".delete_if {|s| s.include?('module1') }
+</span><span class='line'>  require 'module1'
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>What it does is, before each request,</p>
+
+<ol>
+<li>Unload the top-level module.</li>
+<li>Un-require all required files from the module.</li>
+<li>Re-require the top-level module.</li>
+</ol>
+
+
+<h2>An extra step in Rails 3.2</h2>
+
+<p>In Rails 3.2, <code>ActionDispatch::Callbacks.to_prepare</code> has a slightly different behavior. It will run before a request <strong>only if a watchable file is modified</strong>.</p>
+
+<p>You need to specify your own <a href="http://api.rubyonrails.org/classes/Rails/Railtie/Configuration.html#method-i-watchable_dirs">watchable files</a>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># watch all .rb files recursively under modules/module1/ dir
+</span><span class='line'>config.watchable_dirs['modules/module1'] = [:rb]</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Introduce <code>require_reloader</code> gem</h2>
+
+<p>Before bundling the solution into a gem, I did a search on RubyGems.org and found Colin Young&#8217;s <a href="https://github.com/colinyoung/gem_reloader">gem_reloader</a>. It&#8217;s based on Timy&#8217;s solution as well. I forked it and started playing around.</p>
+
+<p>In the end, I made some major changes to include Rails 3.2 support, some fixes and new features.</p>
+
+<p>So I decided to <strong>release it as a new Ruby gem: <a href="https://github.com/teohm/require_reloader">require_reloader</a></strong>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># config/environments/development.rb
+</span><span class='line'>YourApp::Application.configure do
+</span><span class='line'>  ...
+</span><span class='line'>  RequireReloader.watch :module1,
+</span><span class='line'>    path: 'modules/module1'
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Currently it supports Rails 3, including 3.1 and 3.2.</p>
+
+<p>If you are working on something similar, looking forward for your feedbacks and pull requests. It is not tested on Rails 2 yet, so pull requests are definitely welcomed!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -849,126 +955,6 @@ decided to <strong> <em>only</em> encode parameter values</strong>, but <em>not<
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/03/22/working-effectively-with-iterm2/">Working Effectively With iTerm2</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-03-22T22:42:00+08:00" pubdate data-updated="true">Mar 22<span>nd</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have been using <a href="http://www.iterm2.com">iTerm</a> in <a href="http://www.favoritemedium.com">daily work</a> for almost a year now.
-Along the way, I learned a few handy <strong>settings tweaks and shortcut keys to boost my productivity</strong> in command-line environment.</p>
-
-<h2>Install iTerm2</h2>
-
-<p>If you haven&#8217;t heard of <a href="http://www.iterm2.com">iTerm</a>, it&#8217;s a popular <strong>open source alternative to Mac OS X Terminal</strong>.
-Give it a try, download and install it from <a href="http://www.iterm2.com">http://www.iterm2.com</a>.</p>
-
-<h2>Fine-Tune Settings</h2>
-
-<p>Launch iTerm, open <strong>iTerm > Preferences</strong> or just <code>Cmd + ,</code>.</p>
-
-<h3>Open tab/pane with current working directory</h3>
-
-<p>Under <strong>Profiles</strong> tab, go to <strong>General</strong> subtab, set <strong>Working Directory</strong> to <em>&#8220;Reuse previous session&#8217;s directory&#8221;</em>.</p>
-
-<h3>Enable <code>Meta</code> key</h3>
-
-<p>To enable Meta key for <a href="/blog/2012/01/04/shortcuts-to-move-faster-in-bash-command-line">Bash readline editing</a> e.g. <code>Alt + b</code> to move to previous word, under <strong>Profiles</strong> tab, go to <strong>Keys</strong> subtab, set <strong>Left option key acts as:</strong> to <em>&#8220;+Esc&#8221;</em>.</p>
-
-<h3>Hotkey to toggle iTerm2</h3>
-
-<p>Under <strong>Keys</strong> tab, in <strong>Hotkey</strong> section, enable <em>&#8220;Show/hide iTerm2 with  a system-wide hotkey&#8221;</em> and input your hotkey combination, e.g. I use <code>Ctrl + Shift + L</code>.</p>
-
-<h3>Switch pane with mouse cursor</h3>
-
-<p>Under <strong>Pointer</strong>, in <strong>Miscellaneous Settings</strong> section, enable <em>&#8220;Focus follows mouse&#8221;</em>.</p>
-
-<h2>Handy Shortcut Keys</h2>
-
-<p>Here&#8217;s a set of <strong>shortcut keys I commonly use</strong>. You can always look for other shortcut keys in the iTerm menu.</p>
-
-<h3>Tab navigation</h3>
-
-<ul>
-<li>open new tab <code>Cmd + t</code></li>
-<li>next tab <code>Cmd + Shift + ]</code></li>
-<li>previous tab <code>Cmd + Shift + [</code></li>
-</ul>
-
-
-<h3>Pane navigation</h3>
-
-<ul>
-<li>split pane left-right <code>Cmd + d</code></li>
-<li>split pane top-bottom <code>Cmd + Shift + d</code></li>
-<li>next pane <code>Cmd + ]</code></li>
-<li>previous pane <code>Cmd + [</code></li>
-</ul>
-
-
-<h3>Search</h3>
-
-<ul>
-<li>open search bar <code>Cmd + f</code></li>
-<li>find next <code>Cmd + g</code></li>
-</ul>
-
-
-<h3>Input to all panes</h3>
-
-<ul>
-<li>input to all panes in current tab <code>Cmd + Alt + i</code></li>
-</ul>
-
-
-<h3>Clear screen</h3>
-
-<ul>
-<li>clear buffer <code>Cmd + k</code></li>
-<li>clear lines (Bash command) <code>Ctrl + l</code></li>
-</ul>
-
-
-<h3>Zooming / Font Resize</h3>
-
-<ul>
-<li>toggle maximize window <code>Cmd + Alt + =</code></li>
-<li>toggle full screen <code>Cmd + Enter</code></li>
-<li>make font larger <code>Cmd + +</code></li>
-<li>make font smaller <code>Cmd + -</code></li>
-</ul>
-
-
-<p>iTerm lovers, did I miss anything out?</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -993,6 +979,10 @@ Give it a try, download and install it from <a href="http://www.iterm2.com">http
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/10/reload-required-files-in-rails/">Reload required files in Rails</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/10/15/start-using-ruby-percent-notation/">Start Using Ruby % (Percent) Notation</a>
       </li>
     
@@ -1006,10 +996,6 @@ Give it a try, download and install it from <a href="http://www.iterm2.com">http
     
       <li class="post">
         <a href="/blog/2012/09/03/breaking-arc-retain-cycle-in-objective-c-blocks/">Breaking ARC retain cycle in Objective-C blocks</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/04/08/mac-tips-use-caps-lock-as-control-key/">Mac Tips: Use Caps Lock as Control key</a>
       </li>
     
   </ul>
@@ -1058,7 +1044,7 @@ Give it a try, download and install it from <a href="http://www.iterm2.com">http
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2012 - Huiming Teo (teohm) -
+  Copyright &copy; 2013 - Huiming Teo (teohm) -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
