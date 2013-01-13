@@ -4,7 +4,10 @@ single: true
 ---
 
 <div>
-<article class="hentry" role="article">
+<article
+  itemscope="" itemtype="http://nik.io/v1/schema/Article"
+  class="hentry" role="article">
+  <span itemprop="permalink" content="{{ root_url }}{{ post.url }}"></span>
   {% include article.html %}
   <footer>
     <p class="sponsor-tags">
@@ -18,6 +21,9 @@ single: true
     {% unless page.sharing == false %}
       {% include post/sharing.html %}
     {% endunless %}
+    <p class="related">
+      <div data-chorus-discovery=''></div>
+    </p>
     <p class="meta">
       {% if page.previous.url %}
         <a class="basic-alignment left" href="{{page.previous.url}}" title="Previous Post: {{page.previous.title}}">&laquo; {{page.previous.title}}</a>
