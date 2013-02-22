@@ -2,83 +2,83 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://teohm.github.com/blog/2011/05/05/activerecord-model-equality/</loc>
-        <lastmod>2013-01-13T21:29:35+08:00</lastmod>
+        <lastmod>2013-01-13T21:39:29+08:00</lastmod>
     </url>
     <url>
         <loc>http://teohm.github.com/blog/2011/05/09/activerecord-mass-assignment/</loc>
-        <lastmod>2013-01-13T21:29:35+08:00</lastmod>
+        <lastmod>2013-01-13T21:39:29+08:00</lastmod>
     </url>
     <url>
         <loc>
             http://teohm.github.com/blog/2011/05/25/using-jquery-validation-in-rails-remote-form/
         </loc>
-        <lastmod>2013-01-13T21:29:35+08:00</lastmod>
+        <lastmod>2013-01-13T21:39:29+08:00</lastmod>
     </url>
     <url>
         <loc>http://teohm.github.com/blog/2011/05/30/learning-git-internals-by-example/</loc>
-        <lastmod>2013-01-13T21:29:35+08:00</lastmod>
+        <lastmod>2013-01-13T21:39:29+08:00</lastmod>
     </url>
     <url>
         <loc>http://teohm.github.com/blog/2011/05/31/using-rabl-in-rails-json-web-api/</loc>
-        <lastmod>2013-01-13T21:29:35+08:00</lastmod>
+        <lastmod>2013-01-13T21:39:29+08:00</lastmod>
     </url>
     <url>
         <loc>
             http://teohm.github.com/blog/2012/01/04/shortcuts-to-move-faster-in-bash-command-line/
         </loc>
-        <lastmod>2013-01-13T21:29:35+08:00</lastmod>
+        <lastmod>2013-01-13T21:39:29+08:00</lastmod>
     </url>
     <url>
         <loc>http://teohm.github.com/blog/2012/03/22/working-effectively-with-iterm2/</loc>
-        <lastmod>2013-01-13T21:29:35+08:00</lastmod>
+        <lastmod>2013-01-13T21:39:29+08:00</lastmod>
     </url>
     <url>
         <loc>
             http://teohm.github.com/blog/2012/03/27/utf-8-param-name-issue-in-rails-multipart-form/
         </loc>
-        <lastmod>2013-01-13T21:29:35+08:00</lastmod>
+        <lastmod>2013-01-13T21:39:29+08:00</lastmod>
     </url>
     <url>
         <loc>http://teohm.github.com/blog/2012/04/01/using-sshuttle-in-daily-work/</loc>
-        <lastmod>2013-01-13T21:29:35+08:00</lastmod>
+        <lastmod>2013-01-13T21:39:29+08:00</lastmod>
     </url>
     <url>
         <loc>
             http://teohm.github.com/blog/2012/04/07/mac-tips-turn-on-remote-login-ssh-server/
         </loc>
-        <lastmod>2013-01-13T21:29:35+08:00</lastmod>
+        <lastmod>2013-01-13T21:39:29+08:00</lastmod>
     </url>
     <url>
         <loc>
             http://teohm.github.com/blog/2012/04/07/mac-tips-change-default-application-for-a-file-type/
         </loc>
-        <lastmod>2013-01-13T21:29:35+08:00</lastmod>
+        <lastmod>2013-01-13T21:39:29+08:00</lastmod>
     </url>
     <url>
         <loc>http://teohm.github.com/blog/2012/04/08/mac-tips-use-caps-lock-as-control-key/</loc>
-        <lastmod>2013-01-13T21:29:35+08:00</lastmod>
+        <lastmod>2013-01-13T21:39:29+08:00</lastmod>
     </url>
     <url>
         <loc>
             http://teohm.github.com/blog/2012/09/03/breaking-arc-retain-cycle-in-objective-c-blocks/
         </loc>
-        <lastmod>2013-01-13T21:29:35+08:00</lastmod>
+        <lastmod>2013-01-13T21:39:29+08:00</lastmod>
     </url>
     <url>
         <loc>http://teohm.github.com/blog/2012/09/24/objective-c-collection-operators/</loc>
-        <lastmod>2013-01-13T21:29:35+08:00</lastmod>
+        <lastmod>2013-01-13T21:39:29+08:00</lastmod>
     </url>
     <url>
         <loc>http://teohm.github.com/blog/2012/10/02/ruby-idiom-to-ensure-variable-is-array/</loc>
-        <lastmod>2013-01-13T21:29:35+08:00</lastmod>
+        <lastmod>2013-01-13T21:39:29+08:00</lastmod>
     </url>
     <url>
         <loc>http://teohm.github.com/blog/2012/10/15/start-using-ruby-percent-notation/</loc>
-        <lastmod>2013-01-13T21:29:35+08:00</lastmod>
+        <lastmod>2013-01-13T21:39:29+08:00</lastmod>
     </url>
     <url>
         <loc>http://teohm.github.com/blog/2013/01/10/reload-required-files-in-rails/</loc>
-        <lastmod>2013-01-13T21:29:35+08:00</lastmod>
+        <lastmod>2013-01-13T21:39:29+08:00</lastmod>
     </url>
     <url>
         <loc>http://teohm.github.com/blog/archives/</loc>
