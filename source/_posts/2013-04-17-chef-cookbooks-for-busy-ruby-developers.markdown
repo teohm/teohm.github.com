@@ -204,7 +204,7 @@ We have a **full-stack, rack-based server** with:
 4. Tweak Capistrano deploy.rb
 -------------
 
-Now, it's ready to deploy a Rack-backed app to the remote server!
+Now, it's ready to deploy a Rack-based app to the remote server!
 
 I have two example Rails apps available on Github:
 
