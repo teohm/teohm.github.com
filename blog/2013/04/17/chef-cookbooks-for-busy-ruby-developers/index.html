@@ -1,0 +1,677 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html xmlns:wb="http://open.weibo.com/wb" class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Chef cookbooks for busy Ruby developers - teohm.dev</title>
+  <meta name="author" content="Huiming Teo (teohm)">
+
+  
+  <meta name="description" content="In this post, I will show you a step-by-step guide on using the cookbooks together with knife-solo to provision a remote server in 4 steps.">
+  <meta name="keywords" content="chef, chef-solo, ruby, rack, rackbox, databox, appbox, unicorn, passenger, rails.">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta content="related_content_manifest" value="a22f91cd-07f6-4154-8c8c-b7033b28a633"/>
+
+  
+  <link rel="canonical" href="http://teohm.github.com/blog/2013/04/17/chef-cookbooks-for-busy-ruby-developers/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/teohm" rel="alternate" title="teohm.dev" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<meta property="og:image" content="http://teohm.github.com/images/tags/chef.png">
+<link rel="img_src" href="http://teohm.github.com/images/tags/chef.png">
+ 
+
+
+<meta property="og:description" content="In this post, I will show you a step-by-step guide on using the cookbooks together with knife-solo to provision a remote server in 4 steps.">
+
+
+<script type='text/javascript'>//<![CDATA[
+(function() {
+  var script = document.createElement('script');
+  script.type  = 'text/javascript';
+  script.async = 'async';
+  script.src   = 'https://choruswp.nik.io/v1/related_content.js?id=392033&api_key=fd9c6833f5f710740979381b40240de9292abeeddd4e741';
+  var s = document.getElementsByTagName('script')[0];
+  s.parentNode.insertBefore(script, s);
+})();//]]>
+</script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-28076807-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">teohm.dev</a></h1>
+  
+    <h2>I enjoy life, and make stuff for people I care about :)</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/teohm" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:teohm.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article
+  itemscope="" itemtype="http://nik.io/v1/schema/Article"
+  class="hentry" role="article">
+  <span itemprop="permalink" content=""></span>
+  
+  <header>
+    
+      <h1 class="entry-title">Chef Cookbooks for Busy Ruby Developers</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-17T23:06:00+08:00" pubdate data-updated="true">Apr 17<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Have you ever <strong>setup a Rails production environment from scratch, by
+hand</strong>? If you had, I share your pain every time when a new project
+started.</p>
+
+<p>The process is often repetitive. To me, it seems to be a waste to do it
+manually every time. It also consumes time and attention. It would be
+great if I could spend them on tasks that bring more values to clients.</p>
+
+<p>To minimize such waste, I have written two Chef cookbooks to <strong>automate
+the process</strong>:</p>
+
+<ul>
+<li><a href="https://github.com/teohm/rackbox-cookbook"><strong>rackbox</strong></a>  - to provision <strong>rack-based web server</strong> (Nginx as front server, Unicorn and Passenger as upstream app servers, <code>rbenv</code> as ruby version manager).</li>
+<li><a href="https://github.com/teohm/databox-cookbook"><strong>databox</strong></a> - to provision <strong>database server</strong> (supports MySQL and PostgreSQL).</li>
+</ul>
+
+
+<h2>Getting started</h2>
+
+<p>In this post, I will show you a <strong>step-by-step guide</strong> on how to use the
+cookbooks together with
+<a href="https://github.com/matschaffer/knife-solo"><code>knife-solo</code></a> to provision a
+remote server in 4 steps:</p>
+
+<ol>
+<li>setup Chef Solo environment</li>
+<li>modify config file</li>
+<li>provision remote server</li>
+<li>tweak Capistrano <code>deploy.rb</code></li>
+</ol>
+
+
+<p>A working example in also available at
+<a href="https://github.com/teohm/kitchen-example">teohm/kitchen-example</a>.</p>
+
+<h2>1. Setup Chef Solo environment</h2>
+
+<ul>
+<li>Install Chef Solo tools on local machine.</li>
+<li>Download Chef cookbooks to local machine.</li>
+<li>Install <code>chef-solo</code> on remote server.</li>
+</ul>
+
+
+<h3>Install Chef Solo tools</h3>
+
+<p>Let&#8217;s create a new directory,</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mkdir chef-kitchen
+</span><span class='line'>cd chef-kitchen</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and a <code>Gemfile</code>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>source "https://rubygems.org"
+</span><span class='line'>
+</span><span class='line'>gem "knife-solo", "&gt;= 0.3.0pre3"
+</span><span class='line'>gem "berkshelf"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I recommend <code>knife-solo &gt;= 0.3</code> as it includes a few <a href="https://github.com/matschaffer/knife-solo/blob/master/CHANGELOG.md#changes-and-new-features">major fixes and
+improvements</a>.</p>
+
+<p>Now, install the ruby gems.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bundle install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, setup a kitchen directory structure with <code>knife-solo</code>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bundle exec knife solo init .</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Download Chef cookbooks</h3>
+
+<p>I use <a href="http://berkshelf.com/">Berkshelf</a> to manage cookbooks. So we need a <code>Berksfile</code>,</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>site :opscode
+</span><span class='line'>
+</span><span class='line'>cookbook "runit", "&gt;= 1.1.2"  # HACK: force-use this version
+</span><span class='line'>cookbook "databox"
+</span><span class='line'>cookbook "rackbox"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>(I added a hack here to force <code>berkshelf</code> to use <code>runit 1.1.2</code> required
+by <code>rackbox</code>. Still looking for a better solution.)</p>
+
+<p>We can now download cookbooks with <code>berks install</code>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bundle exec berks install --path cookbooks/</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Install <code>chef-solo</code> on remote server</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bundle exec knife solo prepare testbox</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>2. Customize config file</h2>
+
+<ul>
+<li>Download config example</li>
+<li>Customize config file</li>
+</ul>
+
+
+<h3>Download config example</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>curl https://raw.github.com/teohm/kitchen-example/master/nodes/host.json.example --output nodes/testbox.json</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Modify config file (JSON)</h3>
+
+<p>The config file starts with a <code>run_list</code>. You specify a list of cookbook
+recipes here. Chef will run them in the same order in this list.</p>
+
+<p>It is followed by cookbook attributes. You can modify these attributes.
+A full reference of attributes are described in each cookbook&#8217;s README
+(see <a href="https://github.com/teohm/appbox-cookbook#attributes">appbox</a>,
+<a href="https://github.com/teohm/databox-cookbook#attributes">databox</a>,
+<a href="https://github.com/teohm/rackbox-cookbook#attributes">rackbox</a>).</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  "run_list": [
+</span><span class='line'>    "databox",
+</span><span class='line'>    "rackbox"
+</span><span class='line'>  ],
+</span><span class='line'>  "appbox": {
+</span><span class='line'>    "deploy_keys": ["ssh-rsa 5bnmu23890fghghjk"],
+</span><span class='line'>    "admin_keys": ["ssh-rsa 456789fghjkvbn567"]
+</span><span class='line'>  },
+</span><span class='line'>  "databox": {
+</span><span class='line'>    "db_root_password": "welcome!",
+</span><span class='line'>    "databases": {
+</span><span class='line'>      "mysql": [
+</span><span class='line'>        { "username": "app1",
+</span><span class='line'>          "password": "app1",
+</span><span class='line'>          "database_name": "app1_production" }
+</span><span class='line'>      ],
+</span><span class='line'>      "postgresql": [
+</span><span class='line'>        { "username": "app2",
+</span><span class='line'>          "password": "app2",
+</span><span class='line'>          "database_name": "app2_production" }
+</span><span class='line'>      ]
+</span><span class='line'>    }
+</span><span class='line'>  },
+</span><span class='line'>  "rackbox": {
+</span><span class='line'>    "ruby": {
+</span><span class='line'>      "versions": ["1.9.3-p385", "1.9.2-p320"],
+</span><span class='line'>      "global_version": "1.9.3-p385"
+</span><span class='line'>    },
+</span><span class='line'>    "apps": {
+</span><span class='line'>      "unicorn": [
+</span><span class='line'>        { "appname": "app1",
+</span><span class='line'>          "hostname": "app1.test.com" }
+</span><span class='line'>      ],
+</span><span class='line'>      "passenger": [
+</span><span class='line'>        { "appname": "app2",
+</span><span class='line'>          "hostname": "app2.test.com" }
+</span><span class='line'>      ]
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>3. Provision remote server</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bundle exec knife solo cook testbox</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It uploads the kitchen directory and runs <code>chef-solo</code> on the remote
+server. Chef-solo will then takeover and execute the run list to setup
+everything.</p>
+
+<h3>What do we get at this point?</h3>
+
+<p>Basically, it&#8217;s done!</p>
+
+<p>We have a <strong>full-stack, rack-based server</strong> with:</p>
+
+<ul>
+<li>3 user accounts (deploy, devops, apps)</li>
+<li><code>rbenv</code> as ruby version manager</li>
+<li><code>nginx</code> as front-server</li>
+<li><code>unicorn</code>, <code>passenger-standalone</code> as upstream app servers, managed by <code>runit</code></li>
+<li><code>postgresql</code>, <code>mysql</code> installed and databases created</li>
+<li>all apps will be stored in <code>/home/apps/</code></li>
+</ul>
+
+
+<h2>4. Tweak Capistrano deploy.rb</h2>
+
+<p>Now, it&#8217;s ready to deploy a Rack-backed app to the remote server!</p>
+
+<p>I have two example Rails apps available on Github:</p>
+
+<ul>
+<li><a href="https://github.com/teohm/sample-app1">teohm/sample-app1</a> runs on unicorn,</li>
+<li><a href="https://github.com/teohm/sample-app2">teohm/sample-app2</a> runs on passenger-standalone.</li>
+</ul>
+
+
+<p>There are a few <strong>minor tweaks required in Capistrano <code>deploy.rb</code></strong>, as listed below.</p>
+
+<p>I will explain the tweaks in details next time. Meanwhile, check out the complete working examples at: <a href="https://github.com/teohm/sample-app1/blob/master/config/deploy.rb">app1/config/deploy.rb</a> and <a href="https://github.com/teohm/sample-app2/blob/master/config/deploy.rb">app2/config/deploy.rb</a></p>
+
+<h3>Login as <code>deploy</code> user</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>set :user, "deploy"</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Deploy to <code>/home/apps</code></h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>set :deploy_to, "/home/apps/#{application}"</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Load <code>rbenv</code> in Capistrano</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>default_run_options[:shell] = '/bin/bash --login'</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Run bundler with <code>--binstubs</code></h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>require 'bundler/capistrano'
+</span><span class='line'>set :bundle_flags, "--deployment --binstubs"
+</span><span class='line'>set :bundle_without, [:test, :development, :deploy]</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Restart app with <code>runit sv</code></h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>namespace :deploy do
+</span><span class='line'>  task :start do
+</span><span class='line'>    run "sudo sv up app1"
+</span><span class='line'>  end
+</span><span class='line'>  task :stop do
+</span><span class='line'>    run "sudo sv down app1"
+</span><span class='line'>  end
+</span><span class='line'>  task :restart, :roles =&gt; :app, :except =&gt; { :no_release =&gt; true } do
+</span><span class='line'>    run "sudo sv restart app1"
+</span><span class='line'>  end
+</span><span class='line'>end
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Feedback</h2>
+
+<p>If you are interested on using the cookbooks, or have an idea/feedback/question about this topic, feel free to drop me (<a href="http://twitter.com/teohm">@teohm</a>) a message. Pull requests and issue reports are definitely welcomed!</p>
+</div>
+
+
+  <footer>
+    <p class="sponsor-tags">
+      <input type="hidden" name="IL_IN_TAG" value="1"/>
+    </p>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Huiming Teo (teohm)</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-17T23:06:00+08:00" pubdate data-updated="true">Apr 17<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/chef/'>chef</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://teohm.github.com/blog/2013/04/17/chef-cookbooks-for-busy-ruby-developers/" data-via="teohm" data-counturl="http://teohm.github.com/blog/2013/04/17/chef-cookbooks-for-busy-ruby-developers/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  <div class="weibo-share" style="display:inline-block; position:relative; top:-0.2em">
+    <wb:share-button relateuid="2678248043"></wb:share-button>
+  </div>
+  <div class="reddit-button" style="margin-right:2em; display:inline-block; position:relative; top:0.2em">
+    <script type="text/javascript">reddit_url='http://teohm.github.com/blog/2013/04/17/chef-cookbooks-for-busy-ruby-developers/'</script>
+    <script type="text/javascript" src="http://www.reddit.com/static/button/button1.js"></script>
+  </div>
+  
+    <div class="fb-like" data-send="false" data-width="225" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="related">
+      <div data-chorus-discovery=''></div>
+    </p>
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/01/10/reload-required-files-in-rails/" title="Previous Post: Reload required files in Rails">&laquo; Reload required files in Rails</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>My Tools</h1>
+  <ul id="tools">
+      <li class="post">
+        <a href="/revoke-access/">Revoke any authorized access</a>
+      </li>
+  </ul>
+</section>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/04/17/chef-cookbooks-for-busy-ruby-developers/">Chef cookbooks for busy Ruby developers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/10/reload-required-files-in-rails/">Reload required files in Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/15/start-using-ruby-percent-notation/">Start Using Ruby % (Percent) Notation</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/02/ruby-idiom-to-ensure-variable-is-array/">Ruby idiom to ensure variable is Array</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/09/24/objective-c-collection-operators/">Objective-C Collection Operators</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("teohm", 3, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/teohm" class="twitter-follow-button" data-show-count="false">Follow @teohm</a>
+  
+</section>
+
+
+<section>
+  <h1>On Delicious</h1>
+  <div id="delicious"></div>
+  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/toydi?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
+  <p><a href="http://delicious.com/toydi">My Delicious Bookmarks &raquo;</a></p>
+</section>
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/100712640845389576742?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Huiming Teo (teohm) -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'teohm';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://teohm.github.com/blog/2013/04/17/chef-cookbooks-for-busy-ruby-developers/';
+        var disqus_url = 'http://teohm.github.com/blog/2013/04/17/chef-cookbooks-for-busy-ruby-developers/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+<script type="text/javascript">
+    var infolinks_pid = 1125985;
+        var infolinks_wsid = 0;
+</script>
+<script type="text/javascript" src="http://resources.infolinks.com/js/infolinks_main.js"></script>
+<script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=" type="text/javascript" charset="utf-8"></script>
+
+
+</body>
+</html>

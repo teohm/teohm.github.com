@@ -4,7 +4,7 @@
   <title><![CDATA[teohm.dev]]></title>
   <link href="http://teohm.github.com/atom.xml" rel="self"/>
   <link href="http://teohm.github.com/"/>
-  <updated>2013-02-22T10:59:24+08:00</updated>
+  <updated>2013-04-18T09:32:01+08:00</updated>
   <id>http://teohm.github.com/</id>
   <author>
     <name><![CDATA[Huiming Teo (teohm)]]></name>
@@ -12,6 +12,336 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Chef cookbooks for busy Ruby developers]]></title>
+    <link href="http://teohm.github.com/blog/2013/04/17/chef-cookbooks-for-busy-ruby-developers/"/>
+    <updated>2013-04-17T23:06:00+08:00</updated>
+    <id>http://teohm.github.com/blog/2013/04/17/chef-cookbooks-for-busy-ruby-developers</id>
+    <content type="html"><![CDATA[<p>Have you ever <strong>setup a Rails production environment from scratch, by
+hand</strong>? If you had, I share your pain every time when a new project
+started.</p>
+
+<p>The process is often repetitive. To me, it seems to be a waste to do it
+manually every time. It also consumes time and attention. It would be
+great if I could spend them on tasks that bring more values to clients.</p>
+
+<p>To minimize such waste, I have written two Chef cookbooks to <strong>automate
+the process</strong>:</p>
+
+<ul>
+<li><a href="https://github.com/teohm/rackbox-cookbook"><strong>rackbox</strong></a>  - to provision <strong>rack-based web server</strong> (Nginx as front server, Unicorn and Passenger as upstream app servers, <code>rbenv</code> as ruby version manager).</li>
+<li><a href="https://github.com/teohm/databox-cookbook"><strong>databox</strong></a> - to provision <strong>database server</strong> (supports MySQL and PostgreSQL).</li>
+</ul>
+
+
+<h2>Getting started</h2>
+
+<p>In this post, I will show you a <strong>step-by-step guide</strong> on how to use the
+cookbooks together with
+<a href="https://github.com/matschaffer/knife-solo"><code>knife-solo</code></a> to provision a
+remote server in 4 steps:</p>
+
+<ol>
+<li>setup Chef Solo environment</li>
+<li>modify config file</li>
+<li>provision remote server</li>
+<li>tweak Capistrano <code>deploy.rb</code></li>
+</ol>
+
+
+<p>A working example in also available at
+<a href="https://github.com/teohm/kitchen-example">teohm/kitchen-example</a>.</p>
+
+<h2>1. Setup Chef Solo environment</h2>
+
+<ul>
+<li>Install Chef Solo tools on local machine.</li>
+<li>Download Chef cookbooks to local machine.</li>
+<li>Install <code>chef-solo</code> on remote server.</li>
+</ul>
+
+
+<h3>Install Chef Solo tools</h3>
+
+<p>Let&#8217;s create a new directory,</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mkdir chef-kitchen
+</span><span class='line'>cd chef-kitchen</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and a <code>Gemfile</code>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>source "https://rubygems.org"
+</span><span class='line'>
+</span><span class='line'>gem "knife-solo", "&gt;= 0.3.0pre3"
+</span><span class='line'>gem "berkshelf"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I recommend <code>knife-solo &gt;= 0.3</code> as it includes a few <a href="https://github.com/matschaffer/knife-solo/blob/master/CHANGELOG.md#changes-and-new-features">major fixes and
+improvements</a>.</p>
+
+<p>Now, install the ruby gems.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bundle install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, setup a kitchen directory structure with <code>knife-solo</code>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bundle exec knife solo init .</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Download Chef cookbooks</h3>
+
+<p>I use <a href="http://berkshelf.com/">Berkshelf</a> to manage cookbooks. So we need a <code>Berksfile</code>,</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>site :opscode
+</span><span class='line'>
+</span><span class='line'>cookbook "runit", "&gt;= 1.1.2"  # HACK: force-use this version
+</span><span class='line'>cookbook "databox"
+</span><span class='line'>cookbook "rackbox"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>(I added a hack here to force <code>berkshelf</code> to use <code>runit 1.1.2</code> required
+by <code>rackbox</code>. Still looking for a better solution.)</p>
+
+<p>We can now download cookbooks with <code>berks install</code>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bundle exec berks install --path cookbooks/</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Install <code>chef-solo</code> on remote server</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bundle exec knife solo prepare testbox</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>2. Customize config file</h2>
+
+<ul>
+<li>Download config example</li>
+<li>Customize config file</li>
+</ul>
+
+
+<h3>Download config example</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>curl https://raw.github.com/teohm/kitchen-example/master/nodes/host.json.example --output nodes/testbox.json</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Modify config file (JSON)</h3>
+
+<p>The config file starts with a <code>run_list</code>. You specify a list of cookbook
+recipes here. Chef will run them in the same order in this list.</p>
+
+<p>It is followed by cookbook attributes. You can modify these attributes.
+A full reference of attributes are described in each cookbook&#8217;s README
+(see <a href="https://github.com/teohm/appbox-cookbook#attributes">appbox</a>,
+<a href="https://github.com/teohm/databox-cookbook#attributes">databox</a>,
+<a href="https://github.com/teohm/rackbox-cookbook#attributes">rackbox</a>).</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  "run_list": [
+</span><span class='line'>    "databox",
+</span><span class='line'>    "rackbox"
+</span><span class='line'>  ],
+</span><span class='line'>  "appbox": {
+</span><span class='line'>    "deploy_keys": ["ssh-rsa 5bnmu23890fghghjk"],
+</span><span class='line'>    "admin_keys": ["ssh-rsa 456789fghjkvbn567"]
+</span><span class='line'>  },
+</span><span class='line'>  "databox": {
+</span><span class='line'>    "db_root_password": "welcome!",
+</span><span class='line'>    "databases": {
+</span><span class='line'>      "mysql": [
+</span><span class='line'>        { "username": "app1",
+</span><span class='line'>          "password": "app1",
+</span><span class='line'>          "database_name": "app1_production" }
+</span><span class='line'>      ],
+</span><span class='line'>      "postgresql": [
+</span><span class='line'>        { "username": "app2",
+</span><span class='line'>          "password": "app2",
+</span><span class='line'>          "database_name": "app2_production" }
+</span><span class='line'>      ]
+</span><span class='line'>    }
+</span><span class='line'>  },
+</span><span class='line'>  "rackbox": {
+</span><span class='line'>    "ruby": {
+</span><span class='line'>      "versions": ["1.9.3-p385", "1.9.2-p320"],
+</span><span class='line'>      "global_version": "1.9.3-p385"
+</span><span class='line'>    },
+</span><span class='line'>    "apps": {
+</span><span class='line'>      "unicorn": [
+</span><span class='line'>        { "appname": "app1",
+</span><span class='line'>          "hostname": "app1.test.com" }
+</span><span class='line'>      ],
+</span><span class='line'>      "passenger": [
+</span><span class='line'>        { "appname": "app2",
+</span><span class='line'>          "hostname": "app2.test.com" }
+</span><span class='line'>      ]
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>3. Provision remote server</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bundle exec knife solo cook testbox</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It uploads the kitchen directory and runs <code>chef-solo</code> on the remote
+server. Chef-solo will then takeover and execute the run list to setup
+everything.</p>
+
+<h3>What do we get at this point?</h3>
+
+<p>Basically, it&#8217;s done!</p>
+
+<p>We have a <strong>full-stack, rack-based server</strong> with:</p>
+
+<ul>
+<li>3 user accounts (deploy, devops, apps)</li>
+<li><code>rbenv</code> as ruby version manager</li>
+<li><code>nginx</code> as front-server</li>
+<li><code>unicorn</code>, <code>passenger-standalone</code> as upstream app servers, managed by <code>runit</code></li>
+<li><code>postgresql</code>, <code>mysql</code> installed and databases created</li>
+<li>all apps will be stored in <code>/home/apps/</code></li>
+</ul>
+
+
+<h2>4. Tweak Capistrano deploy.rb</h2>
+
+<p>Now, it&#8217;s ready to deploy a Rack-backed app to the remote server!</p>
+
+<p>I have two example Rails apps available on Github:</p>
+
+<ul>
+<li><a href="https://github.com/teohm/sample-app1">teohm/sample-app1</a> runs on unicorn,</li>
+<li><a href="https://github.com/teohm/sample-app2">teohm/sample-app2</a> runs on passenger-standalone.</li>
+</ul>
+
+
+<p>There are a few <strong>minor tweaks required in Capistrano <code>deploy.rb</code></strong>, as listed below.</p>
+
+<p>I will explain the tweaks in details next time. Meanwhile, check out the complete working examples at: <a href="https://github.com/teohm/sample-app1/blob/master/config/deploy.rb">app1/config/deploy.rb</a> and <a href="https://github.com/teohm/sample-app2/blob/master/config/deploy.rb">app2/config/deploy.rb</a></p>
+
+<h3>Login as <code>deploy</code> user</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>set :user, "deploy"</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Deploy to <code>/home/apps</code></h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>set :deploy_to, "/home/apps/#{application}"</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Load <code>rbenv</code> in Capistrano</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>default_run_options[:shell] = '/bin/bash --login'</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Run bundler with <code>--binstubs</code></h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>require 'bundler/capistrano'
+</span><span class='line'>set :bundle_flags, "--deployment --binstubs"
+</span><span class='line'>set :bundle_without, [:test, :development, :deploy]</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Restart app with <code>runit sv</code></h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>namespace :deploy do
+</span><span class='line'>  task :start do
+</span><span class='line'>    run "sudo sv up app1"
+</span><span class='line'>  end
+</span><span class='line'>  task :stop do
+</span><span class='line'>    run "sudo sv down app1"
+</span><span class='line'>  end
+</span><span class='line'>  task :restart, :roles =&gt; :app, :except =&gt; { :no_release =&gt; true } do
+</span><span class='line'>    run "sudo sv restart app1"
+</span><span class='line'>  end
+</span><span class='line'>end
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Feedback</h2>
+
+<p>If you are interested on using the cookbooks, or have an idea/feedback/question about this topic, feel free to drop me (<a href="http://twitter.com/teohm">@teohm</a>) a message. Pull requests and issue reports are definitely welcomed!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Reload required files in Rails]]></title>

@@ -9,8 +9,9 @@
   <meta name="author" content="Huiming Teo (teohm)">
 
   
-  <meta name="description" content="I have been using iTerm in daily work for almost a year now.
-Along the way, I learned a few handy settings tweaks and shortcut keys to boost my &hellip;">
+  <meta name="description" content="I first stumbled upon this issue when Yasith
+(@meaningful) showed me a strange bug
+in a Rails project. Here&#8217;s what happened: Issue When submit &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -34,8 +35,13 @@ Along the way, I learned a few handy settings tweaks and shortcut keys to boost 
  
 
 
-<meta property="og:description" content="I have been using iTerm in daily work for almost a year now.
-Along the way, I learned a few handy settings tweaks and shortcut keys to boost my productivity in command-line environment. Install iTerm2 If you haven&#8217;t heard of iTerm, it&#8217;s a popular open source alternative to Mac OS X &hellip;">
+<meta property="og:description" content="I first stumbled upon this issue when Yasith
+(@meaningful) showed me a strange bug
+in a Rails project. Here&#8217;s what happened: Issue When submit a multipart form that contains Unicode parameter name e.g. 1
+2
+3
+4
+&lt;form method=&quot;post&quot; enctype=&quot;multipart/form-data&quot; action=& &hellip;">
 
 
 <script type='text/javascript'>//<![CDATA[
@@ -96,6 +102,103 @@ Along the way, I learned a few handy settings tweaks and shortcut keys to boost 
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/03/27/utf-8-param-name-issue-in-rails-multipart-form/">UTF-8 Param Name Issue in Rails Multipart Form</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-27T21:36:00+08:00" pubdate data-updated="true">Mar 27<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I first stumbled upon this issue when <a href="http://thekindof.me">Yasith</a>
+(<a href="https://twitter.com/meaningful">@meaningful</a>) showed me a strange bug
+in a Rails project. Here&#8217;s what happened:</p>
+
+<h2>Issue</h2>
+
+<p>When submit a multipart form that contains <strong>Unicode parameter name</strong> e.g.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span> <span class="na">enctype=</span><span class="s">&quot;multipart/form-data&quot;</span> <span class="na">action=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">&quot;Iñtërnâtiônàlizætiøn_name&quot;</span>
+</span><span class='line'>         <span class="na">value=</span><span class="s">&quot;Iñtërnâtiônàlizætiøn_value&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;/form&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Rails controller returns the param value <code>"Iñtërnâtiônàlizætiøn_value"</code> as expected.</p>
+
+<p>But the <strong>param name becomes</strong>:
+<code>"I\xC3\xB1t\xC3\xABrn\xC3\xA2ti\xC3\xB4n\xC3\xA0liz\xC3\xA6ti\xC3\xB8n_name"</code>.</p>
+
+<p>It makes life miserable, if you are not expecting this to happen:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">params</span><span class="o">[</span><span class="s2">&quot;Iñtërnâtiônàlizætiøn_name&quot;</span><span class="o">]</span> <span class="c1"># =&gt; nil</span>
+</span><span class='line'><span class="n">params</span><span class="o">[</span><span class="s2">&quot;I</span><span class="se">\xC3\xB1</span><span class="s2">t</span><span class="se">\xC3\xAB</span><span class="s2">rn</span><span class="se">\xC3\xA2</span><span class="s2">ti</span><span class="se">\xC3\xB4</span><span class="s2">n</span><span class="se">\xC3\xA0</span><span class="s2">liz</span><span class="se">\xC3\xA6</span><span class="s2">ti</span><span class="se">\xC3\xB8</span><span class="s2">n_name&quot;</span><span class="o">]</span> <span class="c1"># =&gt; &quot;Iñtërnâtiônàlizætiøn_value&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>What happened?</h2>
+
+<p>When <a href="https://github.com/rack/rack/blob/master/lib/rack/multipart/parser.rb"><strong>Rack</strong></a>
+returns multipart form data to Rails, it returns:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="p">{</span> <span class="s2">&quot;I</span><span class="se">\xC3\xB1</span><span class="s2">t</span><span class="se">\xC3\xAB</span><span class="s2">rn</span><span class="se">\xC3\xA2</span><span class="s2">ti</span><span class="se">\xC3\xB4</span><span class="s2">n</span><span class="se">\xC3\xA0</span><span class="s2">liz</span><span class="se">\xC3\xA6</span><span class="s2">ti</span><span class="se">\xC3\xB8</span><span class="s2">n_name&quot;</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="s2">&quot;I</span><span class="se">\xC3\xB1</span><span class="s2">t</span><span class="se">\xC3\xAB</span><span class="s2">rn</span><span class="se">\xC3\xA2</span><span class="s2">ti</span><span class="se">\xC3\xB4</span><span class="s2">n</span><span class="se">\xC3\xA0</span><span class="s2">liz</span><span class="se">\xC3\xA6</span><span class="s2">ti</span><span class="se">\xC3\xB8</span><span class="s2">n_value&quot;</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>However, <code>ActionDispatch::Http::Parameters#encode_params</code> in <a href="https://github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/http/parameters.rb"><strong>Rails</strong></a>
+decided to <strong> <em>only</em> encode parameter values</strong>, but <em>not</em> parameter names. <strong>As a result, we get:</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="p">{</span> <span class="s2">&quot;I</span><span class="se">\xC3\xB1</span><span class="s2">t</span><span class="se">\xC3\xAB</span><span class="s2">rn</span><span class="se">\xC3\xA2</span><span class="s2">ti</span><span class="se">\xC3\xB4</span><span class="s2">n</span><span class="se">\xC3\xA0</span><span class="s2">liz</span><span class="se">\xC3\xA6</span><span class="s2">ti</span><span class="se">\xC3\xB8</span><span class="s2">n_name&quot;</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="s2">&quot;Iñtërnâtiônàlizætiøn_value&quot;</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Solutions?</h2>
+
+<ol>
+<li><strong>Don&#8217;t use Unicode param name</strong>.</li>
+<li>Patch Rails source code. I added a <a href="https://github.com/teohm/rails/compare/multipart_unicode_param_name">fix in my forked branch</a>, and <a href="https://github.com/rails/rails/issues/5606">reported the issue</a>. Hopefully it will get fixed soon in the coming release.</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1190,6 +1293,10 @@ post them here occationally if interesting enough to share.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/17/chef-cookbooks-for-busy-ruby-developers/">Chef cookbooks for busy Ruby developers</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/10/reload-required-files-in-rails/">Reload required files in Rails</a>
       </li>
     
@@ -1203,10 +1310,6 @@ post them here occationally if interesting enough to share.</p>
     
       <li class="post">
         <a href="/blog/2012/09/24/objective-c-collection-operators/">Objective-C Collection Operators</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/09/03/breaking-arc-retain-cycle-in-objective-c-blocks/">Breaking ARC retain cycle in Objective-C blocks</a>
       </li>
     
   </ul>
