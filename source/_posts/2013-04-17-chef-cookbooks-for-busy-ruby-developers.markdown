@@ -109,6 +109,15 @@ bundle exec berks install --path cookbooks/
 bundle exec knife solo prepare testbox
 ```
 
+In this example, `testbox` is a host I setup in my `~/.ssh/config`:
+
+```
+Host testbox
+  User ubuntu
+  Hostname ec2-51-221-13-121.ap-southeast-1.compute.amazonaws.com
+  IdentityFile ~/.ssh/testbox_ec2.pem
+```
+
 2. Customize config file
 --------------
 
