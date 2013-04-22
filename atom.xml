@@ -4,7 +4,7 @@
   <title><![CDATA[teohm.dev]]></title>
   <link href="http://teohm.github.com/atom.xml" rel="self"/>
   <link href="http://teohm.github.com/"/>
-  <updated>2013-04-18T13:58:29+08:00</updated>
+  <updated>2013-04-22T22:02:22+08:00</updated>
   <id>http://teohm.github.com/</id>
   <author>
     <name><![CDATA[Huiming Teo (teohm)]]></name>
@@ -128,6 +128,18 @@ by <code>rackbox</code>. Still looking for a better solution.)</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>bundle exec knife solo prepare testbox</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this example, <code>testbox</code> is a host I setup in my <code>~/.ssh/config</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Host testbox
+</span><span class='line'>  User ubuntu
+</span><span class='line'>  Hostname ec2-51-221-13-121.ap-southeast-1.compute.amazonaws.com
+</span><span class='line'>  IdentityFile ~/.ssh/testbox_ec2.pem</span></code></pre></td></tr></table></div></figure>
 
 
 <h2>2. Customize config file</h2>
